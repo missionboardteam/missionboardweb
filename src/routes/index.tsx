@@ -121,15 +121,24 @@ const faqs = [
   },
 ];
 
+const accentGradient: Record<(typeof channels)[number]["accent"], string> = {
+  gold: "var(--gradient-gold)",
+  blue: "var(--gradient-blue)",
+  pink: "var(--gradient-pink)",
+};
+
+const accentDot: Record<(typeof channels)[number]["accent"], string> = {
+  gold: "var(--accent)",
+  blue: "var(--primary)",
+  pink: "oklch(0.75 0.18 340)",
+};
+
 function ChannelCard({ channel }: { channel: (typeof channels)[number] }) {
   return (
     <article className="card-elevated group relative overflow-hidden rounded-3xl border border-border bg-card p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-8">
       <div
         className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full opacity-25 blur-3xl"
-        style={{
-          backgroundImage:
-            channel.accent === "gold" ? "var(--gradient-gold)" : "var(--gradient-blue)",
-        }}
+        style={{ backgroundImage: accentGradient[channel.accent] }}
       />
       <div className="relative flex flex-col items-center gap-5 text-center sm:flex-row sm:items-start sm:text-left">
         <img
@@ -152,10 +161,7 @@ function ChannelCard({ channel }: { channel: (typeof channels)[number] }) {
           <li key={p} className="flex items-center gap-2 text-sm text-foreground/90">
             <span
               className="h-1.5 w-1.5 rounded-full"
-              style={{
-                backgroundColor:
-                  channel.accent === "gold" ? "var(--accent)" : "var(--primary)",
-              }}
+              style={{ backgroundColor: accentDot[channel.accent] }}
             />
             {p}
           </li>
@@ -167,10 +173,7 @@ function ChannelCard({ channel }: { channel: (typeof channels)[number] }) {
         target="_blank"
         rel="noopener noreferrer"
         className="glow relative mt-7 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-        style={{
-          backgroundImage:
-            channel.accent === "gold" ? "var(--gradient-gold)" : "var(--gradient-blue)",
-        }}
+        style={{ backgroundImage: accentGradient[channel.accent] }}
       >
         <TelegramIcon />
         Join on Telegram
