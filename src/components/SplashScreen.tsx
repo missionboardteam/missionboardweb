@@ -107,34 +107,30 @@ function CelebrationBackground() {
   );
 }
 
+const FADE_DURATION = 500;
+
 export function SplashScreen() {
-  const [phase, setPhase] = useState<"in" | "out" | "done">("in");
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    const fadeStart = setTimeout(() => setPhase("out"), DURATION - 500);
-    const remove = setTimeout(() => setPhase("done"), DURATION);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const timer = setTimeout(() => {
+      setDone(true);
+      document.body.style.overflow = prev;
+    }, DURATION + FADE_DURATION + 100);
     return () => {
-      clearTimeout(fadeStart);
-      clearTimeout(remove);
+      clearTimeout(timer);
+      document.body.style.overflow = prev;
     };
   }, []);
 
-  useEffect(() => {
-    if (phase === "done") return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [phase]);
-
-  if (phase === "done") return null;
+  if (done) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background px-6 transition-opacity duration-500 ${
-        phase === "out" ? "opacity-0" : "opacity-100"
-      }`}
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background px-6"
+      style={{ animation: `splash-fade ${DURATION}ms linear forwards` }}
       role="status"
       aria-label="Loading"
     >
@@ -200,6 +196,14 @@ export function SplashScreen() {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes splash-fade {
+          0% { opacity: 1; }
+          ${((DURATION - FADE_DURATION) / DURATION) * 100}% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }
