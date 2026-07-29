@@ -273,9 +273,9 @@ function Index() {
             Pick your channel
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-center text-sm text-muted-foreground">
-            Join the one that matches your class — or both, they're free.
+            Join the channel that matches your class — or all three, they're free.
           </p>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {channels.map((c) => (
               <ChannelCard key={c.name} channel={c} />
             ))}
