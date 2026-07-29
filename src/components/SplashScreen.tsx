@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import missionLogo from "@/assets/mission-board.jpg.asset.json";
 import nextgenLogo from "@/assets/nextgen-academy.jpg.asset.json";
 
@@ -13,9 +13,33 @@ const CONFETTI_COLORS = [
   "#4ade80", // green-400
 ];
 
+type Confetti = {
+  id: number;
+  left: string;
+  delay: string;
+  duration: string;
+  color: string;
+  size: number;
+  rotation: number;
+};
+
+type Balloon = {
+  id: number;
+  left: string;
+  delay: string;
+  duration: string;
+  color: string;
+  size: number;
+};
+
 function CelebrationBackground() {
-  const confetti = useMemo(() => {
-    return Array.from({ length: 48 }).map((_, i) => ({
+  const [items, setItems] = useState<{ confetti: Confetti[]; balloons: Balloon[] }>({
+    confetti: [],
+    balloons: [],
+  });
+
+  useEffect(() => {
+    const confetti = Array.from({ length: 48 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       delay: `${Math.random() * 1.5}s`,
@@ -24,10 +48,8 @@ function CelebrationBackground() {
       size: 6 + Math.random() * 8,
       rotation: Math.random() * 360,
     }));
-  }, []);
 
-  const balloons = useMemo(() => {
-    return Array.from({ length: 12 }).map((_, i) => ({
+    const balloons = Array.from({ length: 12 }).map((_, i) => ({
       id: i,
       left: `${5 + Math.random() * 90}%`,
       delay: `${Math.random() * 1.2}s`,
@@ -35,11 +57,13 @@ function CelebrationBackground() {
       color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
       size: 24 + Math.random() * 40,
     }));
+
+    setItems({ confetti, balloons });
   }, []);
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {balloons.map((b) => (
+      {items.balloons.map((b) => (
         <div
           key={`balloon-${b.id}`}
           className="absolute -bottom-20 rounded-full opacity-40 blur-[1px]"
@@ -52,7 +76,7 @@ function CelebrationBackground() {
           }}
         />
       ))}
-      {confetti.map((c) => (
+      {items.confetti.map((c) => (
         <div
           key={`confetti-${c.id}`}
           className="absolute -top-8 rounded-sm opacity-80"
@@ -83,34 +107,30 @@ function CelebrationBackground() {
   );
 }
 
+const FADE_DURATION = 500;
+
 export function SplashScreen() {
-  const [phase, setPhase] = useState<"in" | "out" | "done">("in");
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    const out = setTimeout(() => setPhase("out"), DURATION);
-    const done = setTimeout(() => setPhase("done"), DURATION + 600);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const timer = setTimeout(() => {
+      setDone(true);
+      document.body.style.overflow = prev;
+    }, DURATION + FADE_DURATION + 100);
     return () => {
-      clearTimeout(out);
-      clearTimeout(done);
+      clearTimeout(timer);
+      document.body.style.overflow = prev;
     };
   }, []);
 
-  useEffect(() => {
-    if (phase === "done") return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [phase]);
-
-  if (phase === "done") return null;
+  if (done) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background px-6 transition-opacity duration-500 ${
-        phase === "out" ? "opacity-0" : "opacity-100"
-      }`}
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background px-6"
+      style={{ animation: `splash-fade ${DURATION}ms linear forwards` }}
       role="status"
       aria-label="Loading"
     >
@@ -149,7 +169,6 @@ export function SplashScreen() {
           </div>
         </div>
 
-
         <div className="animate-in fade-in mx-auto mt-10 max-w-xs space-y-3 rounded-2xl border border-border bg-card/60 px-5 py-4 text-xs delay-1000 duration-1000 fill-mode-backwards">
           <div>
             <p className="text-muted-foreground">Owned By (Powered & Produced by)</p>
@@ -176,19 +195,15 @@ export function SplashScreen() {
             </a>
           </div>
         </div>
-
-        <div className="mx-auto mt-8 h-1 w-40 overflow-hidden rounded-full bg-secondary">
-          <div
-            className="h-full rounded-full"
-            style={{
-              backgroundImage: "var(--gradient-gold)",
-              animation: `splash-progress ${DURATION}ms linear forwards`,
-            }}
-          />
-        </div>
       </div>
 
-      <style>{`@keyframes splash-progress { from { width: 0% } to { width: 100% } }`}</style>
+      <style>{`
+        @keyframes splash-fade {
+          0% { opacity: 1; }
+          ${((DURATION - FADE_DURATION) / DURATION) * 100}% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }
