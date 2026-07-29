@@ -87,11 +87,11 @@ export function SplashScreen() {
   const [phase, setPhase] = useState<"in" | "out" | "done">("in");
 
   useEffect(() => {
-    const out = setTimeout(() => setPhase("out"), DURATION);
-    const done = setTimeout(() => setPhase("done"), DURATION + 600);
+    const fadeStart = setTimeout(() => setPhase("out"), DURATION - 500);
+    const remove = setTimeout(() => setPhase("done"), DURATION);
     return () => {
-      clearTimeout(out);
-      clearTimeout(done);
+      clearTimeout(fadeStart);
+      clearTimeout(remove);
     };
   }, []);
 
@@ -149,7 +149,6 @@ export function SplashScreen() {
           </div>
         </div>
 
-
         <div className="animate-in fade-in mx-auto mt-10 max-w-xs space-y-3 rounded-2xl border border-border bg-card/60 px-5 py-4 text-xs delay-1000 duration-1000 fill-mode-backwards">
           <div>
             <p className="text-muted-foreground">Owned By (Powered & Produced by)</p>
@@ -176,19 +175,7 @@ export function SplashScreen() {
             </a>
           </div>
         </div>
-
-        <div className="mx-auto mt-8 h-1 w-40 overflow-hidden rounded-full bg-secondary">
-          <div
-            className="h-full rounded-full"
-            style={{
-              backgroundImage: "var(--gradient-gold)",
-              animation: `splash-progress ${DURATION}ms linear forwards`,
-            }}
-          />
-        </div>
       </div>
-
-      <style>{`@keyframes splash-progress { from { width: 0% } to { width: 100% } }`}</style>
     </div>
   );
 }
