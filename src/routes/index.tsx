@@ -50,6 +50,16 @@ const channels = [
     accent: "gold" as const,
   },
   {
+    name: "Class 10 Discussion Group",
+    tag: "Class 10 · Doubts & Chat",
+    logo: discussionLogo.url,
+    link: CLASS10_DISCUSSION_LINK,
+    blurb:
+      "A lively student community to ask doubts, share resources, discuss chapters and help each other crack the Class 10 boards together.",
+    points: ["Ask doubts 24/7", "Share notes & resources", "Peer discussions"],
+    accent: "pink" as const,
+  },
+  {
     name: "Next Generation Academy",
     tag: "Class 11 & 12 · JEE / NEET",
     logo: nextgenLogo.url,
