@@ -8,6 +8,7 @@ import {
 import missionLogo from "@/assets/mission-board.jpg.asset.json";
 import nextgenLogo from "@/assets/nextgen-academy.jpg.asset.json";
 import discussionLogo from "@/assets/class10-discussion.jpg.asset.json";
+import { SplashScreen } from "@/components/SplashScreen";
 
 const MISSION_LINK = "https://t.me/+T8PdqiLKkfU1ZDU9";
 const NEXTGEN_LINK = "https://t.me/NextGenerationAcademy07";
