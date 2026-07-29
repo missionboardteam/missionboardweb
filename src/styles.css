@@ -153,3 +153,21 @@
     color: var(--color-foreground);
   }
 }
+
+@utility hero-surface {
+  background-image: var(--gradient-hero);
+}
+
+@utility text-gold {
+  background-image: var(--gradient-gold);
+  background-clip: text;
+  color: transparent;
+}
+
+@utility card-elevated {
+  box-shadow: var(--shadow-card);
+}
+
+@utility glow {
+  box-shadow: var(--shadow-glow);
+}
