@@ -45,32 +45,29 @@ export function SplashScreen() {
       />
 
       <div className="relative w-full max-w-md text-center">
-        <p className="animate-in fade-in slide-in-from-bottom-2 text-xs font-semibold tracking-[0.25em] text-muted-foreground uppercase duration-700">
-          Mission Board Class 10 2027
-        </p>
-        <p className="animate-in fade-in mt-2 text-sm text-muted-foreground delay-200 duration-700 fill-mode-backwards">
-          presents you a brand new website
-        </p>
+        <h1 className="animate-in fade-in slide-in-from-bottom-2 font-display text-xl leading-tight font-extrabold tracking-tight text-foreground duration-700 sm:text-2xl">
+          Mission Board Class 10 2027 presents you a brand new website
+        </h1>
 
-        <div className="mt-8 flex items-center justify-center gap-4">
+        <div className="mt-8 flex items-end justify-center gap-5 sm:gap-6">
           <img
             src={missionLogo.url}
             alt="Mission Board Class 10 2027 logo"
-            className="animate-in fade-in zoom-in-75 h-24 w-24 rounded-2xl object-cover ring-1 ring-border delay-300 duration-700 fill-mode-backwards sm:h-28 sm:w-28"
+            className="animate-in fade-in zoom-in-75 h-28 w-28 rounded-2xl object-cover ring-1 ring-border delay-300 duration-700 fill-mode-backwards sm:h-32 sm:w-32"
           />
-          <img
-            src={nextgenLogo.url}
-            alt="Next Generation Academy logo"
-            className="animate-in fade-in zoom-in-75 h-24 w-24 rounded-2xl object-cover ring-1 ring-border delay-500 duration-700 fill-mode-backwards sm:h-28 sm:w-28"
-          />
+          <div className="animate-in fade-in zoom-in-75 flex flex-col items-center delay-500 duration-700 fill-mode-backwards">
+            <img
+              src={nextgenLogo.url}
+              alt="Next Generation Academy logo"
+              className="h-16 w-16 rounded-2xl object-cover ring-1 ring-border sm:h-20 sm:w-20"
+            />
+            <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-tight sm:text-xl">
+              Next Generation Academy
+            </h2>
+            <p className="text-xs text-muted-foreground">(A Part Of Mission Board Family)</p>
+          </div>
         </div>
 
-        <h1 className="animate-in fade-in slide-in-from-bottom-3 mt-8 font-display text-2xl leading-tight font-extrabold tracking-tight delay-700 duration-700 fill-mode-backwards sm:text-3xl">
-          Next Generation Academy
-        </h1>
-        <p className="animate-in fade-in mt-2 text-xs text-muted-foreground delay-1000 duration-700 fill-mode-backwards">
-          (A Part Of Mission Board Family)
-        </p>
 
         <div className="animate-in fade-in mx-auto mt-10 max-w-xs space-y-3 rounded-2xl border border-border bg-card/60 px-5 py-4 text-xs delay-1000 duration-1000 fill-mode-backwards">
           <div>
