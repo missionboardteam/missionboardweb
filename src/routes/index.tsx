@@ -315,18 +315,29 @@ function Index() {
               Learn · Grow · <span className="text-gold">Achieve</span>
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-sm text-muted-foreground">
-              Join thousands of students already preparing smarter with free premium material.
+              Join thousands of students already preparing smarter with free premium material and
+              peer discussions.
             </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
                 href={MISSION_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-                style={{ backgroundImage: "var(--gradient-blue)" }}
+                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-accent-foreground transition-opacity hover:opacity-90"
+                style={{ backgroundImage: "var(--gradient-gold)" }}
               >
                 <TelegramIcon />
-                Join Mission Board 2027
+                Mission Board 2027
+              </a>
+              <a
+                href={CLASS10_DISCUSSION_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+                style={{ backgroundImage: "var(--gradient-pink)" }}
+              >
+                <TelegramIcon />
+                Class 10 Discussion
               </a>
               <a
                 href={NEXTGEN_LINK}
@@ -335,7 +346,7 @@ function Index() {
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 font-display text-sm font-bold transition-colors hover:bg-secondary"
               >
                 <TelegramIcon />
-                Join Next Gen Academy
+                Next Gen Academy
               </a>
             </div>
           </div>
