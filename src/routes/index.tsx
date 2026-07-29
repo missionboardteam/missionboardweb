@@ -355,8 +355,8 @@ function Index() {
 
       <footer className="border-t border-border py-8">
         <p className="text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Mission Board 2027 & Next Generation Academy · Free
-          education for every student
+          © {new Date().getFullYear()} Mission Board 2027, Class 10 Discussion Group & Next
+          Generation Academy · Free education for every student
         </p>
       </footer>
     </div>
