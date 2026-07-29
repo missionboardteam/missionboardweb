@@ -8,6 +8,7 @@ import {
 import missionLogo from "@/assets/mission-board.jpg.asset.json";
 import nextgenLogo from "@/assets/nextgen-academy.jpg.asset.json";
 import discussionLogo from "@/assets/class10-discussion.jpg.asset.json";
+import { SplashScreen } from "@/components/SplashScreen";
 
 const MISSION_LINK = "https://t.me/+T8PdqiLKkfU1ZDU9";
 const NEXTGEN_LINK = "https://t.me/NextGenerationAcademy07";
@@ -193,7 +194,9 @@ function TelegramIcon({ className = "h-4 w-4" }: { className?: string }) {
 function Index() {
   return (
     <div className="min-h-screen font-sans">
+      <SplashScreen />
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
+
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <span className="font-display text-sm font-bold tracking-tight sm:text-base">
             Mission Board <span className="text-muted-foreground">×</span> Next Gen
