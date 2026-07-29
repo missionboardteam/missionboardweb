@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import missionLogo from "@/assets/mission-board.jpg.asset.json";
 import nextgenLogo from "@/assets/nextgen-academy.jpg.asset.json";
 
@@ -13,9 +13,33 @@ const CONFETTI_COLORS = [
   "#4ade80", // green-400
 ];
 
+type Confetti = {
+  id: number;
+  left: string;
+  delay: string;
+  duration: string;
+  color: string;
+  size: number;
+  rotation: number;
+};
+
+type Balloon = {
+  id: number;
+  left: string;
+  delay: string;
+  duration: string;
+  color: string;
+  size: number;
+};
+
 function CelebrationBackground() {
-  const confetti = useMemo(() => {
-    return Array.from({ length: 48 }).map((_, i) => ({
+  const [items, setItems] = useState<{ confetti: Confetti[]; balloons: Balloon[] }>({
+    confetti: [],
+    balloons: [],
+  });
+
+  useEffect(() => {
+    const confetti = Array.from({ length: 48 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       delay: `${Math.random() * 1.5}s`,
@@ -24,10 +48,8 @@ function CelebrationBackground() {
       size: 6 + Math.random() * 8,
       rotation: Math.random() * 360,
     }));
-  }, []);
 
-  const balloons = useMemo(() => {
-    return Array.from({ length: 12 }).map((_, i) => ({
+    const balloons = Array.from({ length: 12 }).map((_, i) => ({
       id: i,
       left: `${5 + Math.random() * 90}%`,
       delay: `${Math.random() * 1.2}s`,
@@ -35,11 +57,13 @@ function CelebrationBackground() {
       color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
       size: 24 + Math.random() * 40,
     }));
+
+    setItems({ confetti, balloons });
   }, []);
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {balloons.map((b) => (
+      {items.balloons.map((b) => (
         <div
           key={`balloon-${b.id}`}
           className="absolute -bottom-20 rounded-full opacity-40 blur-[1px]"
@@ -52,7 +76,7 @@ function CelebrationBackground() {
           }}
         />
       ))}
-      {confetti.map((c) => (
+      {items.confetti.map((c) => (
         <div
           key={`confetti-${c.id}`}
           className="absolute -top-8 rounded-sm opacity-80"
