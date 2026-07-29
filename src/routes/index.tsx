@@ -7,9 +7,11 @@ import {
 } from "@/components/ui/accordion";
 import missionLogo from "@/assets/mission-board.jpg.asset.json";
 import nextgenLogo from "@/assets/nextgen-academy.jpg.asset.json";
+import discussionLogo from "@/assets/class10-discussion.jpg.asset.json";
 
 const MISSION_LINK = "https://t.me/+T8PdqiLKkfU1ZDU9";
 const NEXTGEN_LINK = "https://t.me/NextGenerationAcademy07";
+const CLASS10_DISCUSSION_LINK = "https://t.me/+AxCXqeqCM-JiYTc1";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,6 +50,16 @@ const channels = [
     accent: "gold" as const,
   },
   {
+    name: "Class 10 Discussion Group",
+    tag: "Class 10 · Doubts & Chat",
+    logo: discussionLogo.url,
+    link: CLASS10_DISCUSSION_LINK,
+    blurb:
+      "A lively student community to ask doubts, share resources, discuss chapters and help each other crack the Class 10 boards together.",
+    points: ["Ask doubts 24/7", "Share notes & resources", "Peer discussions"],
+    accent: "pink" as const,
+  },
+  {
     name: "Next Generation Academy",
     tag: "Class 11 & 12 · JEE / NEET",
     logo: nextgenLogo.url,
@@ -60,7 +72,7 @@ const channels = [
 ];
 
 const stats = [
-  { value: "2", label: "Telegram channels" },
+  { value: "3", label: "Telegram channels" },
   { value: "100%", label: "Free forever" },
   { value: "Daily", label: "New material" },
   { value: "10–12", label: "Classes covered" },
@@ -109,15 +121,24 @@ const faqs = [
   },
 ];
 
+const accentGradient: Record<(typeof channels)[number]["accent"], string> = {
+  gold: "var(--gradient-gold)",
+  blue: "var(--gradient-blue)",
+  pink: "var(--gradient-pink)",
+};
+
+const accentDot: Record<(typeof channels)[number]["accent"], string> = {
+  gold: "var(--accent)",
+  blue: "var(--primary)",
+  pink: "oklch(0.75 0.18 340)",
+};
+
 function ChannelCard({ channel }: { channel: (typeof channels)[number] }) {
   return (
     <article className="card-elevated group relative overflow-hidden rounded-3xl border border-border bg-card p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-8">
       <div
         className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full opacity-25 blur-3xl"
-        style={{
-          backgroundImage:
-            channel.accent === "gold" ? "var(--gradient-gold)" : "var(--gradient-blue)",
-        }}
+        style={{ backgroundImage: accentGradient[channel.accent] }}
       />
       <div className="relative flex flex-col items-center gap-5 text-center sm:flex-row sm:items-start sm:text-left">
         <img
@@ -140,10 +161,7 @@ function ChannelCard({ channel }: { channel: (typeof channels)[number] }) {
           <li key={p} className="flex items-center gap-2 text-sm text-foreground/90">
             <span
               className="h-1.5 w-1.5 rounded-full"
-              style={{
-                backgroundColor:
-                  channel.accent === "gold" ? "var(--accent)" : "var(--primary)",
-              }}
+              style={{ backgroundColor: accentDot[channel.accent] }}
             />
             {p}
           </li>
@@ -155,10 +173,7 @@ function ChannelCard({ channel }: { channel: (typeof channels)[number] }) {
         target="_blank"
         rel="noopener noreferrer"
         className="glow relative mt-7 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-        style={{
-          backgroundImage:
-            channel.accent === "gold" ? "var(--gradient-gold)" : "var(--gradient-blue)",
-        }}
+        style={{ backgroundImage: accentGradient[channel.accent] }}
       >
         <TelegramIcon />
         Join on Telegram
@@ -204,10 +219,10 @@ function Index() {
               <span className="text-gold">Class 10, 11 and 12</span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-              Two Telegram channels, one mission — premium study material for CBSE boards, JEE
-              and NEET. Absolutely free, updated every day.
+              Three Telegram channels, one mission — premium study material, doubt discussions
+              and daily updates for CBSE boards, JEE and NEET. Absolutely free.
             </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
                 href={MISSION_LINK}
                 target="_blank"
@@ -217,6 +232,16 @@ function Index() {
               >
                 <TelegramIcon />
                 Mission Board 2027
+              </a>
+              <a
+                href={CLASS10_DISCUSSION_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+                style={{ backgroundImage: "var(--gradient-pink)" }}
+              >
+                <TelegramIcon />
+                Class 10 Discussion
               </a>
               <a
                 href={NEXTGEN_LINK}
@@ -248,9 +273,9 @@ function Index() {
             Pick your channel
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-center text-sm text-muted-foreground">
-            Join the one that matches your class — or both, they're free.
+            Join the channel that matches your class — or all three, they're free.
           </p>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {channels.map((c) => (
               <ChannelCard key={c.name} channel={c} />
             ))}
@@ -290,18 +315,29 @@ function Index() {
               Learn · Grow · <span className="text-gold">Achieve</span>
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-sm text-muted-foreground">
-              Join thousands of students already preparing smarter with free premium material.
+              Join thousands of students already preparing smarter with free premium material and
+              peer discussions.
             </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
                 href={MISSION_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-                style={{ backgroundImage: "var(--gradient-blue)" }}
+                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-accent-foreground transition-opacity hover:opacity-90"
+                style={{ backgroundImage: "var(--gradient-gold)" }}
               >
                 <TelegramIcon />
-                Join Mission Board 2027
+                Mission Board 2027
+              </a>
+              <a
+                href={CLASS10_DISCUSSION_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+                style={{ backgroundImage: "var(--gradient-pink)" }}
+              >
+                <TelegramIcon />
+                Class 10 Discussion
               </a>
               <a
                 href={NEXTGEN_LINK}
@@ -310,7 +346,7 @@ function Index() {
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 font-display text-sm font-bold transition-colors hover:bg-secondary"
               >
                 <TelegramIcon />
-                Join Next Gen Academy
+                Next Gen Academy
               </a>
             </div>
           </div>
@@ -319,8 +355,8 @@ function Index() {
 
       <footer className="border-t border-border py-8">
         <p className="text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Mission Board 2027 & Next Generation Academy · Free
-          education for every student
+          © {new Date().getFullYear()} Mission Board 2027, Class 10 Discussion Group & Next
+          Generation Academy · Free education for every student
         </p>
       </footer>
     </div>
