@@ -75,7 +75,6 @@ const channels = [
 const stats = [
   { value: "3", label: "Telegram channels" },
   { value: "100%", label: "Free forever" },
-  { value: "Daily", label: "New material" },
   { value: "10–12", label: "Classes covered" },
 ];
 
