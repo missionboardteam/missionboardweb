@@ -5,14 +5,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import missionLogo from "@/assets/mission-board.jpg.asset.json";
-import nextgenLogo from "@/assets/nextgen-academy.jpg.asset.json";
-import discussionLogo from "@/assets/class10-discussion.jpg.asset.json";
 import { SplashScreen } from "@/components/SplashScreen";
-
-const MISSION_LINK = "https://t.me/+T8PdqiLKkfU1ZDU9";
-const NEXTGEN_LINK = "https://t.me/NextGenerationAcademy07";
-const CLASS10_DISCUSSION_LINK = "https://t.me/+AxCXqeqCM-JiYTc1";
+import {
+  channels,
+  ChannelCard,
+  TelegramIcon,
+  MISSION_LINK,
+  NEXTGEN_LINK,
+  CLASS10_DISCUSSION_LINK,
+} from "@/lib/channels";
 
 export const Route = createFileRoute("/")({
   head: () => ({
