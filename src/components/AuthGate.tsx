@@ -1,7 +1,7 @@
 import { useLocation } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthPanel } from "@/components/AuthPanel";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const PUBLIC_PATHS = ["/auth", "/reset-password"];
 
