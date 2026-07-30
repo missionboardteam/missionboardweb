@@ -93,7 +93,7 @@ const faqs = [
 
 function Index() {
   return (
-    <div className="min-h-screen font-sans">
+    <div className="min-h-screen pb-20 font-sans">
       <SplashScreen />
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
 
