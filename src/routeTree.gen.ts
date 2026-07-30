@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ChannelsRouteImport } from './routes/channels'
 import { Route as IndexRouteImport } from './routes/index'
 
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChannelsRoute = ChannelsRouteImport.update({
   id: '/channels',
   path: '/channels',
@@ -26,31 +32,42 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/channels': typeof ChannelsRoute
+  '/notifications': typeof NotificationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/channels': typeof ChannelsRoute
+  '/notifications': typeof NotificationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/channels': typeof ChannelsRoute
+  '/notifications': typeof NotificationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/channels'
+  fullPaths: '/' | '/channels' | '/notifications'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/channels'
-  id: '__root__' | '/' | '/channels'
+  to: '/' | '/channels' | '/notifications'
+  id: '__root__' | '/' | '/channels' | '/notifications'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChannelsRoute: typeof ChannelsRoute
+  NotificationsRoute: typeof NotificationsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/channels': {
       id: '/channels'
       path: '/channels'
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChannelsRoute: ChannelsRoute,
+  NotificationsRoute: NotificationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
