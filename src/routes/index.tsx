@@ -40,38 +40,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const channels = [
-  {
-    name: "Mission Board Class 10 2027",
-    tag: "Class 10 · CBSE 2027",
-    logo: missionLogo.url,
-    link: MISSION_LINK,
-    blurb:
-      "Complete Class 10 board preparation — chapter-wise notes, NCERT solutions, sample papers, PYQs and exclusive material, updated regularly.",
-    points: ["Free books & PDFs", "Sample papers + PYQs", "Exam strategy & tips"],
-    accent: "gold" as const,
-  },
-  {
-    name: "Class 10 Discussion Group",
-    tag: "Class 10 · Doubts & Chat",
-    logo: discussionLogo.url,
-    link: CLASS10_DISCUSSION_LINK,
-    blurb:
-      "A lively student community to ask doubts, share resources, discuss chapters and help each other crack the Class 10 boards together.",
-    points: ["Ask doubts 24/7", "Share notes & resources", "Peer discussions"],
-    accent: "pink" as const,
-  },
-  {
-    name: "Next Generation Academy",
-    tag: "Class 11 & 12 · JEE / NEET",
-    logo: nextgenLogo.url,
-    link: NEXTGEN_LINK,
-    blurb:
-      "Premium notes for Physics, Chemistry, Maths and Biology — foundation to topper level, built for CBSE boards along with JEE and NEET.",
-    points: ["Premium notes, free", "PCM & PCB coverage", "Regular updates"],
-    accent: "blue" as const,
-  },
-];
 
 const stats = [
   { value: "3", label: "Telegram channels" },
