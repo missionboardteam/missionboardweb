@@ -75,7 +75,6 @@ const channels = [
 const stats = [
   { value: "3", label: "Telegram channels" },
   { value: "100%", label: "Free forever" },
-  { value: "Daily", label: "New material" },
   { value: "10–12", label: "Classes covered" },
 ];
 
@@ -257,7 +256,7 @@ function Index() {
               </a>
             </div>
 
-            <dl className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+            <dl className="mx-auto mt-14 grid max-w-3xl grid-cols-3 gap-3">
               {stats.map((s) => (
                 <div
                   key={s.label}
