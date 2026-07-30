@@ -15,10 +15,9 @@ export function AuthGate() {
   return (
     <Dialog open>
       <DialogContent
-        showCloseButton={false}
         onEscapeKeyDown={(e) => e.preventDefault()}
         onInteractOutside={(e) => e.preventDefault()}
-        className="max-h-[90vh] overflow-y-auto sm:max-w-md"
+        className="max-h-[90vh] overflow-y-auto sm:max-w-md [&>button]:hidden"
       >
         <AuthPanel />
       </DialogContent>
