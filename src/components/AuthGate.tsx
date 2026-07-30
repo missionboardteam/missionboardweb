@@ -19,6 +19,7 @@ export function AuthGate() {
         onInteractOutside={(e) => e.preventDefault()}
         className="max-h-[90vh] overflow-y-auto sm:max-w-md [&>button]:hidden"
       >
+        <DialogTitle className="sr-only">Sign in to continue</DialogTitle>
         <AuthPanel />
       </DialogContent>
     </Dialog>
