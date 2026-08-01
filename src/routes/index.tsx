@@ -176,7 +176,7 @@ function Index() {
             Pick your channel
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-center text-sm text-muted-foreground">
-            Join the channel that matches your class — or all three, they're free.
+            Join all THREE channels to access your books.
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {channels.map((c) => (

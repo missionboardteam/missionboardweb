@@ -172,24 +172,42 @@ export function SplashScreen() {
         <div className="animate-in fade-in mx-auto mt-10 max-w-xs space-y-3 rounded-2xl border border-border bg-card/60 px-5 py-4 text-xs delay-1000 duration-1000 fill-mode-backwards">
           <div>
             <p className="text-muted-foreground">Owned By (Powered & Produced by)</p>
-            <p className="mt-0.5 font-display font-bold text-gold">Navaan Sandhu</p>
+            <p className="mt-0.5 font-display text-base font-extrabold tracking-tight text-gold">
+              Navaan Sandhu
+            </p>
             <a
               href="https://t.me/Navaansandhu_og"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="font-semibold text-primary hover:underline"
             >
               @Navaansandhu_og
             </a>
           </div>
           <div className="border-t border-border pt-3">
+            <p className="text-muted-foreground">Co-Owner</p>
+            <p className="mt-0.5 font-display text-base font-extrabold tracking-tight text-gold">
+              Soham Tekawade
+            </p>
+            <a
+              href="https://t.me/Tekawade_Soham13"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-primary hover:underline"
+            >
+              @Tekawade_Soham13
+            </a>
+          </div>
+          <div className="border-t border-border pt-3">
             <p className="text-muted-foreground">Website developed by</p>
-            <p className="mt-0.5 font-display font-bold">BLU LEGACY</p>
+            <p className="mt-0.5 font-display text-base font-extrabold tracking-tight">
+              BLU LEGACY
+            </p>
             <a
               href="https://t.me/blu_legacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="font-semibold text-primary hover:underline"
             >
               @blu_legacy
             </a>

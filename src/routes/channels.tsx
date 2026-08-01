@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { channels, ChannelCard } from "@/lib/channels";
+import { FamilyBanner } from "@/components/FamilyBanner";
 
 export const Route = createFileRoute("/channels")({
   head: () => ({
