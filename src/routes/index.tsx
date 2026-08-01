@@ -93,8 +93,9 @@ const faqs = [
 
 function Index() {
   return (
-    <div className="min-h-screen pb-20 font-sans">
+    <div className="min-h-screen pb-28 font-sans">
       <SplashScreen />
+      <FamilyBanner />
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
 
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
