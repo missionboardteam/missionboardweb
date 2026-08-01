@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { channels, ChannelCard } from "@/lib/channels";
+import { FamilyBanner } from "@/components/FamilyBanner";
 
 export const Route = createFileRoute("/channels")({
   head: () => ({
@@ -24,7 +25,8 @@ export const Route = createFileRoute("/channels")({
 
 function ChannelsPage() {
   return (
-    <div className="min-h-screen pb-24 font-sans">
+    <div className="min-h-screen pb-28 font-sans">
+      <FamilyBanner />
       <div className="hero-surface border-b border-border/70 px-4 py-12 text-center">
         <h1 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
           Our <span className="text-gold">Channels</span>

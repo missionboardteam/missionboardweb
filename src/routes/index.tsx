@@ -6,6 +6,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { SplashScreen } from "@/components/SplashScreen";
+import { FamilyBanner } from "@/components/FamilyBanner";
 import {
   channels,
   ChannelCard,
@@ -93,8 +94,9 @@ const faqs = [
 
 function Index() {
   return (
-    <div className="min-h-screen pb-20 font-sans">
+    <div className="min-h-screen pb-28 font-sans">
       <SplashScreen />
+      <FamilyBanner />
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
 
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
@@ -176,7 +178,7 @@ function Index() {
             Pick your channel
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-center text-sm text-muted-foreground">
-            Join the channel that matches your class — or all three, they're free.
+            Join all THREE channels to access your books.
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {channels.map((c) => (
