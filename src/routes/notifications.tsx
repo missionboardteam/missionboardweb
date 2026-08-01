@@ -87,11 +87,11 @@ function NotificationsPage() {
             <li
               key={n.id}
               className={`card-elevated rounded-2xl border bg-card p-5 ${
-                n.pinned ? "border-gold/50 ring-1 ring-gold/25" : "border-border"
+                n.pinned ? "border-accent/60 ring-1 ring-accent/25" : "border-border"
               }`}
             >
               {n.pinned && (
-                <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-gold/40 bg-secondary px-2.5 py-1 text-[10px] font-bold tracking-wide text-gold uppercase">
+                <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-secondary px-2.5 py-1 text-[10px] font-bold tracking-wide text-gold uppercase">
                   <Pin className="h-3 w-3" />
                   Pinned
                 </span>
