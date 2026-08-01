@@ -6,6 +6,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { SplashScreen } from "@/components/SplashScreen";
+import { FamilyBanner } from "@/components/FamilyBanner";
 import {
   channels,
   ChannelCard,
