@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AuthGate } from "@/components/AuthGate";
 import { BottomNav } from "@/components/BottomNav";
+import { DriveAnnouncement } from "@/components/DriveAnnouncement";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -134,6 +135,7 @@ function RootComponent() {
         <Outlet />
         <BottomNav />
         <AuthGate />
+        <DriveAnnouncement />
         <Toaster position="top-center" richColors />
       </AuthProvider>
     </QueryClientProvider>
