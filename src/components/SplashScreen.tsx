@@ -109,14 +109,23 @@ function CelebrationBackground() {
 
 const FADE_DURATION = 500;
 
+const SEEN_KEY = "splash-seen";
+
 export function SplashScreen() {
-  const [done, setDone] = useState(false);
+  const [state, setState] = useState<"pending" | "playing" | "done">("pending");
 
   useEffect(() => {
+    if (sessionStorage.getItem(SEEN_KEY)) {
+      setState("done");
+      return;
+    }
+    sessionStorage.setItem(SEEN_KEY, "1");
+    setState("playing");
+
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const timer = setTimeout(() => {
-      setDone(true);
+      setState("done");
       document.body.style.overflow = prev;
     }, DURATION + FADE_DURATION + 100);
     return () => {
@@ -125,7 +134,8 @@ export function SplashScreen() {
     };
   }, []);
 
-  if (done) return null;
+  if (state !== "playing") return null;
+
 
   return (
     <div
