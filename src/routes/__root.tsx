@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AuthGate } from "@/components/AuthGate";
 import { BottomNav } from "@/components/BottomNav";
+import { SwipeTabs } from "@/components/SwipeTabs";
 import { DriveAnnouncement } from "@/components/DriveAnnouncement";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -133,6 +134,7 @@ function RootComponent() {
       <AuthProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <SwipeTabs />
         <BottomNav />
         <AuthGate />
         <DriveAnnouncement />

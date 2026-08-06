@@ -86,16 +86,18 @@ function NotificationsPage() {
           {data?.map((n) => (
             <li
               key={n.id}
-              className={`card-elevated rounded-2xl border bg-card p-5 ${
-                n.pinned ? "border-accent/60 ring-1 ring-accent/25" : "border-border"
+              className={`card-elevated relative rounded-2xl border bg-card p-5 ${
+                n.pinned ? "border-accent/60 pt-8 ring-1 ring-accent/25" : "border-border"
               }`}
             >
               {n.pinned && (
-                <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-secondary px-2.5 py-1 text-[10px] font-bold tracking-wide text-gold uppercase">
+                <span className="absolute top-2.5 left-3 inline-flex items-center gap-1 rounded-full border border-accent/40 bg-secondary px-2.5 py-1 text-[10px] font-bold tracking-wide text-gold uppercase">
+                  <span aria-hidden="true">📌</span>
                   <Pin className="h-3 w-3" />
                   Pinned
                 </span>
               )}
+
               <p className="font-display font-bold">{n.title}</p>
               {n.body && (
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
