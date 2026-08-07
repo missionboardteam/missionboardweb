@@ -1,4 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import ntLogo from "@/assets/batch-nt-logo.webp.asset.json";
+import mjLogo from "@/assets/batch-mj-logo.png.asset.json";
+import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
 import {
   Accordion,
   AccordionContent,
@@ -19,7 +22,7 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mission Board 2027 & Next Gen Academy | Free Study Material" },
+      { title: "Mission Board Class 10, 11 & 12 | Free Study Material" },
       {
         name: "description",
         content:
@@ -27,7 +30,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Mission Board 2027 & Next Gen Academy | Free Study Material",
+        content: "Mission Board Class 10, 11 & 12 | Free Study Material",
       },
       {
         property: "og:description",
@@ -51,7 +54,7 @@ const stats = [
 const faqs = [
   {
     q: "What are these channels about?",
-    a: "Mission Board Class 10 2027 covers everything for the CBSE Class 10 board exams, while Next Generation Academy covers Class 11 and 12 (CBSE boards plus JEE and NEET foundation). Both share notes, books and exclusive study material.",
+    a: "Mission Board Class 10 2027 covers everything for the CBSE Class 10 board exams, while Mission Board Class 11 & 12 covers Class 11 and 12 (CBSE boards plus JEE and NEET foundation). Both share notes, books and exclusive study material.",
   },
   {
     q: "Is everything really free?",
@@ -101,7 +104,7 @@ function Index() {
 
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <span className="font-display text-sm font-bold tracking-tight sm:text-base">
-            Mission Board <span className="text-muted-foreground">×</span> Next Gen
+            Mission Board
           </span>
           <a
             href="#channels"
@@ -155,7 +158,7 @@ function Index() {
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 font-display text-sm font-bold transition-colors hover:bg-secondary"
               >
                 <TelegramIcon />
-                Next Gen Academy
+                Class 11 &amp; 12
               </a>
             </div>
 
@@ -170,6 +173,47 @@ function Index() {
                 </div>
               ))}
             </dl>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-5xl px-4 pt-12 sm:pt-16">
+          <div className="card-elevated relative overflow-hidden rounded-3xl border border-border bg-card p-6 sm:p-8">
+            <div
+              className="pointer-events-none absolute -top-20 -left-16 h-52 w-52 rounded-full opacity-25 blur-3xl"
+              style={{ backgroundImage: "var(--gradient-blue)" }}
+            />
+            <div className="relative flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left">
+              <div>
+                <span className="inline-block rounded-full border border-border bg-secondary px-3 py-1 text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
+                  New · 2026-27
+                </span>
+                <h2 className="mt-3 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+                  Batches are <span className="text-gold">live</span>
+                </h2>
+                <p className="mt-2 max-w-md text-sm text-muted-foreground">
+                  Next Toppers, Mission JEET and Physics Wallah (PW) batches — open them right
+                  inside our website.
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
+                {[ntLogo, mjLogo, pwLogo].map((l) => (
+                  <img
+                    key={l.url}
+                    src={l.url}
+                    alt="Batch provider logo"
+                    loading="lazy"
+                    className="h-14 w-14 rounded-2xl bg-white object-contain p-1.5 ring-1 ring-border"
+                  />
+                ))}
+              </div>
+            </div>
+            <Link
+              to="/batches"
+              className="glow relative mt-6 flex w-full items-center justify-center rounded-xl px-5 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+              style={{ backgroundImage: "var(--gradient-blue)" }}
+            >
+              Go to Batches
+            </Link>
           </div>
         </section>
 
@@ -251,7 +295,7 @@ function Index() {
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 font-display text-sm font-bold transition-colors hover:bg-secondary"
               >
                 <TelegramIcon />
-                Next Gen Academy
+                Class 11 &amp; 12
               </a>
             </div>
           </div>
@@ -260,8 +304,8 @@ function Index() {
 
       <footer className="border-t border-border py-8">
         <p className="text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Mission Board 2027, Class 10 Discussion Group & Next
-          Generation Academy · Free education for every student
+          © {new Date().getFullYear()} Mission Board Class 10 2027, Class 10 Discussion Group &
+          Mission Board Class 11 &amp; 12 · Free education for every student
         </p>
       </footer>
     </div>

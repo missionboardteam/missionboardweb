@@ -5,16 +5,17 @@ import { FamilyBanner } from "@/components/FamilyBanner";
 export const Route = createFileRoute("/channels")({
   head: () => ({
     meta: [
-      { title: "Channels — Mission Board 2027 & Next Gen Academy" },
+      { title: "Channels — Mission Board Class 10, 11 & 12" },
       {
         name: "description",
         content:
-          "All Telegram channels: Mission Board Class 10 2027, Class 10 Discussion Group and Next Generation Academy for Class 11 & 12.",
+          "All Telegram channels: Mission Board Class 10 2027, Class 10 Discussion Group and Mission Board Class 11 & 12.",
       },
       { property: "og:title", content: "Our Telegram Channels" },
       {
         property: "og:description",
-        content: "Join Mission Board 2027, the Class 10 Discussion Group and Next Generation Academy.",
+        content:
+          "Join Mission Board Class 10 2027, the Class 10 Discussion Group and Mission Board Class 11 & 12.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

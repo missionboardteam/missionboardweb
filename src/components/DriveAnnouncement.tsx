@@ -6,6 +6,13 @@ import { GoogleDriveIcon } from "@/components/GoogleDriveIcon";
 
 const KEY = "announcements-seen";
 
+const CONFETTI = Array.from({ length: 18 }).map((_, i) => ({
+  left: `${(i * 5.5 + (i % 3) * 4) % 100}%`,
+  delay: `${(i % 6) * 0.25}s`,
+  duration: `${1.8 + (i % 4) * 0.4}s`,
+  color: ["#facc15", "#22d3ee", "#f472b6", "#a78bfa", "#fb923c", "#4ade80"][i % 6],
+}));
+
 type Stage = "drive" | "batches" | "done";
 
 export function DriveAnnouncement() {
@@ -47,17 +54,51 @@ export function DriveAnnouncement() {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/70 px-4 backdrop-blur-sm">
-      <div className="animate-in fade-in zoom-in-95 card-elevated relative w-full max-w-sm overflow-hidden rounded-3xl border border-white/15 bg-card/90 p-7 text-center duration-500">
+      <div
+        className={`animate-in fade-in zoom-in-95 card-elevated relative w-full max-w-sm overflow-hidden rounded-3xl border p-7 text-center duration-500 ${
+          isDrive ? "border-white/15 bg-card/90" : "border-accent/40"
+        }`}
+        style={
+          isDrive
+            ? undefined
+            : {
+                backgroundImage:
+                  "radial-gradient(120% 90% at 50% 0%, oklch(0.32 0.14 265) 0%, oklch(0.18 0.06 265) 55%, oklch(0.14 0.03 265) 100%)",
+              }
+        }
+      >
         <div
           className="pointer-events-none absolute -top-24 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full opacity-40 blur-3xl"
-          style={{ backgroundImage: isDrive ? "var(--gradient-gold)" : "var(--gradient-blue)" }}
+          style={{ backgroundImage: isDrive ? "var(--gradient-gold)" : "var(--gradient-gold)" }}
         />
+        {!isDrive && (
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            {CONFETTI.map((c, i) => (
+              <span
+                key={i}
+                className="absolute -top-6 rounded-sm"
+                style={{
+                  left: c.left,
+                  width: 7,
+                  height: 12,
+                  backgroundColor: c.color,
+                  animation: `pop-confetti ${c.duration} linear ${c.delay} infinite`,
+                }}
+              />
+            ))}
+            <style>{`@keyframes pop-confetti {
+              0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+              15% { opacity: 1; }
+              100% { transform: translateY(420px) rotate(540deg); opacity: 0; }
+            }`}</style>
+          </div>
+        )}
         {canClose && (
           <button
             type="button"
             aria-label="Close announcement"
             onClick={next}
-            className="animate-in fade-in absolute top-3 right-3 rounded-full border border-border bg-card/80 p-1.5 text-muted-foreground backdrop-blur transition-colors hover:text-foreground"
+            className="animate-in fade-in absolute top-3 right-3 z-10 rounded-full border border-border bg-card/80 p-1.5 text-muted-foreground backdrop-blur transition-colors hover:text-foreground"
           >
             <X className="h-4 w-4" />
           </button>
@@ -66,22 +107,46 @@ export function DriveAnnouncement() {
           {isDrive ? (
             <GoogleDriveIcon className="h-7 w-7" />
           ) : (
-            <Sparkles className="h-7 w-7 text-primary" />
+            <span className="text-2xl">🎉</span>
           )}
         </div>
-        <h2 className="relative mt-5 font-display text-lg leading-snug font-extrabold tracking-tight">
-          {isDrive ? "GOOGLE DRIVE FOR NEW BOOKS 📚 🎉" : "NEW 2026-27 BATCHES 🎓 🎉"}
-        </h2>
-        <p className="relative mt-2 text-sm text-muted-foreground">
-          {isDrive ? "now available under Notifications Tab." : "now available in the Batches tab."}
-        </p>
+        {isDrive ? (
+          <>
+            <h2 className="relative mt-5 font-display text-lg leading-snug font-extrabold tracking-tight">
+              GOOGLE DRIVE FOR NEW BOOKS 📚 🎉
+            </h2>
+            <p className="relative mt-2 text-sm text-muted-foreground">
+              now available under Notifications Tab.
+            </p>
+          </>
+        ) : (
+          <>
+            <h2
+              className="relative mt-5 font-display text-2xl leading-tight font-extrabold tracking-tight"
+              style={{
+                backgroundImage: "var(--gradient-gold)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              🎊 NEW 2026-27 BATCHES 🎓
+            </h2>
+            <p className="relative mt-3 text-sm font-semibold text-foreground">
+              Next Toppers, Mission JEET and Physics Wallah (PW) batches are now LIVE!
+            </p>
+            <p className="relative mt-1.5 text-xs text-muted-foreground">
+              Open them right inside our website from the Batches tab.
+            </p>
+          </>
+        )}
         <Link
           to={isDrive ? "/notifications" : "/batches"}
           onClick={finish}
           className="glow relative mt-6 flex w-full items-center justify-center rounded-xl px-5 py-3 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-          style={{ backgroundImage: isDrive ? "var(--gradient-gold)" : "var(--gradient-blue)" }}
+          style={{ backgroundImage: isDrive ? "var(--gradient-gold)" : "var(--gradient-pink)" }}
         >
-          {isDrive ? "Open Notifications" : "Go to Batches"}
+          {isDrive ? "Open Notifications" : "🎉 Go to Batches"}
         </Link>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import missionLogo from "@/assets/mission-board.jpg.asset.json";
-import nextgenLogo from "@/assets/nextgen-academy.jpg.asset.json";
+import missionLogo from "@/assets/mission-board-10.png.asset.json";
+import nextgenLogo from "@/assets/mission-board-1112.png.asset.json";
 
 const DURATION = 4600;
 
@@ -169,11 +169,11 @@ export function SplashScreen() {
           <div className="animate-in fade-in zoom-in-75 flex flex-col items-center delay-500 duration-700 fill-mode-backwards">
             <img
               src={nextgenLogo.url}
-              alt="Next Generation Academy logo"
+              alt="Mission Board Class 11 & 12 logo"
               className="h-16 w-16 rounded-2xl object-cover ring-1 ring-border sm:h-20 sm:w-20"
             />
             <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-tight sm:text-xl">
-              Next Generation Academy
+              Mission Board Class 11 &amp; 12
             </h2>
             <p className="text-xs text-muted-foreground">(A Part Of Mission Board Family)</p>
           </div>

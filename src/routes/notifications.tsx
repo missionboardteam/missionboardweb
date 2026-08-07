@@ -10,7 +10,7 @@ export const Route = createFileRoute("/notifications")({
       { title: "Notifications — Mission Board Class 10 2027" },
       {
         name: "description",
-        content: "Latest announcements and updates from Mission Board 2027 and Next Generation Academy.",
+        content: "Latest announcements and updates from Mission Board Class 10, 11 & 12.",
       },
       { property: "og:title", content: "Notifications" },
       { property: "og:description", content: "Latest announcements from the Mission Board family." },
