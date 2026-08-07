@@ -152,7 +152,7 @@ export function AuthPanel({
           ? "Join with your email to unlock all channels, notifications and updates."
           : mode === "forgot"
             ? "Enter your email and we'll send you a reset link."
-            : "Sign in to browse Mission Board 2027 & Next Generation Academy."}
+            : "Sign in to browse Mission Board Class 10, 11 & 12."}
       </p>
 
       {mode !== "forgot" && (

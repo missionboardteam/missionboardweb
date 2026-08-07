@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, ExternalLink } from "lucide-react";
-import nextToppersLogo from "@/assets/batch-next-toppers.png";
-import missionJeetLogo from "@/assets/batch-mission-jeet.png";
-import pwLogo from "@/assets/batch-pw.png";
+import nextToppersLogo from "@/assets/batch-nt-logo.webp.asset.json";
+import missionJeetLogo from "@/assets/batch-mj-logo.png.asset.json";
+import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
 
 export const Route = createFileRoute("/batches")({
   head: () => ({
