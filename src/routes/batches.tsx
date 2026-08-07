@@ -31,7 +31,7 @@ const batches = [
     id: "nt",
     name: "Next Toppers",
     tag: "Class 9-12 · Batches",
-    logo: nextToppersLogo,
+    logo: nextToppersLogo.url,
     url: "https://nexthope.pages.dev/nt/",
     accent: "var(--gradient-blue)",
   },
@@ -39,7 +39,7 @@ const batches = [
     id: "mj",
     name: "Mission JEET",
     tag: "Board + Competitive",
-    logo: missionJeetLogo,
+    logo: missionJeetLogo.url,
     url: "https://nexthope.pages.dev/mj",
     accent: "var(--gradient-gold)",
   },
@@ -47,7 +47,7 @@ const batches = [
     id: "pw",
     name: "Physics Wallah (PW)",
     tag: "JEE / NEET / Boards",
-    logo: pwLogo,
+    logo: pwLogo.url,
     url: "https://nexthope.pages.dev/pw",
     accent: "var(--gradient-pink)",
   },
@@ -73,11 +73,12 @@ function BatchesPage() {
             src={active.logo}
             alt={`${active.name} logo`}
             loading="lazy"
-            width={512}
-            height={512}
-            className="h-8 w-8 rounded-lg bg-white/5 object-contain"
+            className="h-8 w-8 rounded-lg bg-white object-contain p-0.5"
           />
           <p className="font-display text-sm font-bold">{active.name}</p>
+          <span className="ml-auto font-display text-sm font-extrabold tracking-tight text-gold">
+            Mission Board
+          </span>
         </div>
         <iframe
           src={active.url}
@@ -118,10 +119,9 @@ function BatchesPage() {
                 src={b.logo}
                 alt={`${b.name} logo`}
                 loading="lazy"
-                width={512}
-                height={512}
-                className="h-16 w-16 shrink-0 rounded-2xl bg-white/5 object-contain ring-1 ring-border"
+                className="h-16 w-16 shrink-0 rounded-2xl bg-white object-contain p-2 ring-1 ring-border"
               />
+
               <div className="min-w-0">
                 <span className="inline-block rounded-full border border-border bg-secondary px-2.5 py-1 text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
                   {b.tag}
