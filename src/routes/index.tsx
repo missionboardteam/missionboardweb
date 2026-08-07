@@ -1,4 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import ntLogo from "@/assets/batch-nt-logo.webp.asset.json";
+import mjLogo from "@/assets/batch-mj-logo.png.asset.json";
+import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
 import {
   Accordion,
   AccordionContent,
@@ -170,6 +173,47 @@ function Index() {
                 </div>
               ))}
             </dl>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-5xl px-4 pt-12 sm:pt-16">
+          <div className="card-elevated relative overflow-hidden rounded-3xl border border-border bg-card p-6 sm:p-8">
+            <div
+              className="pointer-events-none absolute -top-20 -left-16 h-52 w-52 rounded-full opacity-25 blur-3xl"
+              style={{ backgroundImage: "var(--gradient-blue)" }}
+            />
+            <div className="relative flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left">
+              <div>
+                <span className="inline-block rounded-full border border-border bg-secondary px-3 py-1 text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
+                  New · 2026-27
+                </span>
+                <h2 className="mt-3 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+                  Batches are <span className="text-gold">live</span>
+                </h2>
+                <p className="mt-2 max-w-md text-sm text-muted-foreground">
+                  Next Toppers, Mission JEET and Physics Wallah (PW) batches — open them right
+                  inside our website.
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
+                {[ntLogo, mjLogo, pwLogo].map((l) => (
+                  <img
+                    key={l.url}
+                    src={l.url}
+                    alt="Batch provider logo"
+                    loading="lazy"
+                    className="h-14 w-14 rounded-2xl bg-white object-contain p-1.5 ring-1 ring-border"
+                  />
+                ))}
+              </div>
+            </div>
+            <Link
+              to="/batches"
+              className="glow relative mt-6 flex w-full items-center justify-center rounded-xl px-5 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+              style={{ backgroundImage: "var(--gradient-blue)" }}
+            >
+              Go to Batches
+            </Link>
           </div>
         </section>
 
