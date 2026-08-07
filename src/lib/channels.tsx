@@ -1,5 +1,5 @@
-import missionLogo from "@/assets/mission-board.jpg.asset.json";
-import nextgenLogo from "@/assets/nextgen-academy.jpg.asset.json";
+import missionLogo from "@/assets/mission-board-10.png.asset.json";
+import nextgenLogo from "@/assets/mission-board-1112.png.asset.json";
 import discussionLogo from "@/assets/class10-discussion.jpg.asset.json";
 
 export const MISSION_LINK = "https://t.me/+T8PdqiLKkfU1ZDU9";
@@ -28,7 +28,7 @@ export const channels = [
     accent: "pink" as const,
   },
   {
-    name: "Next Generation Academy",
+    name: "Mission Board Class 11 & 12",
     tag: "Class 11 & 12 · JEE / NEET",
     logo: nextgenLogo.url,
     link: NEXTGEN_LINK,
