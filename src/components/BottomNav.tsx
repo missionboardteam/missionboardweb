@@ -1,5 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { navItems as items, activeNavIndex } from "@/lib/nav";
+import { MbAiLogo } from "@/components/MbAiLogo";
+
 
 export function BottomNav() {
   const { pathname } = useLocation();
@@ -50,7 +52,7 @@ export function BottomNav() {
           </div>
 
           <ul className="relative z-10 flex items-stretch justify-between">
-            {items.map(({ to, label, icon: Icon }, i) => {
+            {items.map(({ to, label, icon: Icon, brand }, i) => {
               const active = i === activeIndex;
               return (
                 <li key={to} className="flex-1">
@@ -59,27 +61,34 @@ export function BottomNav() {
                     className={`relative flex flex-col items-center gap-1 rounded-[24px] px-0.5 py-2 text-[9.5px] font-semibold transition-all duration-300 ${
                       active
                         ? "scale-[1.06] text-accent"
-                        : "text-muted-foreground hover:text-foreground active:scale-95"
+                        : brand
+                          ? "text-accent/90 hover:text-accent"
+                          : "text-muted-foreground hover:text-foreground active:scale-95"
                     }`}
                   >
-                    <Icon
-                      className="h-[19px] w-[19px] transition-transform duration-300"
-                      strokeWidth={active ? 2.6 : 2}
-                      style={
-                        active
-                          ? {
-                              filter:
-                                "drop-shadow(0 0 7px color-mix(in oklab, var(--accent) 70%, transparent))",
-                            }
-                          : undefined
-                      }
-                    />
+                    {brand ? (
+                      <MbAiLogo className="h-[21px] w-[21px]" />
+                    ) : (
+                      <Icon
+                        className="h-[19px] w-[19px] transition-transform duration-300"
+                        strokeWidth={active ? 2.6 : 2}
+                        style={
+                          active
+                            ? {
+                                filter:
+                                  "drop-shadow(0 0 7px color-mix(in oklab, var(--accent) 70%, transparent))",
+                              }
+                            : undefined
+                        }
+                      />
+                    )}
                     <span className={active ? "tracking-tight" : undefined}>{label}</span>
                   </Link>
                 </li>
               );
             })}
           </ul>
+
         </div>
       </div>
     </nav>

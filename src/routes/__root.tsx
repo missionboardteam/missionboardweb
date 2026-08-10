@@ -16,6 +16,8 @@ import { AuthGate } from "@/components/AuthGate";
 import { BottomNav } from "@/components/BottomNav";
 import { SwipeTabs } from "@/components/SwipeTabs";
 import { DriveAnnouncement } from "@/components/DriveAnnouncement";
+import { MbAiFab } from "@/components/MbAiFab";
+
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -135,9 +137,11 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <SwipeTabs />
+        <MbAiFab />
         <BottomNav />
         <AuthGate />
         <DriveAnnouncement />
+
         <Toaster position="top-center" richColors />
       </AuthProvider>
     </QueryClientProvider>
