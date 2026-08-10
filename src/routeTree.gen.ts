@@ -17,6 +17,9 @@ import { Route as BatchesRouteImport } from './routes/batches'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MbAiIndexRouteImport } from './routes/mb-ai.index'
+import { Route as MbAiThreadIdRouteImport } from './routes/mb-ai.$threadId'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -58,6 +61,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MbAiIndexRoute = MbAiIndexRouteImport.update({
+  id: '/mb-ai/',
+  path: '/mb-ai/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MbAiThreadIdRoute = MbAiThreadIdRouteImport.update({
+  id: '/mb-ai/$threadId',
+  path: '/mb-ai/$threadId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +86,9 @@ export interface FileRoutesByFullPath {
   '/channels': typeof ChannelsRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/api/chat': typeof ApiChatRoute
+  '/mb-ai/$threadId': typeof MbAiThreadIdRoute
+  '/mb-ai/': typeof MbAiIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +99,9 @@ export interface FileRoutesByTo {
   '/channels': typeof ChannelsRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/api/chat': typeof ApiChatRoute
+  '/mb-ai/$threadId': typeof MbAiThreadIdRoute
+  '/mb-ai': typeof MbAiIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +113,9 @@ export interface FileRoutesById {
   '/channels': typeof ChannelsRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/api/chat': typeof ApiChatRoute
+  '/mb-ai/$threadId': typeof MbAiThreadIdRoute
+  '/mb-ai/': typeof MbAiIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +128,9 @@ export interface FileRouteTypes {
     | '/channels'
     | '/notifications'
     | '/reset-password'
+    | '/api/chat'
+    | '/mb-ai/$threadId'
+    | '/mb-ai/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +141,9 @@ export interface FileRouteTypes {
     | '/channels'
     | '/notifications'
     | '/reset-password'
+    | '/api/chat'
+    | '/mb-ai/$threadId'
+    | '/mb-ai'
   id:
     | '__root__'
     | '/'
@@ -121,6 +154,9 @@ export interface FileRouteTypes {
     | '/channels'
     | '/notifications'
     | '/reset-password'
+    | '/api/chat'
+    | '/mb-ai/$threadId'
+    | '/mb-ai/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +168,9 @@ export interface RootRouteChildren {
   ChannelsRoute: typeof ChannelsRoute
   NotificationsRoute: typeof NotificationsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiChatRoute: typeof ApiChatRoute
+  MbAiThreadIdRoute: typeof MbAiThreadIdRoute
+  MbAiIndexRoute: typeof MbAiIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +231,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mb-ai/': {
+      id: '/mb-ai/'
+      path: '/mb-ai'
+      fullPath: '/mb-ai/'
+      preLoaderRoute: typeof MbAiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mb-ai/$threadId': {
+      id: '/mb-ai/$threadId'
+      path: '/mb-ai/$threadId'
+      fullPath: '/mb-ai/$threadId'
+      preLoaderRoute: typeof MbAiThreadIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +264,9 @@ const rootRouteChildren: RootRouteChildren = {
   ChannelsRoute: ChannelsRoute,
   NotificationsRoute: NotificationsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiChatRoute: ApiChatRoute,
+  MbAiThreadIdRoute: MbAiThreadIdRoute,
+  MbAiIndexRoute: MbAiIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

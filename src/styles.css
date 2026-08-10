@@ -174,3 +174,29 @@
 @utility glow {
   box-shadow: var(--shadow-glow);
 }
+
+@keyframes mbai-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes mbai-shine {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--accent) 55%, transparent));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px color-mix(in oklab, var(--accent) 85%, transparent));
+  }
+}
+
+.mbai-shine {
+  animation: mbai-shine 2.6s ease-in-out infinite;
+}
