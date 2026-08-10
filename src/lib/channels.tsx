@@ -3,7 +3,7 @@ import nextgenLogo from "@/assets/mission-board-1112.png.asset.json";
 import discussionLogo from "@/assets/class10-discussion.jpg.asset.json";
 
 export const MISSION_LINK = "https://t.me/+T8PdqiLKkfU1ZDU9";
-export const NEXTGEN_LINK = "https://t.me/NextGenerationAcademy07";
+export const NEXTGEN_LINK = "https://t.me/MissionBoardclass11and12";
 export const CLASS10_DISCUSSION_LINK = "https://t.me/+AxCXqeqCM-JiYTc1";
 
 export const channels = [
