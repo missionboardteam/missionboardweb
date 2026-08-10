@@ -136,11 +136,12 @@ function ChatWindow({
       new DefaultChatTransport<UIMessage>({
         api: "/api/chat",
         body: { threadId },
-        headers: async () => {
+        headers: async (): Promise<Record<string, string>> => {
           const { data } = await supabase.auth.getSession();
           const token = data.session?.access_token;
           return token ? { Authorization: `Bearer ${token}` } : {};
         },
+
       }),
     [threadId],
   );
