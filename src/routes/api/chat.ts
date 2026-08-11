@@ -80,7 +80,32 @@ export const Route = createFileRoute("/api/chat")({
             model: gateway("google/gemini-3.6-flash"),
             system: SYSTEM_PROMPT,
             messages: await convertToModelMessages(uiMessages),
+            stopWhen: stepCountIs(50),
+            tools: {
+              generate_image: tool({
+                description:
+                  "Generate an image (diagram, labelled figure, chart, poster or illustration) for the student.",
+                inputSchema: z.object({
+                  prompt: z
+                    .string()
+                    .describe("Detailed description of the image to generate, in English."),
+                }),
+                execute: async ({ prompt }) => {
+                  const { generateAndStoreImage } = await import("@/lib/mbai-image.server");
+                  try {
+                    const { url } = await generateAndStoreImage(prompt, key);
+                    return { url, prompt };
+                  } catch (error) {
+                    console.error("[MB AI] image generation failed", error);
+                    return {
+                      error: error instanceof Error ? error.message : "Image generation failed",
+                    };
+                  }
+                },
+              }),
+            },
           });
+
 
           return result.toUIMessageStreamResponse({
             originalMessages: uiMessages,
