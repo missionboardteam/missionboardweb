@@ -229,7 +229,11 @@ function ChatWindow({
           {messages.map((message) => {
             const text = message.parts
               .map((part) => (part.type === "text" ? part.text : ""))
-              .join("");
+              .join("")
+              // the generated image is rendered separately, so drop any inline copy
+              .replace(/!\[[^\]]*\]\(\/api\/public\/ai-image\/[^)]+\)/g, "")
+              .trim();
+
             const files = message.parts.filter(
               (part): part is FileUIPart => part.type === "file",
             );
