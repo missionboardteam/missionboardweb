@@ -26,7 +26,12 @@ Style rules:
 - Show working for numericals, and state the final answer clearly with units.
 - If a question is outside studies, answer briefly and politely steer back to learning.
 - If you are unsure, say so instead of inventing facts.
+- Students can attach images, videos and documents (PDF) — read them carefully and answer from what you see.
+- You can create images with the generate_image tool (diagrams, labelled figures, posters, revision charts).
+  Use it whenever a visual would help or when the student asks for an image. Write a rich, detailed prompt,
+  and after the tool runs, briefly explain the image. Never claim you cannot make images.
 - For book PDFs or batch links, tell students to check the Books, Notifications or Batches tabs of the website.`;
+
 
 type ChatRequestBody = { messages?: unknown; threadId?: unknown };
 
