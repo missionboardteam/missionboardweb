@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import {
+  convertToModelMessages,
+  streamText,
+  stepCountIs,
+  tool,
+  type UIMessage,
+} from "ai";
+import { z } from "zod";
 import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 import { authenticateRequest } from "@/lib/mbai-auth.server";
+
 
 const SYSTEM_PROMPT = `You are MB AI (Mission Board AI), the study assistant of the Mission Board family —
 Mission Board Class 10 2027, Mission Board Class 11 & 12, and the Class 10 Discussion Group.
@@ -18,7 +26,12 @@ Style rules:
 - Show working for numericals, and state the final answer clearly with units.
 - If a question is outside studies, answer briefly and politely steer back to learning.
 - If you are unsure, say so instead of inventing facts.
+- Students can attach images, videos and documents (PDF) — read them carefully and answer from what you see.
+- You can create images with the generate_image tool (diagrams, labelled figures, posters, revision charts).
+  Use it whenever a visual would help or when the student asks for an image. Write a rich, detailed prompt,
+  and after the tool runs, briefly explain the image. Never claim you cannot make images.
 - For book PDFs or batch links, tell students to check the Books, Notifications or Batches tabs of the website.`;
+
 
 type ChatRequestBody = { messages?: unknown; threadId?: unknown };
 
@@ -67,7 +80,32 @@ export const Route = createFileRoute("/api/chat")({
             model: gateway("google/gemini-3.6-flash"),
             system: SYSTEM_PROMPT,
             messages: await convertToModelMessages(uiMessages),
+            stopWhen: stepCountIs(50),
+            tools: {
+              generate_image: tool({
+                description:
+                  "Generate an image (diagram, labelled figure, chart, poster or illustration) for the student.",
+                inputSchema: z.object({
+                  prompt: z
+                    .string()
+                    .describe("Detailed description of the image to generate, in English."),
+                }),
+                execute: async ({ prompt }) => {
+                  const { generateAndStoreImage } = await import("@/lib/mbai-image.server");
+                  try {
+                    const { url } = await generateAndStoreImage(prompt, key);
+                    return { url, prompt };
+                  } catch (error) {
+                    console.error("[MB AI] image generation failed", error);
+                    return {
+                      error: error instanceof Error ? error.message : "Image generation failed",
+                    };
+                  }
+                },
+              }),
+            },
           });
+
 
           return result.toUIMessageStreamResponse({
             originalMessages: uiMessages,

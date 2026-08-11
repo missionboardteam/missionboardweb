@@ -20,6 +20,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as MbAiIndexRouteImport } from './routes/mb-ai.index'
 import { Route as MbAiThreadIdRouteImport } from './routes/mb-ai.$threadId'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiPublicAiImageFileRouteImport } from './routes/api/public/ai-image.$file'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -76,6 +77,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAiImageFileRoute = ApiPublicAiImageFileRouteImport.update({
+  id: '/api/public/ai-image/$file',
+  path: '/api/public/ai-image/$file',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/mb-ai/$threadId': typeof MbAiThreadIdRoute
   '/mb-ai/': typeof MbAiIndexRoute
+  '/api/public/ai-image/$file': typeof ApiPublicAiImageFileRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/mb-ai/$threadId': typeof MbAiThreadIdRoute
   '/mb-ai': typeof MbAiIndexRoute
+  '/api/public/ai-image/$file': typeof ApiPublicAiImageFileRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/mb-ai/$threadId': typeof MbAiThreadIdRoute
   '/mb-ai/': typeof MbAiIndexRoute
+  '/api/public/ai-image/$file': typeof ApiPublicAiImageFileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/mb-ai/$threadId'
     | '/mb-ai/'
+    | '/api/public/ai-image/$file'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/mb-ai/$threadId'
     | '/mb-ai'
+    | '/api/public/ai-image/$file'
   id:
     | '__root__'
     | '/'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/mb-ai/$threadId'
     | '/mb-ai/'
+    | '/api/public/ai-image/$file'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,6 +183,7 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   MbAiThreadIdRoute: typeof MbAiThreadIdRoute
   MbAiIndexRoute: typeof MbAiIndexRoute
+  ApiPublicAiImageFileRoute: typeof ApiPublicAiImageFileRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -252,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ai-image/$file': {
+      id: '/api/public/ai-image/$file'
+      path: '/api/public/ai-image/$file'
+      fullPath: '/api/public/ai-image/$file'
+      preLoaderRoute: typeof ApiPublicAiImageFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -267,17 +287,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   MbAiThreadIdRoute: MbAiThreadIdRoute,
   MbAiIndexRoute: MbAiIndexRoute,
+  ApiPublicAiImageFileRoute: ApiPublicAiImageFileRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
