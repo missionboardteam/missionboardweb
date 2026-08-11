@@ -20,6 +20,8 @@ import {
   PromptInputFooter,
   PromptInputSubmit,
   PromptInputTextarea,
+  usePromptInputAttachments,
+
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 
