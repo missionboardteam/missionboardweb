@@ -211,15 +211,15 @@ export function SplashScreen() {
           <div className="border-t border-border pt-3">
             <p className="text-muted-foreground">Website developed by</p>
             <p className="mt-0.5 font-display text-base font-extrabold tracking-tight">
-              Mrigan
+              BLU LEGACY
             </p>
             <a
-              href="https://t.me/mriganx_xd"
+              href="https://t.me/blu_legacy"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-primary hover:underline"
             >
-              @mriganx_xd
+              @blu_legacy
             </a>
           </div>
         </div>
