@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import {
+  convertToModelMessages,
+  streamText,
+  stepCountIs,
+  tool,
+  type UIMessage,
+} from "ai";
+import { z } from "zod";
 import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 import { authenticateRequest } from "@/lib/mbai-auth.server";
+
 
 const SYSTEM_PROMPT = `You are MB AI (Mission Board AI), the study assistant of the Mission Board family —
 Mission Board Class 10 2027, Mission Board Class 11 & 12, and the Class 10 Discussion Group.
