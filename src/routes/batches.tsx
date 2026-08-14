@@ -76,10 +76,20 @@ function BatchesPage() {
             className="h-8 w-8 rounded-lg bg-white object-contain p-0.5"
           />
           <p className="font-display text-sm font-bold">{active.name}</p>
-          <span className="ml-auto font-display text-sm font-extrabold tracking-tight text-gold">
+          <a
+            href={active.url}
+            target="_blank"
+            rel="noopener"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            New tab
+          </a>
+          <span className="font-display text-sm font-extrabold tracking-tight text-gold">
             Mission Board
           </span>
         </div>
+
         <iframe
           src={active.url}
           title={active.name}
