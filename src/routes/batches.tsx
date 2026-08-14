@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, Send } from "lucide-react";
-import { ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Send } from "lucide-react";
 import nextToppersLogo from "@/assets/batch-nt-logo.webp.asset.json";
 import missionJeetLogo from "@/assets/batch-mj-logo.png.asset.json";
 import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
