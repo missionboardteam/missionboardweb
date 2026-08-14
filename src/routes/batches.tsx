@@ -84,9 +84,10 @@ function BatchesPage() {
           src={active.url}
           title={active.name}
           className="h-[calc(100vh-9.5rem)] w-full border-0 bg-white"
-          referrerPolicy="no-referrer"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+          allow="fullscreen; clipboard-read; clipboard-write; autoplay; encrypted-media"
+          allowFullScreen
         />
+
       </div>
     );
   }
