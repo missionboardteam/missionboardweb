@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import nextToppersLogo from "@/assets/batch-nt-logo.webp.asset.json";
 import missionJeetLogo from "@/assets/batch-mj-logo.png.asset.json";
 import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
@@ -26,13 +27,18 @@ export const Route = createFileRoute("/batches")({
   component: BatchesPage,
 });
 
+const SERVER2_TELEGRAM = "https://t.me/+pzCrMzIlK0cyMWRl";
+
 const batches = [
   {
     id: "nt",
     name: "Next Toppers",
     tag: "Class 9-12 · Batches",
     logo: nextToppersLogo.url,
-    url: "https://nexthope.pages.dev/nt/",
+    servers: [
+      { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/nt/" },
+      { id: "s2", label: "Server 2", url: "https://studypanda.live/nexttoppers" },
+    ],
     accent: "var(--gradient-blue)",
   },
   {
@@ -40,7 +46,10 @@ const batches = [
     name: "Mission JEET",
     tag: "Board + Competitive",
     logo: missionJeetLogo.url,
-    url: "https://nexthope.pages.dev/mj",
+    servers: [
+      { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/mj" },
+      { id: "s2", label: "Server 2", url: "https://studypanda.live/missionjeet" },
+    ],
     accent: "var(--gradient-gold)",
   },
   {
@@ -48,16 +57,21 @@ const batches = [
     name: "Physics Wallah (PW)",
     tag: "JEE / NEET / Boards",
     logo: pwLogo.url,
-    url: "https://nexthope.pages.dev/pw",
+    servers: [
+      { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/pw" },
+      { id: "s2", label: "Server 2", url: "https://pw.studypanda.live/study/batches" },
+    ],
     accent: "var(--gradient-pink)",
   },
 ] as const;
 
 function BatchesPage() {
   const [openId, setOpenId] = useState<string | null>(null);
+  const [serverId, setServerId] = useState<string>("s1");
   const active = batches.find((b) => b.id === openId);
+  const activeServer = active?.servers.find((s) => s.id === serverId) ?? active?.servers[0];
 
-  if (active) {
+  if (active && activeServer) {
     return (
       <div className="flex min-h-screen flex-col pb-28 font-sans">
         <div className="flex items-center gap-3 border-b border-border/70 bg-card/60 px-4 py-3 backdrop-blur">
@@ -76,28 +90,51 @@ function BatchesPage() {
             className="h-8 w-8 rounded-lg bg-white object-contain p-0.5"
           />
           <p className="font-display text-sm font-bold">{active.name}</p>
-          <a
-            href={active.url}
-            target="_blank"
-            rel="noopener"
-            className="ml-auto inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
-          >
-            <ExternalLink className="h-3.5 w-3.5" />
-            New tab
-          </a>
-          <span className="font-display text-sm font-extrabold tracking-tight text-gold">
+          <span className="ml-auto font-display text-sm font-extrabold tracking-tight text-gold">
             Mission Board
           </span>
         </div>
 
+        <div className="flex items-center gap-2 border-b border-border/70 bg-card/40 px-4 py-2 backdrop-blur">
+          {active.servers.map((s) => {
+            const isActive = s.id === activeServer.id;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setServerId(s.id)}
+                className={`rounded-xl px-3 py-2 font-display text-xs font-bold transition-all duration-300 ${
+                  isActive
+                    ? "text-accent-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]"
+                    : "border border-border bg-secondary text-muted-foreground hover:text-foreground"
+                }`}
+                style={isActive ? { backgroundImage: active.accent } : undefined}
+              >
+                {s.label}
+              </button>
+            );
+          })}
+          {activeServer.id === "s2" && (
+            <a
+              href={SERVER2_TELEGRAM}
+              target="_blank"
+              rel="noopener"
+              className="ml-auto inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
+            >
+              <Send className="h-3.5 w-3.5" />
+              Join Telegram
+            </a>
+          )}
+        </div>
+
         <iframe
-          src={active.url}
-          title={active.name}
-          className="h-[calc(100vh-9.5rem)] w-full border-0 bg-white"
+          key={activeServer.url}
+          src={activeServer.url}
+          title={`${active.name} — ${activeServer.label}`}
+          className="h-[calc(100vh-13rem)] w-full border-0 bg-white"
           allow="fullscreen; clipboard-read; clipboard-write; autoplay; encrypted-media"
           allowFullScreen
         />
-
       </div>
     );
   }
@@ -118,7 +155,10 @@ function BatchesPage() {
           <button
             key={b.id}
             type="button"
-            onClick={() => setOpenId(b.id)}
+            onClick={() => {
+              setServerId("s1");
+              setOpenId(b.id);
+            }}
             className="card-elevated group relative overflow-hidden rounded-3xl border border-border bg-card p-5 text-left transition-transform duration-300 hover:-translate-y-1"
           >
             <div
@@ -138,6 +178,7 @@ function BatchesPage() {
                   {b.tag}
                 </span>
                 <h2 className="mt-2 font-display text-lg leading-tight font-bold">{b.name}</h2>
+                <p className="mt-1 text-xs text-muted-foreground">Server 1 · Server 2</p>
               </div>
               <ExternalLink className="ml-auto h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
             </div>
