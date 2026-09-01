@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RoomRouteImport } from './routes/room'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ChannelsRouteImport } from './routes/channels'
@@ -22,6 +23,11 @@ import { Route as MbAiThreadIdRouteImport } from './routes/mb-ai.$threadId'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiPublicAiImageFileRouteImport } from './routes/api/public/ai-image.$file'
 
+const RoomRoute = RoomRouteImport.update({
+  id: '/room',
+  path: '/room',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/channels': typeof ChannelsRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/room': typeof RoomRoute
   '/api/chat': typeof ApiChatRoute
   '/mb-ai/$threadId': typeof MbAiThreadIdRoute
   '/mb-ai/': typeof MbAiIndexRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
   '/channels': typeof ChannelsRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/room': typeof RoomRoute
   '/api/chat': typeof ApiChatRoute
   '/mb-ai/$threadId': typeof MbAiThreadIdRoute
   '/mb-ai': typeof MbAiIndexRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/channels': typeof ChannelsRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/room': typeof RoomRoute
   '/api/chat': typeof ApiChatRoute
   '/mb-ai/$threadId': typeof MbAiThreadIdRoute
   '/mb-ai/': typeof MbAiIndexRoute
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
     | '/channels'
     | '/notifications'
     | '/reset-password'
+    | '/room'
     | '/api/chat'
     | '/mb-ai/$threadId'
     | '/mb-ai/'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/channels'
     | '/notifications'
     | '/reset-password'
+    | '/room'
     | '/api/chat'
     | '/mb-ai/$threadId'
     | '/mb-ai'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/channels'
     | '/notifications'
     | '/reset-password'
+    | '/room'
     | '/api/chat'
     | '/mb-ai/$threadId'
     | '/mb-ai/'
@@ -180,6 +192,7 @@ export interface RootRouteChildren {
   ChannelsRoute: typeof ChannelsRoute
   NotificationsRoute: typeof NotificationsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  RoomRoute: typeof RoomRoute
   ApiChatRoute: typeof ApiChatRoute
   MbAiThreadIdRoute: typeof MbAiThreadIdRoute
   MbAiIndexRoute: typeof MbAiIndexRoute
@@ -188,6 +201,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/room': {
+      id: '/room'
+      path: '/room'
+      fullPath: '/room'
+      preLoaderRoute: typeof RoomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -284,6 +304,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChannelsRoute: ChannelsRoute,
   NotificationsRoute: NotificationsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  RoomRoute: RoomRoute,
   ApiChatRoute: ApiChatRoute,
   MbAiThreadIdRoute: MbAiThreadIdRoute,
   MbAiIndexRoute: MbAiIndexRoute,
