@@ -116,17 +116,15 @@ function BatchesPage() {
               </button>
             );
           })}
-          {activeServer.id === "s2" && (
-            <a
-              href={SERVER2_TELEGRAM}
-              target="_blank"
-              rel="noopener"
-              className="ml-auto inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
-            >
-              <Send className="h-3.5 w-3.5" />
-              Join Telegram
-            </a>
-          )}
+          <a
+            href={JOIN_TELEGRAM}
+            target="_blank"
+            rel="noopener"
+            className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
+          >
+            <Send className="h-3.5 w-3.5" />
+            Join Telegram
+          </a>
         </div>
 
         <iframe
