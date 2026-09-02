@@ -97,21 +97,28 @@ function BooksPage() {
   const filtered = useMemo(() => {
     if (!data) return data;
     const term = query.trim().toLowerCase();
-    const pub = PUBLISHERS.find((p) => p.id === publisher);
     let list = data.filter((n) => {
       const text = `${n.title} ${n.body}`.toLowerCase();
-      if (term && !text.includes(term)) return false;
-      if (pub && "match" in pub && !pub.match.some((m) => text.includes(m))) return false;
-      return true;
+      return !term || text.includes(term);
     });
     list = [...list].sort((a, b) => {
       if (sort === "az") return a.title.localeCompare(b.title);
+      if (sort === "relevance" && term) {
+        const score = (n: (typeof list)[number]) => {
+          const t = n.title.toLowerCase().indexOf(term);
+          if (t >= 0) return t;
+          const b2 = `${n.title} ${n.body}`.toLowerCase().indexOf(term);
+          return 1000 + (b2 < 0 ? 9999 : b2);
+        };
+        return score(a) - score(b);
+      }
       const da = new Date(a.created_at).getTime();
       const db = new Date(b.created_at).getTime();
       return sort === "oldest" ? da - db : db - da;
     });
     return list;
-  }, [data, query, publisher, sort]);
+  }, [data, query, sort]);
+
 
   return (
     <div className="min-h-screen pb-28 font-sans">
