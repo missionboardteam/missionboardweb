@@ -58,7 +58,7 @@ function AccountPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("full_name, avatar_url, phone")
+        .select("full_name, avatar_url, phone, class, bio")
         .eq("id", user!.id)
         .maybeSingle();
       if (error) throw error;
@@ -70,6 +70,8 @@ function AccountPage() {
     if (!profile) return;
     setFullName(profile.full_name ?? ((user?.user_metadata?.full_name as string) ?? ""));
     setPhone(profile.phone ?? "");
+    setKlass(profile.class ?? "");
+    setBio(profile.bio ?? "");
   }, [profile, user]);
 
   useEffect(() => {
