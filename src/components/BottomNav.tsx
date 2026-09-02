@@ -55,22 +55,22 @@ export function BottomNav() {
             {items.map(({ to, label, icon: Icon, brand }, i) => {
               const active = i === activeIndex;
               return (
-                <li key={to} className="flex-1">
+                <li key={to} className="min-w-0 flex-1">
                   <Link
                     to={to}
-                    className={`relative flex flex-col items-center gap-1 rounded-[24px] px-0.5 py-2 text-[9.5px] font-semibold transition-all duration-300 ${
+                    className={`relative flex flex-col items-center gap-0.5 rounded-[22px] px-0 py-2 text-[8.5px] font-semibold transition-all duration-300 ${
                       active
-                        ? "scale-[1.06] text-accent"
+                        ? "scale-[1.08] text-accent"
                         : brand
                           ? "text-accent/90 hover:text-accent"
                           : "text-muted-foreground hover:text-foreground active:scale-95"
                     }`}
                   >
                     {brand ? (
-                      <MbAiLogo className="h-[21px] w-[21px]" />
+                      <MbAiLogo className="h-[19px] w-[19px]" />
                     ) : (
                       <Icon
-                        className="h-[19px] w-[19px] transition-transform duration-300"
+                        className="h-[18px] w-[18px] transition-transform duration-300"
                         strokeWidth={active ? 2.6 : 2}
                         style={
                           active
@@ -82,12 +82,13 @@ export function BottomNav() {
                         }
                       />
                     )}
-                    <span className={active ? "tracking-tight" : undefined}>{label}</span>
+                    <span className={`truncate ${active ? "tracking-tight" : ""}`}>{label}</span>
                   </Link>
                 </li>
               );
             })}
           </ul>
+
 
         </div>
       </div>
