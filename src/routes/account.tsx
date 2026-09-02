@@ -35,6 +35,8 @@ const phoneSchema = z
   .regex(/^\+?[0-9]{7,15}$/, "Enter a valid mobile number (digits only, optional +)");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters").max(72);
 
+const CLASS_OPTIONS = ["Class 10", "Class 11", "Class 12"] as const;
+
 function AccountPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
