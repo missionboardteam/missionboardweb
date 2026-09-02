@@ -17,6 +17,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { SwipeTabs } from "@/components/SwipeTabs";
 import { DriveAnnouncement } from "@/components/DriveAnnouncement";
 import { MbAiFab } from "@/components/MbAiFab";
+import { StatusBar } from "@/components/StatusBar";
 
 import { Toaster } from "@/components/ui/sonner";
 
