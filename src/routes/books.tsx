@@ -207,26 +207,6 @@ function BooksPage() {
           </div>
         )}
 
-        <div className="mb-2 flex flex-wrap gap-2">
-          {PUBLISHERS.map((p) => {
-            const active = p.id === publisher;
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => setPublisher(p.id)}
-                className={`rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
-                  active
-                    ? "text-accent-foreground"
-                    : "border border-border bg-card/70 text-muted-foreground hover:text-foreground"
-                }`}
-                style={active ? { backgroundImage: "var(--gradient-gold)" } : undefined}
-              >
-                {p.label}
-              </button>
-            );
-          })}
-        </div>
 
         <div className="mb-6 flex flex-wrap items-center gap-2">
           <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
