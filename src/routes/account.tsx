@@ -43,6 +43,8 @@ function AccountPage() {
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [klass, setKlass] = useState("");
+  const [bio, setBio] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
