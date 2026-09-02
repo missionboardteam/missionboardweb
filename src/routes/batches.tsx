@@ -26,7 +26,7 @@ export const Route = createFileRoute("/batches")({
   component: BatchesPage,
 });
 
-const SERVER2_TELEGRAM = "https://t.me/+pzCrMzIlK0cyMWRl";
+const JOIN_TELEGRAM = "https://t.me/+pzCrMzIlK0cyMWRl";
 
 const batches = [
   {
@@ -37,6 +37,7 @@ const batches = [
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/nt/" },
       { id: "s2", label: "Server 2", url: "https://studypanda.live/nexttoppers" },
+      { id: "s3", label: "Server 3", url: "https://nt.studybeepro.site/" },
     ],
     accent: "var(--gradient-blue)",
   },
@@ -48,6 +49,7 @@ const batches = [
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/mj" },
       { id: "s2", label: "Server 2", url: "https://studypanda.live/missionjeet" },
+      { id: "s3", label: "Server 3", url: "https://studybeepro.site/mj/" },
     ],
     accent: "var(--gradient-gold)",
   },
@@ -59,6 +61,7 @@ const batches = [
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/pw" },
       { id: "s2", label: "Server 2", url: "https://pw.studypanda.live/study/batches" },
+      { id: "s3", label: "Server 3", url: "https://pw.studybeepro.site/study/batches" },
     ],
     accent: "var(--gradient-pink)",
   },
