@@ -73,6 +73,12 @@ function BatchesPage() {
   const active = batches.find((b) => b.id === openId);
   const activeServer = active?.servers.find((s) => s.id === serverId) ?? active?.servers[0];
 
+  useEffect(() => {
+    setChromeHidden(!!active);
+    return () => setChromeHidden(false);
+  }, [active]);
+
+
   if (active && activeServer) {
     return (
       <div className="flex min-h-screen flex-col pb-28 font-sans">
