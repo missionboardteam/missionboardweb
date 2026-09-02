@@ -119,9 +119,13 @@ function AccountPage() {
     }
     setSavingProfile(true);
     try {
-      const { error } = await supabase
-        .from("profiles")
-        .upsert({ id: user.id, full_name: parsedName.data, phone: phoneValue });
+      const { error } = await supabase.from("profiles").upsert({
+        id: user.id,
+        full_name: parsedName.data,
+        phone: phoneValue,
+        class: klass || null,
+        bio: bio.trim() || null,
+      });
       if (error) throw error;
       await queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
       toast.success("Profile updated");
