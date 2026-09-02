@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setChromeHidden } from "@/lib/chrome";
 import { ArrowLeft, ExternalLink, Send } from "lucide-react";
 import nextToppersLogo from "@/assets/batch-nt-logo.webp.asset.json";
 import missionJeetLogo from "@/assets/batch-mj-logo.png.asset.json";
