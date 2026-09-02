@@ -44,7 +44,7 @@ function BooksPage() {
   const { session } = useAuth();
   const [folder, setFolder] = useState<string>(folders[0].id);
   const [query, setQuery] = useState("");
-  const [publisher, setPublisher] = useState<string>("all");
+  
   const [sort, setSort] = useState<string>("newest");
   const [recent, setRecent] = useState<string[]>([]);
 
