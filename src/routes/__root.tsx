@@ -17,6 +17,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { SwipeTabs } from "@/components/SwipeTabs";
 import { DriveAnnouncement } from "@/components/DriveAnnouncement";
 import { MbAiFab } from "@/components/MbAiFab";
+import { StatusBar } from "@/components/StatusBar";
 
 import { Toaster } from "@/components/ui/sonner";
 
@@ -134,6 +135,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <StatusBar />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <SwipeTabs />

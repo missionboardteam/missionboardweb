@@ -31,17 +31,10 @@ const folders = [
   { id: "books_class11_12", label: "Class 11 and 12" },
 ] as const;
 
-const PUBLISHERS = [
-  { id: "all", label: "All" },
-  { id: "pw", label: "PW", match: ["pw", "physics wallah"] },
-  { id: "oswaal", label: "Oswaal", match: ["oswaal"] },
-  { id: "educart", label: "Educart", match: ["educart"] },
-  { id: "padhle", label: "Padhle", match: ["padhle"] },
-] as const;
-
 const SORTS = [
   { id: "newest", label: "Newest" },
   { id: "oldest", label: "Oldest" },
+  { id: "relevance", label: "Relevance" },
   { id: "az", label: "A–Z" },
 ] as const;
 
@@ -51,7 +44,7 @@ function BooksPage() {
   const { session } = useAuth();
   const [folder, setFolder] = useState<string>(folders[0].id);
   const [query, setQuery] = useState("");
-  const [publisher, setPublisher] = useState<string>("all");
+  
   const [sort, setSort] = useState<string>("newest");
   const [recent, setRecent] = useState<string[]>([]);
 
@@ -104,21 +97,28 @@ function BooksPage() {
   const filtered = useMemo(() => {
     if (!data) return data;
     const term = query.trim().toLowerCase();
-    const pub = PUBLISHERS.find((p) => p.id === publisher);
     let list = data.filter((n) => {
       const text = `${n.title} ${n.body}`.toLowerCase();
-      if (term && !text.includes(term)) return false;
-      if (pub && "match" in pub && !pub.match.some((m) => text.includes(m))) return false;
-      return true;
+      return !term || text.includes(term);
     });
     list = [...list].sort((a, b) => {
       if (sort === "az") return a.title.localeCompare(b.title);
+      if (sort === "relevance" && term) {
+        const score = (n: (typeof list)[number]) => {
+          const t = n.title.toLowerCase().indexOf(term);
+          if (t >= 0) return t;
+          const b2 = `${n.title} ${n.body}`.toLowerCase().indexOf(term);
+          return 1000 + (b2 < 0 ? 9999 : b2);
+        };
+        return score(a) - score(b);
+      }
       const da = new Date(a.created_at).getTime();
       const db = new Date(b.created_at).getTime();
       return sort === "oldest" ? da - db : db - da;
     });
     return list;
-  }, [data, query, publisher, sort]);
+  }, [data, query, sort]);
+
 
   return (
     <div className="min-h-screen pb-28 font-sans">
@@ -207,26 +207,6 @@ function BooksPage() {
           </div>
         )}
 
-        <div className="mb-2 flex flex-wrap gap-2">
-          {PUBLISHERS.map((p) => {
-            const active = p.id === publisher;
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => setPublisher(p.id)}
-                className={`rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
-                  active
-                    ? "text-accent-foreground"
-                    : "border border-border bg-card/70 text-muted-foreground hover:text-foreground"
-                }`}
-                style={active ? { backgroundImage: "var(--gradient-gold)" } : undefined}
-              >
-                {p.label}
-              </button>
-            );
-          })}
-        </div>
 
         <div className="mb-6 flex flex-wrap items-center gap-2">
           <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
@@ -280,9 +260,10 @@ function BooksPage() {
                       href={n.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-block text-sm font-semibold text-primary hover:underline"
+                      className="glow mt-3 inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-display text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90"
+                      style={{ backgroundImage: "var(--gradient-gold)" }}
                     >
-                      Open Google Drive 🔗
+                      Open Google Drive
                     </a>
                   )}
                 </div>

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setChromeHidden } from "@/lib/chrome";
 import { ArrowLeft, ExternalLink, Send } from "lucide-react";
 import nextToppersLogo from "@/assets/batch-nt-logo.webp.asset.json";
 import missionJeetLogo from "@/assets/batch-mj-logo.png.asset.json";
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/batches")({
   component: BatchesPage,
 });
 
-const SERVER2_TELEGRAM = "https://t.me/+pzCrMzIlK0cyMWRl";
+const JOIN_TELEGRAM = "https://t.me/+pzCrMzIlK0cyMWRl";
 
 const batches = [
   {
@@ -37,6 +38,7 @@ const batches = [
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/nt/" },
       { id: "s2", label: "Server 2", url: "https://studypanda.live/nexttoppers" },
+      { id: "s3", label: "Server 3", url: "https://nt.studybeepro.site/" },
     ],
     accent: "var(--gradient-blue)",
   },
@@ -48,6 +50,7 @@ const batches = [
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/mj" },
       { id: "s2", label: "Server 2", url: "https://studypanda.live/missionjeet" },
+      { id: "s3", label: "Server 3", url: "https://studybeepro.site/mj/" },
     ],
     accent: "var(--gradient-gold)",
   },
@@ -59,6 +62,7 @@ const batches = [
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/pw" },
       { id: "s2", label: "Server 2", url: "https://pw.studypanda.live/study/batches" },
+      { id: "s3", label: "Server 3", url: "https://pw.studybeepro.site/study/batches" },
     ],
     accent: "var(--gradient-pink)",
   },
@@ -69,6 +73,12 @@ function BatchesPage() {
   const [serverId, setServerId] = useState<string>("s1");
   const active = batches.find((b) => b.id === openId);
   const activeServer = active?.servers.find((s) => s.id === serverId) ?? active?.servers[0];
+
+  useEffect(() => {
+    setChromeHidden(!!active);
+    return () => setChromeHidden(false);
+  }, [active]);
+
 
   if (active && activeServer) {
     return (
@@ -113,17 +123,15 @@ function BatchesPage() {
               </button>
             );
           })}
-          {activeServer.id === "s2" && (
-            <a
-              href={SERVER2_TELEGRAM}
-              target="_blank"
-              rel="noopener"
-              className="ml-auto inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
-            >
-              <Send className="h-3.5 w-3.5" />
-              Join Telegram
-            </a>
-          )}
+          <a
+            href={JOIN_TELEGRAM}
+            target="_blank"
+            rel="noopener"
+            className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
+          >
+            <Send className="h-3.5 w-3.5" />
+            Join Telegram
+          </a>
         </div>
 
         <iframe

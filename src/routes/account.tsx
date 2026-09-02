@@ -35,6 +35,8 @@ const phoneSchema = z
   .regex(/^\+?[0-9]{7,15}$/, "Enter a valid mobile number (digits only, optional +)");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters").max(72);
 
+const CLASS_OPTIONS = ["Class 10", "Class 11", "Class 12"] as const;
+
 function AccountPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -43,6 +45,8 @@ function AccountPage() {
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [klass, setKlass] = useState("");
+  const [bio, setBio] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
@@ -56,7 +60,7 @@ function AccountPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("full_name, avatar_url, phone")
+        .select("full_name, avatar_url, phone, class, bio")
         .eq("id", user!.id)
         .maybeSingle();
       if (error) throw error;
@@ -68,6 +72,8 @@ function AccountPage() {
     if (!profile) return;
     setFullName(profile.full_name ?? ((user?.user_metadata?.full_name as string) ?? ""));
     setPhone(profile.phone ?? "");
+    setKlass(profile.class ?? "");
+    setBio(profile.bio ?? "");
   }, [profile, user]);
 
   useEffect(() => {
@@ -117,9 +123,13 @@ function AccountPage() {
     }
     setSavingProfile(true);
     try {
-      const { error } = await supabase
-        .from("profiles")
-        .upsert({ id: user.id, full_name: parsedName.data, phone: phoneValue });
+      const { error } = await supabase.from("profiles").upsert({
+        id: user.id,
+        full_name: parsedName.data,
+        phone: phoneValue,
+        class: klass || null,
+        bio: bio.trim() || null,
+      });
       if (error) throw error;
       await queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
       toast.success("Profile updated");
@@ -239,19 +249,45 @@ function AccountPage() {
           <h2 className="font-display text-lg font-bold">Edit profile</h2>
           <div className="mt-4 grid gap-3">
             <div className="grid gap-1.5">
-              <Label htmlFor="full-name">Full name</Label>
+              <Label htmlFor="full-name">Display name *</Label>
               <Input
                 id="full-name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 maxLength={60}
                 placeholder="Your name"
+                required
               />
             </div>
+
+            <div className="grid gap-1.5">
+              <Label>Class (optional)</Label>
+              <div className="flex gap-2">
+                {CLASS_OPTIONS.map((c) => {
+                  const active = klass === c;
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setKlass(active ? "" : c)}
+                      className={`flex-1 rounded-xl px-3 py-2.5 font-display text-sm font-bold transition-all ${
+                        active
+                          ? "text-accent-foreground"
+                          : "border border-border bg-secondary/60 text-muted-foreground hover:text-foreground"
+                      }`}
+                      style={active ? { backgroundImage: "var(--gradient-gold)" } : undefined}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="grid gap-1.5">
               <Label htmlFor="phone" className="flex items-center gap-1.5">
                 <Phone className="h-3.5 w-3.5" />
-                Mobile number
+                Mobile number (optional)
               </Label>
               <Input
                 id="phone"
@@ -262,6 +298,20 @@ function AccountPage() {
                 placeholder="+919876543210"
               />
             </div>
+
+            <div className="grid gap-1.5">
+              <Label htmlFor="bio">Bio (optional)</Label>
+              <textarea
+                id="bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                maxLength={160}
+                rows={3}
+                placeholder="e.g. JEE aspirant, loves Physics"
+                className="w-full resize-none rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+              />
+            </div>
+
             <Button
               onClick={saveProfile}
               disabled={savingProfile}

@@ -160,70 +160,57 @@ export function SplashScreen() {
           Mission Board Class 10 2027 presents you a brand new website
         </h1>
 
-        <div className="mt-8 flex items-end justify-center gap-5 sm:gap-6">
-          <img
-            src={missionLogo.url}
-            alt="Mission Board Class 10 2027 logo"
-            className="animate-in fade-in zoom-in-75 h-28 w-28 rounded-2xl object-cover ring-1 ring-border delay-300 duration-700 fill-mode-backwards sm:h-32 sm:w-32"
-          />
-          <div className="animate-in fade-in zoom-in-75 flex flex-col items-center delay-500 duration-700 fill-mode-backwards">
-            <img
-              src={nextgenLogo.url}
-              alt="Mission Board Class 11 & 12 logo"
-              className="h-16 w-16 rounded-2xl object-cover ring-1 ring-border sm:h-20 sm:w-20"
-            />
-            <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-tight sm:text-xl">
-              Mission Board Class 11 &amp; 12
-            </h2>
-            <p className="text-xs text-muted-foreground">(A Part Of Mission Board Family)</p>
-          </div>
+        <img
+          src={missionLogo.url}
+          alt="Mission Board Class 10 2027 logo"
+          className="animate-in fade-in zoom-in-75 mx-auto mt-6 h-28 w-28 rounded-3xl object-cover ring-1 ring-border delay-200 duration-700 fill-mode-backwards sm:h-32 sm:w-32"
+        />
+
+        <div className="animate-in fade-in mx-auto mt-6 grid max-w-xs gap-2.5 delay-500 duration-1000 fill-mode-backwards">
+          {[
+            {
+              role: "Owner (Powered & Produced by)",
+              name: "Navaan Sandhu",
+              handle: "Navaansandhu_og",
+            },
+            { role: "Co-Owner", name: "Soham Tekawade", handle: "Tekawade_Soham13" },
+            { role: "Tech Manager", name: "Mrigan", handle: "mriganx_XD" },
+          ].map((p) => (
+            <div
+              key={p.handle}
+              className="rounded-2xl border border-border bg-card/70 px-4 py-2.5 text-xs backdrop-blur"
+            >
+              <p className="font-semibold tracking-wide text-muted-foreground uppercase">
+                {p.role}
+              </p>
+              <p className="mt-0.5 font-display text-base font-extrabold tracking-tight text-gold">
+                {p.name}
+              </p>
+              <a
+                href={`https://t.me/${p.handle}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-primary hover:underline"
+              >
+                @{p.handle}
+              </a>
+            </div>
+          ))}
         </div>
 
-        <div className="animate-in fade-in mx-auto mt-10 max-w-xs space-y-3 rounded-2xl border border-border bg-card/60 px-5 py-4 text-xs delay-1000 duration-1000 fill-mode-backwards">
-          <div>
-            <p className="text-muted-foreground">Owned By (Powered & Produced by)</p>
-            <p className="mt-0.5 font-display text-base font-extrabold tracking-tight text-gold">
-              Navaan Sandhu
-            </p>
-            <a
-              href="https://t.me/Navaansandhu_og"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-primary hover:underline"
-            >
-              @Navaansandhu_og
-            </a>
-          </div>
-          <div className="border-t border-border pt-3">
-            <p className="text-muted-foreground">Co-Owner</p>
-            <p className="mt-0.5 font-display text-base font-extrabold tracking-tight text-gold">
-              Soham Tekawade
-            </p>
-            <a
-              href="https://t.me/Tekawade_Soham13"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-primary hover:underline"
-            >
-              @Tekawade_Soham13
-            </a>
-          </div>
-          <div className="border-t border-border pt-3">
-            <p className="text-muted-foreground">Website developed by</p>
-            <p className="mt-0.5 font-display text-base font-extrabold tracking-tight">
-              Mrigan
-            </p>
-            <a
-              href="https://t.me/mriganx_XD"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-primary hover:underline"
-            >
-              @mriganx_XD
-            </a>
-          </div>
+        <div className="animate-in fade-in mt-6 flex flex-col items-center delay-1000 duration-1000 fill-mode-backwards">
+          <img
+            src={nextgenLogo.url}
+            alt="Mission Board Class 11 & 12 logo"
+            className="h-14 w-14 rounded-2xl object-cover ring-1 ring-border"
+          />
+          <h2 className="mt-2 font-display text-base leading-tight font-bold tracking-tight">
+            Mission Board Class 11 &amp; 12
+          </h2>
+          <p className="text-[11px] text-muted-foreground">(A Part Of Mission Board Family)</p>
         </div>
       </div>
+
 
       <style>{`
         @keyframes splash-fade {
