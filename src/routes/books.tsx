@@ -31,17 +31,10 @@ const folders = [
   { id: "books_class11_12", label: "Class 11 and 12" },
 ] as const;
 
-const PUBLISHERS = [
-  { id: "all", label: "All" },
-  { id: "pw", label: "PW", match: ["pw", "physics wallah"] },
-  { id: "oswaal", label: "Oswaal", match: ["oswaal"] },
-  { id: "educart", label: "Educart", match: ["educart"] },
-  { id: "padhle", label: "Padhle", match: ["padhle"] },
-] as const;
-
 const SORTS = [
   { id: "newest", label: "Newest" },
   { id: "oldest", label: "Oldest" },
+  { id: "relevance", label: "Relevance" },
   { id: "az", label: "A–Z" },
 ] as const;
 
