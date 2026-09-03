@@ -141,7 +141,24 @@ function RoomPage() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Could not comment"),
   });
 
+  const removeComment = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("discussion_comments")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Comment deleted");
+      void qc.invalidateQueries({ queryKey: ["room-feed"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Could not delete"),
+  });
+
   const toggleLike = useMutation({
+
     mutationFn: async ({ postId, liked }: { postId: string; liked: boolean }) => {
       if (liked) {
         const { error } = await supabase
