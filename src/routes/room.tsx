@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Heart, MessageCircle, Send, MessagesSquare } from "lucide-react";
+import { Heart, MessageCircle, Send, MessagesSquare, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -141,7 +141,24 @@ function RoomPage() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Could not comment"),
   });
 
+  const removeComment = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("discussion_comments")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", user!.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Comment deleted");
+      void qc.invalidateQueries({ queryKey: ["room-feed"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Could not delete"),
+  });
+
   const toggleLike = useMutation({
+
     mutationFn: async ({ postId, liked }: { postId: string; liked: boolean }) => {
       if (liked) {
         const { error } = await supabase
@@ -245,13 +262,20 @@ function RoomPage() {
                   <button
                     type="button"
                     onClick={() => toggleLike.mutate({ postId: p.id, liked: p.liked })}
-                    className={`inline-flex items-center gap-1.5 text-xs font-semibold transition-colors ${
-                      p.liked ? "text-gold" : "text-muted-foreground hover:text-foreground"
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold transition-all duration-200 ${
+                      p.liked
+                        ? "border-accent/50 bg-accent/15 text-gold"
+                        : "border-border bg-secondary/60 text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    <Heart className={`h-4 w-4 ${p.liked ? "fill-current" : ""}`} />
-                    {p.likes}
+                    <Heart
+                      className="h-4 w-4 shrink-0"
+                      strokeWidth={2.25}
+                      fill={p.liked ? "currentColor" : "none"}
+                    />
+                    <span>{p.likes}</span>
                   </button>
+
                   <button
                     type="button"
                     onClick={() => setOpenComments(openComments === p.id ? null : p.id)}
@@ -265,19 +289,38 @@ function RoomPage() {
                 {openComments === p.id && (
                   <div className="mt-3 border-t border-border pt-3">
                     <ul className="grid gap-2">
-                      {p.comments.map((c) => (
-                        <li key={c.id} className="rounded-xl bg-secondary/50 p-3">
-                          <p className="text-xs font-bold">
-                            {c.author?.full_name || "Student"}
-                            <span className="ml-2 font-normal text-muted-foreground">
-                              {timeAgo(c.created_at)}
-                            </span>
-                          </p>
-                          <p className="mt-1 text-sm whitespace-pre-wrap text-foreground/90">
-                            {c.body}
-                          </p>
-                        </li>
-                      ))}
+                      {p.comments.map((c) => {
+                        const canDelete =
+                          c.user_id === user?.id &&
+                          Date.now() - new Date(c.created_at).getTime() < 48 * 3600 * 1000;
+                        return (
+                          <li key={c.id} className="rounded-xl bg-secondary/50 p-3">
+                            <div className="flex items-start gap-2">
+                              <p className="text-xs font-bold">
+                                {c.author?.full_name || "Student"}
+                                <span className="ml-2 font-normal text-muted-foreground">
+                                  {timeAgo(c.created_at)}
+                                </span>
+                              </p>
+                              {canDelete && (
+                                <button
+                                  type="button"
+                                  disabled={removeComment.isPending}
+                                  onClick={() => removeComment.mutate(c.id)}
+                                  className="ml-auto inline-flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-[10px] font-bold text-muted-foreground transition-colors hover:text-destructive disabled:opacity-50"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                  Delete
+                                </button>
+                              )}
+                            </div>
+                            <p className="mt-1 text-sm whitespace-pre-wrap text-foreground/90">
+                              {c.body}
+                            </p>
+                          </li>
+                        );
+                      })}
+
                     </ul>
                     {session && (
                       <div className="mt-2 flex gap-2">

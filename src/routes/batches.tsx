@@ -70,23 +70,87 @@ const batches = [
 
 function BatchesPage() {
   const [openId, setOpenId] = useState<string | null>(null);
-  const [serverId, setServerId] = useState<string>("s1");
+  const [serverId, setServerId] = useState<string | null>(null);
   const active = batches.find((b) => b.id === openId);
-  const activeServer = active?.servers.find((s) => s.id === serverId) ?? active?.servers[0];
+  const activeServer = serverId ? active?.servers.find((s) => s.id === serverId) : undefined;
 
   useEffect(() => {
     setChromeHidden(!!active);
     return () => setChromeHidden(false);
   }, [active]);
 
+  if (active && !activeServer) {
+    return (
+      <div className="min-h-screen pb-28 font-sans">
+        <div className="flex items-center gap-3 border-b border-border/70 bg-card/60 px-4 py-3 backdrop-blur">
+          <button
+            type="button"
+            onClick={() => setOpenId(null)}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </button>
+          <span className="ml-auto font-display text-sm font-extrabold tracking-tight text-gold">
+            Mission Board
+          </span>
+        </div>
+
+        <div className="mx-auto max-w-lg px-4 py-10 text-center">
+          <img
+            src={active.logo}
+            alt={`${active.name} logo`}
+            loading="lazy"
+            className="mx-auto h-20 w-20 rounded-2xl bg-white object-contain p-2 ring-1 ring-border"
+          />
+          <h1 className="mt-5 font-display text-2xl font-extrabold tracking-tight">
+            Select a Server to continue to <span className="text-gold">{active.name}</span>
+          </h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            If one server is slow or down, simply pick another one.
+          </p>
+
+          <div className="mt-7 grid gap-3 text-left">
+            {active.servers.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setServerId(s.id)}
+                className="card-elevated flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                <span className="font-display text-base font-bold">{s.label}</span>
+                <span
+                  className="glow rounded-xl px-4 py-2 font-display text-xs font-bold text-primary-foreground"
+                  style={{ backgroundImage: active.accent }}
+                >
+                  Continue
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <a
+            href={JOIN_TELEGRAM}
+            target="_blank"
+            rel="noopener"
+            className="mt-6 inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-4 py-2.5 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
+          >
+            <Send className="h-3.5 w-3.5" />
+            Join Telegram
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   if (active && activeServer) {
+
     return (
       <div className="flex min-h-screen flex-col pb-28 font-sans">
         <div className="flex items-center gap-3 border-b border-border/70 bg-card/60 px-4 py-3 backdrop-blur">
           <button
             type="button"
-            onClick={() => setOpenId(null)}
+            onClick={() => setServerId(null)}
             className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-secondary/70"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -163,7 +227,7 @@ function BatchesPage() {
             key={b.id}
             type="button"
             onClick={() => {
-              setServerId("s1");
+              setServerId(null);
               setOpenId(b.id);
             }}
             className="card-elevated group relative overflow-hidden rounded-3xl border border-border bg-card p-5 text-left transition-transform duration-300 hover:-translate-y-1"
@@ -185,7 +249,7 @@ function BatchesPage() {
                   {b.tag}
                 </span>
                 <h2 className="mt-2 font-display text-lg leading-tight font-bold">{b.name}</h2>
-                <p className="mt-1 text-xs text-muted-foreground">Server 1 · Server 2</p>
+                <p className="mt-1 text-xs text-muted-foreground">Server 1 • Server 2 • Server 3</p>
               </div>
               <ExternalLink className="ml-auto h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
             </div>
