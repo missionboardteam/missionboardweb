@@ -156,8 +156,8 @@ export function SplashScreen() {
       <CelebrationBackground />
 
       <div className="relative w-full max-w-md text-center">
-        <h1 className="animate-in fade-in slide-in-from-bottom-2 font-display text-xl leading-tight font-extrabold tracking-tight text-foreground duration-700 sm:text-2xl">
-          Mission Board Class 10 2027 presents you a brand new website
+        <h1 className="animate-in fade-in slide-in-from-bottom-2 font-display text-2xl leading-tight font-extrabold tracking-tight text-foreground duration-700 sm:text-3xl">
+          Mission Board presents
         </h1>
 
         <img
