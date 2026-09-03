@@ -245,13 +245,20 @@ function RoomPage() {
                   <button
                     type="button"
                     onClick={() => toggleLike.mutate({ postId: p.id, liked: p.liked })}
-                    className={`inline-flex items-center gap-1.5 text-xs font-semibold transition-colors ${
-                      p.liked ? "text-gold" : "text-muted-foreground hover:text-foreground"
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold transition-all duration-200 ${
+                      p.liked
+                        ? "border-accent/50 bg-accent/15 text-gold"
+                        : "border-border bg-secondary/60 text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    <Heart className={`h-4 w-4 ${p.liked ? "fill-current" : ""}`} />
-                    {p.likes}
+                    <Heart
+                      className="h-4 w-4 shrink-0"
+                      strokeWidth={2.25}
+                      fill={p.liked ? "currentColor" : "none"}
+                    />
+                    <span>{p.likes}</span>
                   </button>
+
                   <button
                     type="button"
                     onClick={() => setOpenComments(openComments === p.id ? null : p.id)}
