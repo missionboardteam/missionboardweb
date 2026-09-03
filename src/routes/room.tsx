@@ -158,7 +158,6 @@ function RoomPage() {
   });
 
   const toggleLike = useMutation({
-
     mutationFn: async ({ postId, liked }: { postId: string; liked: boolean }) => {
       if (liked) {
         const { error } = await supabase
@@ -170,11 +169,33 @@ function RoomPage() {
       } else {
         const { error } = await supabase
           .from("discussion_likes")
-          .insert({ post_id: postId, user_id: user!.id });
+          .upsert({ post_id: postId, user_id: user!.id }, { onConflict: "post_id,user_id" });
         if (error) throw error;
       }
     },
-    onSuccess: () => void qc.invalidateQueries({ queryKey: ["room-feed"] }),
+    onMutate: async ({ postId, liked }) => {
+      await qc.cancelQueries({ queryKey: ["room-feed"] });
+      const prev = qc.getQueriesData<unknown[]>({ queryKey: ["room-feed"] });
+      qc.setQueriesData<unknown[]>({ queryKey: ["room-feed"] }, (old) =>
+        Array.isArray(old)
+          ? old.map((p) => {
+              const post = p as { id: string; liked: boolean; likes: number };
+              if (post.id !== postId) return p;
+              return {
+                ...post,
+                liked: !liked,
+                likes: Math.max(0, post.likes + (liked ? -1 : 1)),
+              };
+            })
+          : old,
+      );
+      return { prev };
+    },
+    onError: (e, _vars, ctx) => {
+      ctx?.prev.forEach(([key, value]) => qc.setQueryData(key, value));
+      toast.error(e instanceof Error ? e.message : "Could not update like");
+    },
+    onSettled: () => void qc.invalidateQueries({ queryKey: ["room-feed"] }),
   });
 
   return (

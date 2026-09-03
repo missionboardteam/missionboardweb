@@ -3,110 +3,6 @@ import missionLogo from "@/assets/mission-board-10.png.asset.json";
 import nextgenLogo from "@/assets/mission-board-1112.png.asset.json";
 
 const DURATION = 4600;
-
-const CONFETTI_COLORS = [
-  "#facc15", // yellow-400
-  "#22d3ee", // cyan-400
-  "#f472b6", // pink-400
-  "#a78bfa", // violet-400
-  "#fb923c", // orange-400
-  "#4ade80", // green-400
-];
-
-type Confetti = {
-  id: number;
-  left: string;
-  delay: string;
-  duration: string;
-  color: string;
-  size: number;
-  rotation: number;
-};
-
-type Balloon = {
-  id: number;
-  left: string;
-  delay: string;
-  duration: string;
-  color: string;
-  size: number;
-};
-
-function CelebrationBackground() {
-  const [items, setItems] = useState<{ confetti: Confetti[]; balloons: Balloon[] }>({
-    confetti: [],
-    balloons: [],
-  });
-
-  useEffect(() => {
-    const confetti = Array.from({ length: 48 }).map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 1.5}s`,
-      duration: `${2 + Math.random() * 2}s`,
-      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-      size: 6 + Math.random() * 8,
-      rotation: Math.random() * 360,
-    }));
-
-    const balloons = Array.from({ length: 12 }).map((_, i) => ({
-      id: i,
-      left: `${5 + Math.random() * 90}%`,
-      delay: `${Math.random() * 1.2}s`,
-      duration: `${3.5 + Math.random() * 2}s`,
-      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-      size: 24 + Math.random() * 40,
-    }));
-
-    setItems({ confetti, balloons });
-  }, []);
-
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {items.balloons.map((b) => (
-        <div
-          key={`balloon-${b.id}`}
-          className="absolute -bottom-20 rounded-full opacity-40 blur-[1px]"
-          style={{
-            left: b.left,
-            width: b.size,
-            height: b.size * 1.15,
-            backgroundColor: b.color,
-            animation: `balloon-rise ${b.duration} ease-in-out ${b.delay} infinite`,
-          }}
-        />
-      ))}
-      {items.confetti.map((c) => (
-        <div
-          key={`confetti-${c.id}`}
-          className="absolute -top-8 rounded-sm opacity-80"
-          style={{
-            left: c.left,
-            width: c.size,
-            height: c.size * 0.55,
-            backgroundColor: c.color,
-            transform: `rotate(${c.rotation}deg)`,
-            animation: `confetti-fall ${c.duration} linear ${c.delay} infinite`,
-          }}
-        />
-      ))}
-      <style>{`
-        @keyframes balloon-rise {
-          0% { transform: translateY(0) translateX(0); opacity: 0; }
-          10% { opacity: 0.5; }
-          50% { transform: translateY(-50vh) translateX(10px); }
-          100% { transform: translateY(-110vh) translateX(-10px); opacity: 0; }
-        }
-        @keyframes confetti-fall {
-          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-          10% { opacity: 0.9; }
-          100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-        }
-      `}</style>
-    </div>
-  );
-}
-
 const FADE_DURATION = 500;
 
 const SEEN_KEY = "splash-seen";
@@ -145,19 +41,29 @@ export function SplashScreen() {
       aria-label="Loading"
     >
       <div
-        className="pointer-events-none absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-30 blur-3xl"
+        className="pointer-events-none absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full opacity-60 blur-3xl"
         style={{ backgroundImage: "var(--gradient-gold)" }}
       />
       <div
-        className="pointer-events-none absolute -bottom-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-25 blur-3xl"
+        className="pointer-events-none absolute top-1/3 -left-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)" }}
+      />
+      <div
+        className="pointer-events-none absolute top-1/2 -right-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)" }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-50 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)" }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-16 right-0 h-56 w-56 rounded-full opacity-15 blur-3xl"
         style={{ backgroundImage: "var(--gradient-blue)" }}
       />
 
-      <CelebrationBackground />
-
       <div className="relative w-full max-w-md text-center">
-        <h1 className="animate-in fade-in slide-in-from-bottom-2 font-display text-xl leading-tight font-extrabold tracking-tight text-foreground duration-700 sm:text-2xl">
-          Mission Board Class 10 2027 presents you a brand new website
+        <h1 className="animate-in fade-in slide-in-from-bottom-2 font-display text-2xl leading-tight font-extrabold tracking-tight text-foreground duration-700 sm:text-3xl">
+          Mission Board presents
         </h1>
 
         <img
