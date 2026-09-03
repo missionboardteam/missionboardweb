@@ -272,19 +272,38 @@ function RoomPage() {
                 {openComments === p.id && (
                   <div className="mt-3 border-t border-border pt-3">
                     <ul className="grid gap-2">
-                      {p.comments.map((c) => (
-                        <li key={c.id} className="rounded-xl bg-secondary/50 p-3">
-                          <p className="text-xs font-bold">
-                            {c.author?.full_name || "Student"}
-                            <span className="ml-2 font-normal text-muted-foreground">
-                              {timeAgo(c.created_at)}
-                            </span>
-                          </p>
-                          <p className="mt-1 text-sm whitespace-pre-wrap text-foreground/90">
-                            {c.body}
-                          </p>
-                        </li>
-                      ))}
+                      {p.comments.map((c) => {
+                        const canDelete =
+                          c.user_id === user?.id &&
+                          Date.now() - new Date(c.created_at).getTime() < 48 * 3600 * 1000;
+                        return (
+                          <li key={c.id} className="rounded-xl bg-secondary/50 p-3">
+                            <div className="flex items-start gap-2">
+                              <p className="text-xs font-bold">
+                                {c.author?.full_name || "Student"}
+                                <span className="ml-2 font-normal text-muted-foreground">
+                                  {timeAgo(c.created_at)}
+                                </span>
+                              </p>
+                              {canDelete && (
+                                <button
+                                  type="button"
+                                  disabled={removeComment.isPending}
+                                  onClick={() => removeComment.mutate(c.id)}
+                                  className="ml-auto inline-flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-[10px] font-bold text-muted-foreground transition-colors hover:text-destructive disabled:opacity-50"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                  Delete
+                                </button>
+                              )}
+                            </div>
+                            <p className="mt-1 text-sm whitespace-pre-wrap text-foreground/90">
+                              {c.body}
+                            </p>
+                          </li>
+                        );
+                      })}
+
                     </ul>
                     {session && (
                       <div className="mt-2 flex gap-2">
