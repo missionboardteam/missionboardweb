@@ -41,15 +41,25 @@ export function SplashScreen() {
       aria-label="Loading"
     >
       <div
-        className="pointer-events-none absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-30 blur-3xl"
+        className="pointer-events-none absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full opacity-60 blur-3xl"
         style={{ backgroundImage: "var(--gradient-gold)" }}
       />
       <div
-        className="pointer-events-none absolute -bottom-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-25 blur-3xl"
+        className="pointer-events-none absolute top-1/3 -left-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)" }}
+      />
+      <div
+        className="pointer-events-none absolute top-1/2 -right-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)" }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-50 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)" }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-16 right-0 h-56 w-56 rounded-full opacity-15 blur-3xl"
         style={{ backgroundImage: "var(--gradient-blue)" }}
       />
-
-      <CelebrationBackground />
 
       <div className="relative w-full max-w-md text-center">
         <h1 className="animate-in fade-in slide-in-from-bottom-2 font-display text-2xl leading-tight font-extrabold tracking-tight text-foreground duration-700 sm:text-3xl">
