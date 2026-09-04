@@ -1,10 +1,14 @@
-import missionLogo from "@/assets/mission-board-10.png.asset.json";
-import nextgenLogo from "@/assets/mission-board-1112.png.asset.json";
-import discussionLogo from "@/assets/class10-discussion.jpg.asset.json";
+import missionLogo from "@/assets/mission-board-10-v2.jpg.asset.json";
+import nextgenLogo from "@/assets/mission-board-1112-v2.jpg.asset.json";
+import discussionLogo from "@/assets/mb-group-chat-dg.jpg.asset.json";
+import legacyLogo from "@/assets/aarambhian-legacy.jpg.asset.json";
+import legacyDgLogo from "@/assets/aarambhian-legacy-dg.jpg.asset.json";
 
 export const MISSION_LINK = "https://t.me/+T8PdqiLKkfU1ZDU9";
 export const NEXTGEN_LINK = "https://t.me/MissionBoardclass11and12";
 export const CLASS10_DISCUSSION_LINK = "https://t.me/+AxCXqeqCM-JiYTc1";
+export const LEGACY_LINK = "https://t.me/AARAMBHIANLEGACY";
+export const LEGACY_DG_LINK = "https://t.me/+LUrgjpZvuiZkOTE1";
 
 export const channels = [
   {
@@ -18,12 +22,12 @@ export const channels = [
     accent: "gold" as const,
   },
   {
-    name: "Class 10 Discussion Group",
-    tag: "Class 10 · Doubts & Chat",
+    name: "Mission Board Group Chat (DG)",
+    tag: "Class 10, 11 & 12 · Doubts & Chat",
     logo: discussionLogo.url,
     link: CLASS10_DISCUSSION_LINK,
     blurb:
-      "A lively student community to ask doubts, share resources, discuss chapters and help each other crack the Class 10 boards together.",
+      "A lively student community to ask doubts, share resources, discuss chapters and help each other crack the boards together.",
     points: ["Ask doubts 24/7", "Share notes & resources", "Peer discussions"],
     accent: "pink" as const,
   },
@@ -37,6 +41,26 @@ export const channels = [
     points: ["Premium notes, free", "PCM & PCB coverage", "Regular updates"],
     accent: "blue" as const,
   },
+  {
+    name: "Aarambhian Legacy",
+    tag: "A part of Mission Board Family",
+    logo: legacyLogo.url,
+    link: LEGACY_LINK,
+    blurb:
+      "The 2026-27 Aarambhian Legacy channel — curated study material, updates and resources for every learner in the Mission Board family.",
+    points: ["Curated material", "Regular updates", "Free for everyone"],
+    accent: "green" as const,
+  },
+  {
+    name: "Aarambhian Legacy Group Chat (DG)",
+    tag: "Discussion · Share · Learn · Grow",
+    logo: legacyDgLogo.url,
+    link: LEGACY_DG_LINK,
+    blurb:
+      "The official Aarambhian Legacy discussion group — chat with fellow students, clear doubts and grow together.",
+    points: ["Friendly community", "Doubt solving", "Share · Learn · Grow"],
+    accent: "green" as const,
+  },
 ];
 
 export type Channel = (typeof channels)[number];
@@ -45,13 +69,16 @@ export const accentGradient: Record<Channel["accent"], string> = {
   gold: "var(--gradient-gold)",
   blue: "var(--gradient-blue)",
   pink: "var(--gradient-pink)",
+  green: "var(--gradient-green)",
 };
 
 export const accentDot: Record<Channel["accent"], string> = {
   gold: "var(--accent)",
   blue: "var(--primary)",
   pink: "oklch(0.75 0.18 340)",
+  green: "oklch(0.72 0.16 148)",
 };
+
 
 export function TelegramIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
