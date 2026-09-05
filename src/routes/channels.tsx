@@ -9,13 +9,13 @@ export const Route = createFileRoute("/channels")({
       {
         name: "description",
         content:
-          "All Telegram channels: Mission Board Class 10 2027, Class 10 Discussion Group and Mission Board Class 11 & 12.",
+          "All Telegram channels: Mission Board Class 10 2027, Mission Board Group Chat (DG), Mission Board Class 11 & 12, Aarambhian Legacy and Aarambhian Legacy Group Chat (DG).",
       },
       { property: "og:title", content: "Our Telegram Channels" },
       {
         property: "og:description",
         content:
-          "Join Mission Board Class 10 2027, the Class 10 Discussion Group and Mission Board Class 11 & 12.",
+          "Join Mission Board Class 10 2027, Mission Board Group Chat (DG), Mission Board Class 11 & 12, Aarambhian Legacy and Aarambhian Legacy Group Chat (DG).",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -29,8 +29,8 @@ export function StatusBar() {
           >
             <Menu className="h-4.5 w-4.5" />
           </button>
-          <span className="font-display text-sm font-extrabold tracking-tight text-gold">
-            Mission Board
+          <span className="font-display text-[13px] leading-tight font-extrabold tracking-tight text-gold">
+            Mission Board <span className="text-foreground/70">×</span> Aarambhian Legacy
           </span>
         </div>
       </div>
@@ -43,8 +43,8 @@ export function StatusBar() {
             aria-label="Sections"
           >
             <div className="flex items-center justify-between">
-              <span className="font-display text-base font-extrabold tracking-tight text-gold">
-                Mission Board
+              <span className="font-display text-sm font-extrabold tracking-tight text-gold">
+                Mission Board <span className="text-foreground/70">×</span> Aarambhian Legacy
               </span>
               <button
                 type="button"
