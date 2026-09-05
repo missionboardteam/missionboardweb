@@ -46,7 +46,7 @@ export const Route = createFileRoute("/")({
 
 
 const stats = [
-  { value: "3", label: "Telegram channels" },
+  { value: "5", label: "Telegram channels" },
   { value: "100%", label: "Free forever" },
   { value: "10–12", label: "Classes covered" },
 ];
@@ -104,7 +104,7 @@ function Index() {
 
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <span className="font-display text-sm font-bold tracking-tight sm:text-base">
-            Mission Board
+            Mission Board × Aarambhian Legacy
           </span>
           <a
             href="#channels"
@@ -127,7 +127,7 @@ function Index() {
               <span className="text-gold">Class 10, 11 and 12</span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-              Three Telegram channels, one mission — premium study material, doubt discussions
+              Five Telegram channels, one mission — premium study material, doubt discussions
               and daily updates for CBSE boards, JEE and NEET. Absolutely free.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -222,7 +222,7 @@ function Index() {
             Pick your channel
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-center text-sm text-muted-foreground">
-            Join all THREE channels to access your books.
+            Join ALL channels to access your books.
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {channels.map((c) => (
@@ -304,8 +304,7 @@ function Index() {
 
       <footer className="border-t border-border py-8">
         <p className="text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Mission Board Class 10 2027, Class 10 Discussion Group &
-          Mission Board Class 11 &amp; 12 · Free education for every student
+          © {new Date().getFullYear()} Mission Board × Aarambhian Legacy · Free education for every student
         </p>
       </footer>
     </div>
