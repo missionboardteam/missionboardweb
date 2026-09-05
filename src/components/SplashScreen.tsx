@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import missionLogo from "@/assets/mission-board-10.png.asset.json";
-import nextgenLogo from "@/assets/mission-board-1112.png.asset.json";
+import missionLogo from "@/assets/mission-board-10-v2.jpg.asset.json";
+import nextgenLogo from "@/assets/mission-board-1112-v2.jpg.asset.json";
 
 const DURATION = 4600;
 const FADE_DURATION = 500;
