@@ -1,14 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import missionLogo from "@/assets/mission-board-10-v2.jpg.asset.json";
 import nextgenLogo from "@/assets/mission-board-1112-v2.jpg.asset.json";
+import introVideo from "@/assets/splash-intro.mp4.asset.json";
 
-const DURATION = 4600;
+const VIDEO_DURATION = 7400;
+const CREDITS_DURATION = 2500;
 const FADE_DURATION = 500;
 
 const SEEN_KEY = "splash-seen";
 
+const CREDITS = [
+  { role: "Owner", name: "Waymaker", handle: "Navaansandhu_og" },
+  { role: "Admin (Co-Owner)", name: "Soham Tekawade", handle: "Tekawade_Soham13" },
+  { role: "Admin (Collaborator)", name: "Divyansh", handle: "divyanshhhh00" },
+  { role: "Tech Manager (Website Builder)", name: "Mrigan", handle: "mriganx_XD" },
+];
+
 export function SplashScreen() {
-  const [state, setState] = useState<"pending" | "playing" | "done">("pending");
+  const [state, setState] = useState<"pending" | "video" | "credits" | "done">("pending");
+  const [muted, setMuted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     if (sessionStorage.getItem(SEEN_KEY)) {
@@ -16,27 +27,78 @@ export function SplashScreen() {
       return;
     }
     sessionStorage.setItem(SEEN_KEY, "1");
-    setState("playing");
+    setState("video");
 
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const timer = setTimeout(() => {
-      setState("done");
-      document.body.style.overflow = prev;
-    }, DURATION + FADE_DURATION + 100);
+
+    const toCredits = setTimeout(() => setState("credits"), VIDEO_DURATION);
+    const toDone = setTimeout(
+      () => {
+        setState("done");
+        document.body.style.overflow = prev;
+      },
+      VIDEO_DURATION + CREDITS_DURATION + FADE_DURATION,
+    );
+
     return () => {
-      clearTimeout(timer);
+      clearTimeout(toCredits);
+      clearTimeout(toDone);
       document.body.style.overflow = prev;
     };
   }, []);
 
-  if (state !== "playing") return null;
+  useEffect(() => {
+    if (state !== "video") return;
+    const el = videoRef.current;
+    if (!el) return;
+    el.play().catch(() => {
+      el.muted = true;
+      setMuted(true);
+      el.play().catch(() => undefined);
+    });
+  }, [state]);
 
+  if (state === "pending" || state === "done") return null;
+
+  if (state === "video") {
+    return (
+      <div
+        className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black"
+        role="status"
+        aria-label="Loading"
+      >
+        <video
+          ref={videoRef}
+          src={introVideo.url}
+          className="h-full w-full object-cover"
+          playsInline
+          autoPlay
+          preload="auto"
+        />
+        {muted && (
+          <button
+            type="button"
+            onClick={() => {
+              const el = videoRef.current;
+              if (!el) return;
+              el.muted = false;
+              setMuted(false);
+              el.play().catch(() => undefined);
+            }}
+            className="absolute bottom-8 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold text-white backdrop-blur"
+          >
+            Tap for sound
+          </button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background px-6"
-      style={{ animation: `splash-fade ${DURATION}ms linear forwards` }}
+      style={{ animation: `splash-fade ${CREDITS_DURATION + FADE_DURATION}ms linear forwards` }}
       role="status"
       aria-label="Loading"
     >
@@ -45,46 +107,29 @@ export function SplashScreen() {
         style={{ backgroundImage: "var(--gradient-gold)" }}
       />
       <div
-        className="pointer-events-none absolute top-1/3 -left-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
-        style={{ backgroundImage: "var(--gradient-gold)" }}
-      />
-      <div
-        className="pointer-events-none absolute top-1/2 -right-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
+        className="pointer-events-none absolute top-1/2 -left-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
         style={{ backgroundImage: "var(--gradient-gold)" }}
       />
       <div
         className="pointer-events-none absolute -bottom-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-50 blur-3xl"
         style={{ backgroundImage: "var(--gradient-gold)" }}
       />
-      <div
-        className="pointer-events-none absolute -bottom-16 right-0 h-56 w-56 rounded-full opacity-15 blur-3xl"
-        style={{ backgroundImage: "var(--gradient-blue)" }}
-      />
 
       <div className="relative w-full max-w-md text-center">
-        <h1 className="animate-in fade-in slide-in-from-bottom-2 font-display text-2xl leading-tight font-extrabold tracking-tight text-foreground duration-700 sm:text-3xl">
-          Mission Board presents
-        </h1>
-
         <img
           src={missionLogo.url}
           alt="Mission Board Class 10 2027 logo"
-          className="animate-in fade-in zoom-in-75 mx-auto mt-6 h-28 w-28 rounded-3xl object-cover ring-1 ring-border delay-200 duration-700 fill-mode-backwards sm:h-32 sm:w-32"
+          className="animate-in fade-in zoom-in-75 mx-auto h-20 w-20 rounded-3xl object-cover ring-1 ring-border duration-500"
         />
+        <h1 className="animate-in fade-in slide-in-from-bottom-2 mt-4 font-display text-2xl leading-tight font-extrabold tracking-tight text-foreground duration-500">
+          Mission Board presents
+        </h1>
 
-        <div className="animate-in fade-in mx-auto mt-6 grid max-w-xs gap-2.5 delay-500 duration-1000 fill-mode-backwards">
-          {[
-            {
-              role: "Owner (Powered & Produced by)",
-              name: "Navaan Sandhu",
-              handle: "Navaansandhu_og",
-            },
-            { role: "Co-Owner", name: "Soham Tekawade", handle: "Tekawade_Soham13" },
-            { role: "Tech Manager", name: "Mrigan", handle: "mriganx_XD" },
-          ].map((p) => (
+        <div className="animate-in fade-in mx-auto mt-4 grid max-w-xs gap-2 delay-200 duration-700 fill-mode-backwards">
+          {CREDITS.map((p) => (
             <div
               key={p.handle}
-              className="rounded-2xl border border-border bg-card/70 px-4 py-2.5 text-xs backdrop-blur"
+              className="rounded-2xl border border-border bg-card/70 px-4 py-2 text-xs backdrop-blur"
             >
               <p className="font-semibold tracking-wide text-muted-foreground uppercase">
                 {p.role}
@@ -104,24 +149,22 @@ export function SplashScreen() {
           ))}
         </div>
 
-        <div className="animate-in fade-in mt-6 flex flex-col items-center delay-1000 duration-1000 fill-mode-backwards">
+        <div className="animate-in fade-in mt-4 flex flex-col items-center delay-500 duration-700 fill-mode-backwards">
           <img
             src={nextgenLogo.url}
             alt="Mission Board Class 11 & 12 logo"
-            className="h-14 w-14 rounded-2xl object-cover ring-1 ring-border"
+            className="h-12 w-12 rounded-2xl object-cover ring-1 ring-border"
           />
-          <h2 className="mt-2 font-display text-base leading-tight font-bold tracking-tight">
-            Mission Board Class 11 &amp; 12
-          </h2>
-          <p className="text-[11px] text-muted-foreground">(A Part Of Mission Board Family)</p>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            Mission Board Class 11 &amp; 12 (A Part Of Mission Board Family)
+          </p>
         </div>
       </div>
-
 
       <style>{`
         @keyframes splash-fade {
           0% { opacity: 1; }
-          ${((DURATION - FADE_DURATION) / DURATION) * 100}% { opacity: 1; }
+          ${(CREDITS_DURATION / (CREDITS_DURATION + FADE_DURATION)) * 100}% { opacity: 1; }
           100% { opacity: 0; }
         }
       `}</style>
