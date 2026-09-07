@@ -7,7 +7,7 @@ const VIDEO_DURATION = 7400;
 const CREDITS_DURATION = 2500;
 const FADE_DURATION = 500;
 
-const SEEN_KEY = "splash-seen";
+const SEEN_KEY = "splash-seen-v2";
 
 const CREDITS = [
   { role: "Owner", name: "Waymaker", handle: "Navaansandhu_og" },
