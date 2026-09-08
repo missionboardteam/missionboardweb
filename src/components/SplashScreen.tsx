@@ -75,21 +75,6 @@ export function SplashScreen() {
           autoPlay
           preload="auto"
         />
-        {muted && (
-          <button
-            type="button"
-            onClick={() => {
-              const el = videoRef.current;
-              if (!el) return;
-              el.muted = false;
-              setMuted(false);
-              el.play().catch(() => undefined);
-            }}
-            className="absolute bottom-8 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold text-white backdrop-blur"
-          >
-            Tap for sound
-          </button>
-        )}
       </div>
     );
   }
