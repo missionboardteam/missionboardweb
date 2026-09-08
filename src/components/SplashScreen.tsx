@@ -16,7 +16,6 @@ export const CREDITS = [
 
 export function SplashScreen() {
   const [state, setState] = useState<"pending" | "video" | "credits" | "done">("pending");
-  const [muted, setMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
@@ -52,13 +51,11 @@ export function SplashScreen() {
     if (!el) return;
     el.muted = false;
     el.volume = 1;
-    el.play()
-      .then(() => setMuted(false))
-      .catch(() => {
-        el.muted = true;
-        setMuted(true);
-        el.play().catch(() => undefined);
-      });
+    el.play().catch(() => {
+      // Device blocked sound autoplay — play muted silently, no button shown.
+      el.muted = true;
+      el.play().catch(() => undefined);
+    });
   }, [state]);
 
   if (state === "pending" || state === "done") return null;
@@ -78,21 +75,6 @@ export function SplashScreen() {
           autoPlay
           preload="auto"
         />
-        {muted && (
-          <button
-            type="button"
-            onClick={() => {
-              const el = videoRef.current;
-              if (!el) return;
-              el.muted = false;
-              setMuted(false);
-              el.play().catch(() => undefined);
-            }}
-            className="absolute bottom-8 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold text-white backdrop-blur"
-          >
-            Tap for sound
-          </button>
-        )}
       </div>
     );
   }
