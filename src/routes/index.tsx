@@ -39,6 +39,19 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        property: "og:image",
+        content:
+          "https://missionboardweb.lovable.app/__l5e/assets-v1/d9fd4746-0575-4ae9-ae16-b79de379db07/mission-board-10-v2.jpg",
+      },
+      { property: "og:image:width", content: "640" },
+      { property: "og:image:height", content: "640" },
+      { property: "og:image:type", content: "image/jpeg" },
+      {
+        name: "twitter:image",
+        content:
+          "https://missionboardweb.lovable.app/__l5e/assets-v1/d9fd4746-0575-4ae9-ae16-b79de379db07/mission-board-10-v2.jpg",
+      },
     ],
   }),
   component: Index,
