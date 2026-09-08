@@ -16,7 +16,6 @@ export const CREDITS = [
 
 export function SplashScreen() {
   const [state, setState] = useState<"pending" | "video" | "credits" | "done">("pending");
-  const [muted, setMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
