@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import missionLogo from "@/assets/mission-board-10-v2.jpg.asset.json";
-import nextgenLogo from "@/assets/mission-board-1112-v2.jpg.asset.json";
 import introVideo from "@/assets/splash-intro.mp4.asset.json";
 
 const VIDEO_DURATION = 7400;
@@ -9,7 +7,7 @@ const FADE_DURATION = 500;
 
 const SEEN_KEY = "splash-seen-v2";
 
-const CREDITS = [
+export const CREDITS = [
   { role: "Owner", name: "Waymaker", handle: "Navaansandhu_og" },
   { role: "Admin (Co-Owner)", name: "Soham Tekawade", handle: "Tekawade_Soham13" },
   { role: "Admin (Collaborator)", name: "Divyansh", handle: "divyanshhhh00" },
