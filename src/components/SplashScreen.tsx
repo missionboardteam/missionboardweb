@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import missionLogo from "@/assets/mission-board-10-v2.jpg.asset.json";
-import nextgenLogo from "@/assets/mission-board-1112-v2.jpg.asset.json";
 import introVideo from "@/assets/splash-intro.mp4.asset.json";
 
 const VIDEO_DURATION = 7400;
-const CREDITS_DURATION = 2500;
+const CREDITS_DURATION = 3000;
 const FADE_DURATION = 500;
 
 const SEEN_KEY = "splash-seen-v2";
 
-const CREDITS = [
+export const CREDITS = [
   { role: "Owner", name: "Waymaker", handle: "Navaansandhu_og" },
   { role: "Admin (Co-Owner)", name: "Soham Tekawade", handle: "Tekawade_Soham13" },
   { role: "Admin (Collaborator)", name: "Divyansh", handle: "divyanshhhh00" },
@@ -52,11 +50,15 @@ export function SplashScreen() {
     if (state !== "video") return;
     const el = videoRef.current;
     if (!el) return;
-    el.play().catch(() => {
-      el.muted = true;
-      setMuted(true);
-      el.play().catch(() => undefined);
-    });
+    el.muted = false;
+    el.volume = 1;
+    el.play()
+      .then(() => setMuted(false))
+      .catch(() => {
+        el.muted = true;
+        setMuted(true);
+        el.play().catch(() => undefined);
+      });
   }, [state]);
 
   if (state === "pending" || state === "done") return null;
@@ -116,12 +118,7 @@ export function SplashScreen() {
       />
 
       <div className="relative w-full max-w-md text-center">
-        <img
-          src={missionLogo.url}
-          alt="Mission Board Class 10 2027 logo"
-          className="animate-in fade-in zoom-in-75 mx-auto h-20 w-20 rounded-3xl object-cover ring-1 ring-border duration-500"
-        />
-        <h1 className="animate-in fade-in slide-in-from-bottom-2 mt-4 font-display text-2xl leading-tight font-extrabold tracking-tight text-foreground duration-500">
+        <h1 className="animate-in fade-in slide-in-from-bottom-2 font-display text-2xl leading-tight font-extrabold tracking-tight text-foreground duration-500">
           Mission Board presents
         </h1>
 
@@ -147,17 +144,6 @@ export function SplashScreen() {
               </a>
             </div>
           ))}
-        </div>
-
-        <div className="animate-in fade-in mt-4 flex flex-col items-center delay-500 duration-700 fill-mode-backwards">
-          <img
-            src={nextgenLogo.url}
-            alt="Mission Board Class 11 & 12 logo"
-            className="h-12 w-12 rounded-2xl object-cover ring-1 ring-border"
-          />
-          <p className="mt-1 text-[11px] text-muted-foreground">
-            Mission Board Class 11 &amp; 12 (A Part Of Mission Board Family)
-          </p>
         </div>
       </div>
 

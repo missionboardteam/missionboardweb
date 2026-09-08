@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { SplashScreen } from "@/components/SplashScreen";
+import { SplashScreen, CREDITS } from "@/components/SplashScreen";
 import { FamilyBanner } from "@/components/FamilyBanner";
 import {
   channels,
@@ -228,6 +228,39 @@ function Index() {
             {channels.map((c) => (
               <ChannelCard key={c.name} channel={c} />
             ))}
+          </div>
+        </section>
+
+        <section id="contact" className="border-t border-border">
+          <div className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
+            <h2 className="text-center font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              Contact <span className="text-gold">Us</span>
+            </h2>
+            <p className="mt-3 text-center text-sm text-muted-foreground">
+              Reach the Mission Board team directly on Telegram.
+            </p>
+            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              {CREDITS.map((p) => (
+                <a
+                  key={p.handle}
+                  href={`https://t.me/${p.handle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="card-elevated rounded-2xl border border-border bg-card px-5 py-4 text-center transition-colors hover:bg-secondary"
+                >
+                  <p className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+                    {p.role}
+                  </p>
+                  <p className="mt-1 font-display text-lg font-extrabold tracking-tight text-gold">
+                    {p.name}
+                  </p>
+                  <p className="mt-1 inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-primary">
+                    <TelegramIcon />
+                    @{p.handle}
+                  </p>
+                </a>
+              ))}
+            </div>
           </div>
         </section>
 
