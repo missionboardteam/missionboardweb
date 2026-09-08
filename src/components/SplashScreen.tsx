@@ -51,13 +51,11 @@ export function SplashScreen() {
     if (!el) return;
     el.muted = false;
     el.volume = 1;
-    el.play()
-      .then(() => setMuted(false))
-      .catch(() => {
-        el.muted = true;
-        setMuted(true);
-        el.play().catch(() => undefined);
-      });
+    el.play().catch(() => {
+      // Device blocked sound autoplay — play muted silently, no button shown.
+      el.muted = true;
+      el.play().catch(() => undefined);
+    });
   }, [state]);
 
   if (state === "pending" || state === "done") return null;
