@@ -109,6 +109,18 @@ export const Route = createFileRoute("/api/chat")({
 
           return result.toUIMessageStreamResponse({
             originalMessages: uiMessages,
+            onError: (error) => {
+              const raw =
+                error instanceof Error ? error.message : typeof error === "string" ? error : "";
+              console.error("[MB AI] stream error", raw);
+              if (/402|credit|payment_required/i.test(raw)) {
+                return "MB AI has run out of credits. Please ask the owner to top up so MB AI can answer again.";
+              }
+              if (/429|rate.?limit/i.test(raw)) {
+                return "MB AI is getting too many questions right now. Please try again in a minute.";
+              }
+              return "MB AI couldn't answer that right now. Please try again.";
+            },
             onFinish: async ({ responseMessage }) => {
               const { error } = await auth.supabase.from("ai_messages").insert({
                 thread_id: threadId,
