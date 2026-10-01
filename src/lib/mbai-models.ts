@@ -20,8 +20,8 @@ export const MBAI_MODELS = {
     name: "Claude",
     provider: "Anthropic",
     description: "Long-form reading and careful writing support",
-    modelId: null,
-    available: false,
+    modelId: "anthropic/claude-sonnet-5",
+    available: true,
   },
 } as const;
 
