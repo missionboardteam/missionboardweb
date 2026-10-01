@@ -3,7 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type FileUIPart, type UIMessage } from "ai";
-import { ArrowLeft, FileText, MessageSquarePlus, Paperclip, X } from "lucide-react";
+import { ArrowLeft, Bot, BrainCircuit, ChevronDown, FileText, MessageSquarePlus, Paperclip, X, Zap } from "lucide-react";
 
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,12 +24,33 @@ import {
 
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DEFAULT_MBAI_MODEL, isMbAiModelId, MBAI_MODELS, type MbAiModelId } from "@/lib/mbai-models";
 
-type Search = { q?: string };
+type Search = { q?: string; model?: MbAiModelId };
 
 export const Route = createFileRoute("/mb-ai/$threadId")({
   validateSearch: (search: Record<string, unknown>): Search => ({
     q: typeof search.q === "string" ? search.q : undefined,
+    model: isMbAiModelId(search.model) ? search.model : DEFAULT_MBAI_MODEL,
   }),
   head: () => ({
     meta: [
@@ -52,7 +73,7 @@ export const Route = createFileRoute("/mb-ai/$threadId")({
 
 function MbAiThreadPage() {
   const { threadId } = Route.useParams();
-  const { q } = Route.useSearch();
+  const { q, model } = Route.useSearch();
   const { session } = useAuth();
   const userId = session?.user.id;
 
@@ -113,6 +134,7 @@ function MbAiThreadPage() {
       title={data.thread.title}
       history={data.history}
       autoPrompt={data.history.length === 0 ? q : undefined}
+      initialModel={model ?? DEFAULT_MBAI_MODEL}
     />
   );
 }
@@ -122,13 +144,17 @@ function ChatWindow({
   title,
   history,
   autoPrompt,
+  initialModel,
 }: {
   threadId: string;
   title: string;
   history: UIMessage[];
   autoPrompt?: string;
+  initialModel: MbAiModelId;
 }) {
   const [input, setInput] = useState("");
+  const [selectedModel, setSelectedModel] = useState<MbAiModelId>(initialModel);
+  const [showExternalConsent, setShowExternalConsent] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const sentAuto = useRef(false);
   const navigate = useNavigate();
@@ -138,7 +164,7 @@ function ChatWindow({
     () =>
       new DefaultChatTransport<UIMessage>({
         api: "/api/chat",
-        body: { threadId },
+        body: { threadId, model: selectedModel },
         headers: async (): Promise<Record<string, string>> => {
           const { data } = await supabase.auth.getSession();
           const token = data.session?.access_token;
@@ -146,17 +172,17 @@ function ChatWindow({
         },
 
       }),
-    [threadId],
+    [selectedModel, threadId],
   );
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, regenerate, clearError, status } = useChat({
     id: threadId,
     messages: history,
     transport,
     onError: (error) => {
       const msg = error.message || "";
-      if (msg.includes("429")) toast.error("MB AI is busy right now. Please try again shortly.");
-      else if (msg.includes("402")) toast.error("MB AI credits are exhausted. Please try later.");
+      if (msg.includes("MBAI_CREDITS_EXHAUSTED") || msg.includes("402")) setShowExternalConsent(true);
+      else if (msg.includes("429")) toast.error("MB AI is busy right now. Please try again shortly.");
       else toast.error("MB AI couldn't answer that. Please try again.");
     },
     onFinish: () => {
@@ -175,8 +201,19 @@ function ChatWindow({
     if (!autoPrompt || sentAuto.current) return;
     sentAuto.current = true;
     void sendMessage({ text: autoPrompt });
-    navigate({ to: "/mb-ai/$threadId", params: { threadId }, search: {}, replace: true });
-  }, [autoPrompt, navigate, sendMessage, threadId]);
+    navigate({ to: "/mb-ai/$threadId", params: { threadId }, search: { model: selectedModel }, replace: true });
+  }, [autoPrompt, navigate, selectedModel, sendMessage, threadId]);
+
+  function chooseModel(model: MbAiModelId) {
+    setSelectedModel(model);
+    navigate({ to: "/mb-ai/$threadId", params: { threadId }, search: { model }, replace: true });
+  }
+
+  async function confirmExternalProcessing() {
+    setShowExternalConsent(false);
+    clearError();
+    await regenerate({ body: { threadId, model: "gemini", externalFallback: true } });
+  }
 
   async function submit(text: string, files: FileUIPart[]) {
     const value = text.trim();
@@ -206,6 +243,7 @@ function ChatWindow({
           <p className="truncate font-display text-sm font-bold">{title}</p>
           <p className="text-[11px] text-muted-foreground">Mission Board AI</p>
         </div>
+        <ModelMenu selected={selectedModel} onChoose={chooseModel} />
         <Link
           to="/mb-ai"
           aria-label="New chat"
@@ -328,21 +366,79 @@ function ChatWindow({
           </PromptInput>
         </div>
       </div>
+      <AlertDialog open={showExternalConsent} onOpenChange={setShowExternalConsent}>
+        <AlertDialogContent className="max-w-md rounded-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle>MB AI credits are exhausted</AlertDialogTitle>
+            <AlertDialogDescription className="leading-6">
+              Would you like to send your data to third-party servers to process your request?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => void confirmExternalProcessing()}>
+              Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
+  );
+}
+
+const MODEL_ICONS = { gemini: Zap, chatgpt: BrainCircuit, claude: Bot } satisfies Record<
+  MbAiModelId,
+  typeof Bot
+>;
+
+function ModelMenu({ selected, onChoose }: { selected: MbAiModelId; onChoose: (model: MbAiModelId) => void }) {
+  const current = MBAI_MODELS[selected];
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm" className="max-w-32 gap-1.5">
+          <span className="truncate">{current.name}</span>
+          <ChevronDown className="h-3.5 w-3.5" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-72 rounded-lg p-2">
+        <DropdownMenuLabel>Choose a MB AI-supported AI Model to chat with…</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {(Object.values(MBAI_MODELS) as (typeof MBAI_MODELS)[MbAiModelId][]).map((model) => {
+          const Icon = MODEL_ICONS[model.id];
+          return (
+            <DropdownMenuItem
+              key={model.id}
+              disabled={!model.available}
+              onSelect={() => onChoose(model.id)}
+              className="items-start rounded-md py-3"
+            >
+              <Icon className="mt-0.5 text-primary" />
+              <span>
+                <span className="block font-semibold">{model.name}</span>
+                <span className="block text-xs text-muted-foreground">{model.description}</span>
+              </span>
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
 function AttachButton() {
   const attachments = usePromptInputAttachments();
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon"
       aria-label="Attach image, video or document"
       onClick={() => attachments.openFileDialog()}
       className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-muted-foreground transition-colors hover:text-foreground"
     >
       <Paperclip className="h-4 w-4" />
-    </button>
+    </Button>
   );
 }
 
@@ -354,14 +450,16 @@ function ComposerAttachments() {
       {attachments.files.map((file) => (
         <div key={file.id} className="relative">
           <AttachmentPreview file={file} />
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             aria-label={`Remove ${file.filename ?? "attachment"}`}
             onClick={() => attachments.remove(file.id)}
             className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-white/20 bg-background/90 text-foreground"
           >
             <X className="h-3 w-3" />
-          </button>
+          </Button>
         </div>
       ))}
     </div>

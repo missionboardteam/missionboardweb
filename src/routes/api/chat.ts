@@ -1,39 +1,41 @@
+import { createAnthropic } from "@ai-sdk/anthropic";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  convertToModelMessages,
-  streamText,
-  stepCountIs,
-  tool,
-  type UIMessage,
-} from "ai";
+import { convertToModelMessages, streamText, stepCountIs, tool, type UIMessage } from "ai";
 import { z } from "zod";
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
+import {
+  createLovableAiGatewayProvider,
+  createLovableAiGatewayRunIdFetch,
+  getLovableAiGatewayRunId,
+  withLovableAiGatewayRunIdHeader,
+} from "@/lib/ai-gateway.server";
 import { authenticateRequest } from "@/lib/mbai-auth.server";
+import { DEFAULT_MBAI_MODEL, isMbAiModelId, MBAI_MODELS } from "@/lib/mbai-models";
 
+const SYSTEM_PROMPT = `You are MB AI (Mission Board AI), the study assistant of the Mission Board family.
+Help Indian school students, mainly CBSE Classes 10, 11 and 12, solve doubts across Maths, Science, Social Science, English and Computer Science. Give clear step-by-step solutions, derivations, revision plans and exam guidance. Match the student's language: English, Hindi or Hinglish.
 
-const SYSTEM_PROMPT = `You are MB AI (Mission Board AI), the study assistant of the Mission Board family —
-Mission Board Class 10 2027, Mission Board Class 11 & 12, Mission Board Group Chat (DG), Aarambhian Legacy, and Aarambhian Legacy Group Chat (DG).
+Be warm, accurate and concise. Use clean markdown, show working for numericals, include units, and clearly state final answers. If uncertain, say so. Read attached images, videos and documents carefully. Use the image tool when a diagram or visual would materially help. For book PDFs or batch links, direct students to the Books, Notifications or Batches tabs.`;
 
-Your job is to help Indian school students (mainly CBSE Class 10, 11 and 12) with:
-- Doubt solving in Maths, Science (Physics, Chemistry, Biology), Social Science, English and Computer.
-- Step-by-step solutions, derivations, numericals and formula explanations.
-- Exam strategy, revision plans, timetables, PYQ guidance and sample-paper tips.
-- Explaining concepts simply, with examples, and in the language the student uses (English, Hindi or Hinglish).
+type ChatRequestBody = {
+  messages?: unknown;
+  threadId?: unknown;
+  model?: unknown;
+  externalFallback?: unknown;
+};
 
-Style rules:
-- Be warm, encouraging and motivating — students should feel supported.
-- Use clean markdown: short paragraphs, bold key terms, numbered steps for solutions.
-- Show working for numericals, and state the final answer clearly with units.
-- If a question is outside studies, answer briefly and politely steer back to learning.
-- If you are unsure, say so instead of inventing facts.
-- Students can attach images, videos and documents (PDF) — read them carefully and answer from what you see.
-- You can create images with the generate_image tool (diagrams, labelled figures, posters, revision charts).
-  Use it whenever a visual would help or when the student asks for an image. Write a rich, detailed prompt,
-  and after the tool runs, briefly explain the image. Never claim you cannot make images.
-- For book PDFs or batch links, tell students to check the Books, Notifications or Batches tabs of the website.`;
-
-
-type ChatRequestBody = { messages?: unknown; threadId?: unknown };
+function errorStatus(error: unknown) {
+  if (typeof error === "object" && error !== null && "statusCode" in error) {
+    const status = Number((error as { statusCode?: unknown }).statusCode);
+    if (Number.isFinite(status)) return status;
+  }
+  const message = error instanceof Error ? error.message : String(error);
+  if (/402|credit|payment_required/i.test(message)) return 402;
+  if (/403|forbidden|policy/i.test(message)) return 403;
+  if (/429|rate.?limit/i.test(message)) return 429;
+  return 500;
+}
 
 export const Route = createFileRoute("/api/chat")({
   server: {
@@ -45,6 +47,8 @@ export const Route = createFileRoute("/api/chat")({
         const body = (await request.json()) as ChatRequestBody;
         const messages = body.messages;
         const threadId = typeof body.threadId === "string" ? body.threadId : null;
+        const selectedModel = isMbAiModelId(body.model) ? body.model : DEFAULT_MBAI_MODEL;
+        const useExternalFallback = body.externalFallback === true;
         if (!Array.isArray(messages) || !threadId) {
           return new Response("messages and threadId are required", { status: 400 });
         }
@@ -57,96 +61,177 @@ export const Route = createFileRoute("/api/chat")({
           .maybeSingle();
         if (threadError || !thread) return new Response("Thread not found", { status: 404 });
 
-        const key = process.env["LOVABLE_API_KEY"];
-        if (!key) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
-
         const uiMessages = messages as UIMessage[];
-        const lastUser = [...uiMessages].reverse().find((m) => m.role === "user");
+        const modelMessages = await convertToModelMessages(uiMessages);
+        const lastUser = [...uiMessages].reverse().find((message) => message.role === "user");
         if (lastUser) {
-          const { error: insertError } = await auth.supabase.from("ai_messages").insert({
-            thread_id: threadId,
-            user_id: auth.userId,
-            role: "user",
-            parts: lastUser.parts as unknown as never,
-            client_message_id: lastUser.id ?? null,
-          });
+          const { error: insertError } = await auth.supabase.from("ai_messages").upsert(
+            {
+              thread_id: threadId,
+              user_id: auth.userId,
+              role: "user",
+              parts: lastUser.parts as unknown as never,
+              client_message_id: lastUser.id ?? null,
+            },
+            { onConflict: "thread_id,client_message_id", ignoreDuplicates: true },
+          );
           if (insertError) console.error("[MB AI] failed saving user message", insertError);
         }
 
-        const gateway = createLovableAiGatewayProvider(key);
+        const onFinish = async ({ responseMessage }: { responseMessage: UIMessage }) => {
+          const { error } = await auth.supabase.from("ai_messages").insert({
+            thread_id: threadId,
+            user_id: auth.userId,
+            role: "assistant",
+            parts: responseMessage.parts as unknown as never,
+            client_message_id: responseMessage.id ?? null,
+          });
+          if (error) console.error("[MB AI] failed saving assistant message", error);
+          await auth.supabase
+            .from("ai_threads")
+            .update({ updated_at: new Date().toISOString() })
+            .eq("id", threadId);
+        };
+
+        if (useExternalFallback) {
+          const googleKey = process.env["GOOGLE_GEMINI_API_KEY"];
+          if (!googleKey) {
+            return new Response("External Gemini processing is not configured.", { status: 503 });
+          }
+          const google = createGoogleGenerativeAI({ apiKey: googleKey });
+          const result = streamText({
+            model: google("gemini-2.5-flash"),
+            system: SYSTEM_PROMPT,
+            messages: modelMessages,
+            abortSignal: request.signal,
+            maxRetries: 0,
+          });
+          return result.toUIMessageStreamResponse({ originalMessages: uiMessages, onFinish });
+        }
+
+        const lovableKey = process.env["LOVABLE_API_KEY"];
+        if (!lovableKey) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
+        const modelConfig = MBAI_MODELS[selectedModel];
+        if (!modelConfig.available || !modelConfig.modelId) {
+          return new Response(`${modelConfig.name} is not available right now.`, { status: 400 });
+        }
 
         try {
-          const result = streamText({
-            model: gateway("google/gemini-3.6-flash"),
-            system: SYSTEM_PROMPT,
-            messages: await convertToModelMessages(uiMessages),
-            stopWhen: stepCountIs(50),
-            tools: {
-              generate_image: tool({
-                description:
-                  "Generate an image (diagram, labelled figure, chart, poster or illustration) for the student.",
-                inputSchema: z.object({
-                  prompt: z
-                    .string()
-                    .describe("Detailed description of the image to generate, in English."),
-                }),
-                execute: async ({ prompt }) => {
-                  const { generateAndStoreImage } = await import("@/lib/mbai-image.server");
-                  try {
-                    const { url } = await generateAndStoreImage(prompt, key);
-                    return { url, prompt };
-                  } catch (error) {
-                    console.error("[MB AI] image generation failed", error);
-                    return {
-                      error: error instanceof Error ? error.message : "Image generation failed",
-                    };
-                  }
+          const initialRunId = getLovableAiGatewayRunId(request);
+          const imageTool = tool({
+            description: "Generate a helpful study diagram, labelled figure, chart or illustration.",
+            inputSchema: z.object({
+              prompt: z.string().describe("A detailed English description of the requested image."),
+            }),
+            execute: async ({ prompt }) => {
+              const { generateAndStoreImage } = await import("@/lib/mbai-image.server");
+              const { url } = await generateAndStoreImage(prompt, lovableKey);
+              return { url, prompt };
+            },
+          });
+
+          if (selectedModel === "chatgpt") {
+            const runIdFetch = createLovableAiGatewayRunIdFetch(initialRunId);
+            const openai = createOpenAI({
+              baseURL: "https://ai.gateway.lovable.dev/v1",
+              apiKey: lovableKey,
+              headers: {
+                "Lovable-API-Key": lovableKey,
+                "X-Lovable-AIG-SDK": "vercel-ai-sdk",
+              },
+              fetch: runIdFetch.fetch,
+            });
+            const result = streamText({
+              model: openai.responses(modelConfig.modelId),
+              system: SYSTEM_PROMPT,
+              messages: modelMessages,
+              tools: { generate_image: imageTool },
+              stopWhen: stepCountIs(50),
+              abortSignal: request.signal,
+              maxRetries: 0,
+              providerOptions: {
+                openai: {
+                  store: false,
+                  forceReasoning: true,
+                  reasoningEffort: "medium",
+                  reasoningSummary: "auto",
+                  include: ["reasoning.encrypted_content"],
                 },
+              },
+            });
+            return withLovableAiGatewayRunIdHeader(
+              result.toUIMessageStreamResponse({
+                originalMessages: uiMessages,
+                sendReasoning: true,
+                onFinish,
+                onError: formatStreamError,
               }),
-            },
-          });
+              runIdFetch,
+            );
+          }
 
+          if (selectedModel === "claude") {
+            const runIdFetch = createLovableAiGatewayRunIdFetch(initialRunId);
+            const anthropic = createAnthropic({
+              baseURL: "https://ai.gateway.lovable.dev/v1",
+              apiKey: lovableKey,
+              headers: { "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
+              fetch: runIdFetch.fetch,
+            });
+            const result = streamText({
+              model: anthropic(modelConfig.modelId),
+              system: SYSTEM_PROMPT,
+              messages: modelMessages,
+              tools: { generate_image: imageTool },
+              stopWhen: stepCountIs(50),
+              abortSignal: request.signal,
+              maxRetries: 0,
+            });
+            return withLovableAiGatewayRunIdHeader(
+              result.toUIMessageStreamResponse({
+                originalMessages: uiMessages,
+                onFinish,
+                onError: formatStreamError,
+              }),
+              runIdFetch,
+            );
+          }
 
-          return result.toUIMessageStreamResponse({
-            originalMessages: uiMessages,
-            onError: (error) => {
-              const raw =
-                error instanceof Error ? error.message : typeof error === "string" ? error : "";
-              console.error("[MB AI] stream error", raw);
-              if (/402|credit|payment_required/i.test(raw)) {
-                return "MB AI has run out of credits. Please ask the owner to top up so MB AI can answer again.";
-              }
-              if (/429|rate.?limit/i.test(raw)) {
-                return "MB AI is getting too many questions right now. Please try again in a minute.";
-              }
-              return "MB AI couldn't answer that right now. Please try again.";
-            },
-            onFinish: async ({ responseMessage }) => {
-              const { error } = await auth.supabase.from("ai_messages").insert({
-                thread_id: threadId,
-                user_id: auth.userId,
-                role: "assistant",
-                parts: responseMessage.parts as unknown as never,
-                client_message_id: responseMessage.id ?? null,
-              });
-              if (error) console.error("[MB AI] failed saving assistant message", error);
-              await auth.supabase
-                .from("ai_threads")
-                .update({ updated_at: new Date().toISOString() })
-                .eq("id", threadId);
-            },
+          const gateway = createLovableAiGatewayProvider(lovableKey, initialRunId);
+          const result = streamText({
+            model: gateway(modelConfig.modelId),
+            system: SYSTEM_PROMPT,
+            messages: modelMessages,
+            tools: { generate_image: imageTool },
+            stopWhen: stepCountIs(50),
+            abortSignal: request.signal,
+            maxRetries: 0,
           });
+          return withLovableAiGatewayRunIdHeader(
+            result.toUIMessageStreamResponse({
+              originalMessages: uiMessages,
+              onFinish,
+              onError: formatStreamError,
+            }),
+            gateway,
+          );
         } catch (error) {
-          console.error("[MB AI] gateway error", error);
+          const status = errorStatus(error);
           const message = error instanceof Error ? error.message : "AI request failed";
-          const status = /429|rate limit/i.test(message)
-            ? 429
-            : /402|credit/i.test(message)
-              ? 402
-              : 500;
-          return new Response(message, { status });
+          console.error("[MB AI] gateway error", status, message);
+          return new Response(status === 402 ? "MBAI_CREDITS_EXHAUSTED" : message, { status });
         }
       },
     },
   },
 });
+
+function formatStreamError(error: unknown) {
+  const status = errorStatus(error);
+  const raw = error instanceof Error ? error.message : String(error);
+  console.error("[MB AI] stream error", status, raw);
+  if (status === 402) return "MBAI_CREDITS_EXHAUSTED";
+  if (status === 403) return raw || "This AI model is blocked by workspace policy.";
+  if (status === 429) return "MB AI is busy right now. Please try again shortly.";
+  return raw || "MB AI could not answer that request.";
+}
