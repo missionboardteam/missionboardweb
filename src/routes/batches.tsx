@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { setChromeHidden } from "@/lib/chrome";
 import { ArrowLeft, ExternalLink, Send } from "lucide-react";
-import { AskMbAiButton } from "@/components/AskMbAiButton";
 import nextToppersLogo from "@/assets/batch-nt-logo.webp.asset.json";
 import missionJeetLogo from "@/assets/batch-mj-logo.png.asset.json";
 import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
@@ -207,7 +206,6 @@ function BatchesPage() {
           allow="fullscreen; clipboard-read; clipboard-write; autoplay; encrypted-media"
           allowFullScreen
         />
-        <AskMbAiButton pageUrl={activeServer.url} pageName={`${active.name} ${activeServer.label}`} />
       </div>
     );
   }

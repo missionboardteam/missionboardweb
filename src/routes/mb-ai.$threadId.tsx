@@ -7,7 +7,6 @@ import { ArrowLeft, Bot, BrainCircuit, ChevronDown, FileText, MessageSquarePlus,
 
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { takeMbAiHandoff } from "@/lib/mbai-handoff";
 import { useAuth } from "@/hooks/useAuth";
 import { MbAiLogo } from "@/components/MbAiLogo";
 import {
@@ -197,14 +196,6 @@ function ChatWindow({
   useEffect(() => {
     textareaRef.current?.focus();
   }, [threadId]);
-
-  useEffect(() => {
-    if (sentAuto.current) return;
-    const handoff = takeMbAiHandoff(threadId);
-    if (!handoff) return;
-    sentAuto.current = true;
-    void sendMessage({ text: handoff.text, files: handoff.files });
-  }, [sendMessage, threadId]);
 
   useEffect(() => {
     if (!autoPrompt || sentAuto.current) return;
