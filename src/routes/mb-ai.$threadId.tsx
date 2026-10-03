@@ -45,12 +45,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DEFAULT_MBAI_MODEL, isMbAiModelId, MBAI_MODELS, type MbAiModelId } from "@/lib/mbai-models";
 
-type Search = { q?: string; model?: MbAiModelId };
+type Search = { q?: string; model?: MbAiModelId; shot?: string };
 
 export const Route = createFileRoute("/mb-ai/$threadId")({
   validateSearch: (search: Record<string, unknown>): Search => ({
     q: typeof search.q === "string" ? search.q : undefined,
     model: isMbAiModelId(search.model) ? search.model : DEFAULT_MBAI_MODEL,
+    shot:
+      typeof search.shot === "string" && search.shot.startsWith("https://image.thum.io/")
+        ? search.shot
+        : undefined,
   }),
   head: () => ({
     meta: [
@@ -134,6 +138,7 @@ function MbAiThreadPage() {
       title={data.thread.title}
       history={data.history}
       autoPrompt={data.history.length === 0 ? q : undefined}
+      autoShot={data.history.length === 0 ? shot : undefined}
       initialModel={model ?? DEFAULT_MBAI_MODEL}
     />
   );
@@ -144,12 +149,14 @@ function ChatWindow({
   title,
   history,
   autoPrompt,
+  autoShot,
   initialModel,
 }: {
   threadId: string;
   title: string;
   history: UIMessage[];
   autoPrompt?: string;
+  autoShot?: string;
   initialModel: MbAiModelId;
 }) {
   const [input, setInput] = useState("");
@@ -200,9 +207,27 @@ function ChatWindow({
   useEffect(() => {
     if (!autoPrompt || sentAuto.current) return;
     sentAuto.current = true;
-    void sendMessage({ text: autoPrompt });
+    void (async () => {
+      let files: FileUIPart[] | undefined;
+      if (autoShot) {
+        try {
+          const res = await fetch(autoShot);
+          const blob = await res.blob();
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            const r = new FileReader();
+            r.onload = () => resolve(r.result as string);
+            r.onerror = reject;
+            r.readAsDataURL(blob);
+          });
+          files = [{ type: "file", mediaType: blob.type || "image/png", filename: "batch-page.png", url: dataUrl }];
+        } catch {
+          toast.error("Couldn't capture the page screenshot.");
+        }
+      }
+      void sendMessage(files ? { text: autoPrompt, files } : { text: autoPrompt });
+    })();
     navigate({ to: "/mb-ai/$threadId", params: { threadId }, search: { model: selectedModel }, replace: true });
-  }, [autoPrompt, navigate, selectedModel, sendMessage, threadId]);
+  }, [autoPrompt, autoShot, navigate, selectedModel, sendMessage, threadId]);
 
   function chooseModel(model: MbAiModelId) {
     setSelectedModel(model);
