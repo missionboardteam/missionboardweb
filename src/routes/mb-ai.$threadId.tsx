@@ -77,7 +77,7 @@ export const Route = createFileRoute("/mb-ai/$threadId")({
 
 function MbAiThreadPage() {
   const { threadId } = Route.useParams();
-  const { q, model } = Route.useSearch();
+  const { q, model, shot } = Route.useSearch();
   const { session } = useAuth();
   const userId = session?.user.id;
 
