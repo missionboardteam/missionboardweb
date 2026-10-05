@@ -44,7 +44,7 @@ function AskMbAiButton({ url }: { url: string }) {
       onClick={ask}
       disabled={busy}
       aria-label="Ask MB AI about this page"
-      className="fixed right-4 bottom-6 z-50 flex items-center gap-2 rounded-full border border-accent/50 bg-card/80 py-1.5 pr-4 pl-1.5 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.75)] backdrop-blur-xl transition-transform active:scale-95 disabled:opacity-80"
+      className="fixed right-4 bottom-40 z-50 flex items-center gap-2 rounded-full border border-accent/50 bg-card/80 py-1.5 pr-4 pl-1.5 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.75)] backdrop-blur-xl transition-transform active:scale-95 disabled:opacity-80"
     >
       <span
         className="pointer-events-none absolute inset-0 -z-10 rounded-full opacity-60 blur-lg"
