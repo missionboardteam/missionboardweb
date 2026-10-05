@@ -27,7 +27,6 @@ function AskMbAiButton() {
       const stream = await navigator.mediaDevices.getDisplayMedia({
         audio: false,
         video: { displaySurface: "browser" },
-        preferCurrentTab: true,
       });
 
       let screenshot: string;
