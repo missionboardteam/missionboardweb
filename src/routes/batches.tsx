@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { MbAiLogo } from "@/components/MbAiLogo";
 
-function AskMbAiButton({ url }: { url: string }) {
+function AskMbAiButton() {
   const navigate = useNavigate();
   const { session } = useAuth();
   const [busy, setBusy] = useState(false);
@@ -20,20 +20,61 @@ function AskMbAiButton({ url }: { url: string }) {
     }
     setBusy(true);
     try {
+      if (!navigator.mediaDevices?.getDisplayMedia) {
+        throw new Error("Live screen capture isn't available in this browser.");
+      }
+
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        audio: false,
+        video: { displaySurface: "browser" },
+        preferCurrentTab: true,
+      });
+
+      let screenshot: string;
+      try {
+        const video = document.createElement("video");
+        video.muted = true;
+        video.playsInline = true;
+        video.srcObject = stream;
+        await video.play();
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        if (!video.videoWidth || !video.videoHeight) throw new Error("The shared tab wasn't ready to capture.");
+
+        const scale = Math.min(1, 1280 / video.videoWidth);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(video.videoWidth * scale);
+        canvas.height = Math.round(video.videoHeight * scale);
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Couldn't capture the visible page.");
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        screenshot = canvas.toDataURL("image/jpeg", 0.86);
+        video.pause();
+        video.srcObject = null;
+      } finally {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+
+      const captureKey = crypto.randomUUID();
+      sessionStorage.setItem(`mbai-batch-capture:${captureKey}`, screenshot);
+
       const { data, error } = await supabase
         .from("ai_threads")
         .insert({ user_id: userId, title: "About this batch page" })
         .select("id")
         .single();
       if (error) throw error;
-      const shot = `https://image.thum.io/get/png/width/1024/crop/1400/${url}`;
       navigate({
         to: "/mb-ai/$threadId",
         params: { threadId: data.id },
-        search: { model: "gemini", q: "I want to know more about this page.", shot },
+        search: { model: "gemini", q: "I want to know more about this page.", capture: captureKey },
       });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Couldn't open MB AI");
+      const errorName = e instanceof DOMException ? e.name : "";
+      if (errorName === "NotAllowedError") {
+        toast.error("Screen capture was cancelled. The page wasn't sent to MB AI.");
+      } else {
+        toast.error(e instanceof Error ? e.message : "Couldn't capture the page for MB AI");
+      }
       setBusy(false);
     }
   }
@@ -268,7 +309,7 @@ function BatchesPage() {
           allow="fullscreen; clipboard-read; clipboard-write; autoplay; encrypted-media"
           allowFullScreen
         />
-        <AskMbAiButton url={activeServer.url} />
+        <AskMbAiButton />
       </div>
     );
   }
