@@ -45,15 +45,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DEFAULT_MBAI_MODEL, isMbAiModelId, MBAI_MODELS, type MbAiModelId } from "@/lib/mbai-models";
 
-type Search = { q?: string; model?: MbAiModelId; capture?: string };
+type Search = { q?: string; model?: MbAiModelId; shot?: string };
 
 export const Route = createFileRoute("/mb-ai/$threadId")({
   validateSearch: (search: Record<string, unknown>): Search => ({
     q: typeof search.q === "string" ? search.q : undefined,
     model: isMbAiModelId(search.model) ? search.model : DEFAULT_MBAI_MODEL,
-    capture:
-      typeof search.capture === "string" && /^[0-9a-f-]{36}$/i.test(search.capture)
-        ? search.capture
+    shot:
+      typeof search.shot === "string" && search.shot.startsWith("https://image.thum.io/")
+        ? search.shot
         : undefined,
   }),
   head: () => ({
@@ -77,7 +77,7 @@ export const Route = createFileRoute("/mb-ai/$threadId")({
 
 function MbAiThreadPage() {
   const { threadId } = Route.useParams();
-  const { q, model, capture } = Route.useSearch();
+  const { q, model, shot } = Route.useSearch();
   const { session } = useAuth();
   const userId = session?.user.id;
 
@@ -138,7 +138,7 @@ function MbAiThreadPage() {
       title={data.thread.title}
       history={data.history}
       autoPrompt={data.history.length === 0 ? q : undefined}
-      autoCaptureKey={data.history.length === 0 ? capture : undefined}
+      autoShot={data.history.length === 0 ? shot : undefined}
       initialModel={model ?? DEFAULT_MBAI_MODEL}
     />
   );
@@ -149,14 +149,14 @@ function ChatWindow({
   title,
   history,
   autoPrompt,
-  autoCaptureKey,
+  autoShot,
   initialModel,
 }: {
   threadId: string;
   title: string;
   history: UIMessage[];
   autoPrompt?: string;
-  autoCaptureKey?: string;
+  autoShot?: string;
   initialModel: MbAiModelId;
 }) {
   const [input, setInput] = useState("");
@@ -209,20 +209,25 @@ function ChatWindow({
     sentAuto.current = true;
     void (async () => {
       let files: FileUIPart[] | undefined;
-      if (autoCaptureKey) {
-        const storageKey = `mbai-batch-capture:${autoCaptureKey}`;
-        const dataUrl = window.sessionStorage.getItem(storageKey);
-        window.sessionStorage.removeItem(storageKey);
-        if (!dataUrl?.startsWith("data:image/jpeg;base64,")) {
-          toast.error("The live page capture is missing. Return to the batch and try again.");
-          return;
+      if (autoShot) {
+        try {
+          const res = await fetch(autoShot);
+          const blob = await res.blob();
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            const r = new FileReader();
+            r.onload = () => resolve(r.result as string);
+            r.onerror = reject;
+            r.readAsDataURL(blob);
+          });
+          files = [{ type: "file", mediaType: blob.type || "image/png", filename: "batch-page.png", url: dataUrl }];
+        } catch {
+          toast.error("Couldn't capture the page screenshot.");
         }
-        files = [{ type: "file", mediaType: "image/jpeg", filename: "batch-page.jpg", url: dataUrl }];
       }
       void sendMessage(files ? { text: autoPrompt, files } : { text: autoPrompt });
     })();
     navigate({ to: "/mb-ai/$threadId", params: { threadId }, search: { model: selectedModel }, replace: true });
-  }, [autoCaptureKey, autoPrompt, navigate, selectedModel, sendMessage, threadId]);
+  }, [autoPrompt, autoShot, navigate, selectedModel, sendMessage, threadId]);
 
   function chooseModel(model: MbAiModelId) {
     setSelectedModel(model);
