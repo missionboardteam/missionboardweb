@@ -76,6 +76,36 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_practice_attempts: {
+        Row: {
+          answers: Json
+          created_at: string
+          id: string
+          practice_date: string
+          score: number
+          subject: string
+          user_id: string
+        }
+        Insert: {
+          answers: Json
+          created_at?: string
+          id?: string
+          practice_date: string
+          score: number
+          subject: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          practice_date?: string
+          score?: number
+          subject?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       discussion_comments: {
         Row: {
           body: string
@@ -240,7 +270,15 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      daily_practice_leaderboard: {
+        Args: never
+        Returns: {
+          display_name: string
+          subjects_completed: number
+          total_points: number
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
