@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BatchesRouteImport } from './routes/batches'
 import { Route as BooksRouteImport } from './routes/books'
 import { Route as ChannelsRouteImport } from './routes/channels'
+import { Route as DailyPracticeRouteImport } from './routes/daily-practice'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RoomRouteImport } from './routes/room'
@@ -51,6 +52,11 @@ const BooksRoute = BooksRouteImport.update({
 const ChannelsRoute = ChannelsRouteImport.update({
   id: '/channels',
   path: '/channels',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DailyPracticeRoute = DailyPracticeRouteImport.update({
+  id: '/daily-practice',
+  path: '/daily-practice',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/batches': typeof BatchesRoute
   '/books': typeof BooksRoute
   '/channels': typeof ChannelsRoute
+  '/daily-practice': typeof DailyPracticeRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/room': typeof RoomRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/batches': typeof BatchesRoute
   '/books': typeof BooksRoute
   '/channels': typeof ChannelsRoute
+  '/daily-practice': typeof DailyPracticeRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/room': typeof RoomRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/batches': typeof BatchesRoute
   '/books': typeof BooksRoute
   '/channels': typeof ChannelsRoute
+  '/daily-practice': typeof DailyPracticeRoute
   '/notifications': typeof NotificationsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/room': typeof RoomRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/batches'
     | '/books'
     | '/channels'
+    | '/daily-practice'
     | '/notifications'
     | '/reset-password'
     | '/room'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/batches'
     | '/books'
     | '/channels'
+    | '/daily-practice'
     | '/notifications'
     | '/reset-password'
     | '/room'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/batches'
     | '/books'
     | '/channels'
+    | '/daily-practice'
     | '/notifications'
     | '/reset-password'
     | '/room'
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   BatchesRoute: typeof BatchesRoute
   BooksRoute: typeof BooksRoute
   ChannelsRoute: typeof ChannelsRoute
+  DailyPracticeRoute: typeof DailyPracticeRoute
   NotificationsRoute: typeof NotificationsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   RoomRoute: typeof RoomRoute
@@ -241,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/channels'
       fullPath: '/channels'
       preLoaderRoute: typeof ChannelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/daily-practice': {
+      id: '/daily-practice'
+      path: '/daily-practice'
+      fullPath: '/daily-practice'
+      preLoaderRoute: typeof DailyPracticeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -302,6 +322,7 @@ const rootRouteChildren: RootRouteChildren = {
   BatchesRoute: BatchesRoute,
   BooksRoute: BooksRoute,
   ChannelsRoute: ChannelsRoute,
+  DailyPracticeRoute: DailyPracticeRoute,
   NotificationsRoute: NotificationsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   RoomRoute: RoomRoute,

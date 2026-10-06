@@ -201,3 +201,15 @@
 .mbai-shine {
   animation: mbai-shine 2.6s ease-in-out infinite;
 }
+
+.platform-page {
+  --card: oklch(0.23 0.025 260);
+  --secondary: oklch(0.29 0.03 260);
+  background-color: var(--background);
+  letter-spacing: 0;
+}
+.platform-divider { background-color: var(--destructive); }
+.platform-row img { background-color: var(--foreground); padding: 0.25rem; }
+@media (prefers-reduced-motion: reduce) {
+  .platform-row * { transition: none; }
+}
