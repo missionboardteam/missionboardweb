@@ -1,11 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { setChromeHidden } from "@/lib/chrome";
-import { ArrowLeft, ExternalLink, Send, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, GraduationCap, Search, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { MbAiLogo } from "@/components/MbAiLogo";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 function AskMbAiButton({ url }: { url: string }) {
   const navigate = useNavigate();
@@ -99,8 +101,8 @@ const batches = [
     logo: nextToppersLogo.url,
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/nt/" },
-      { id: "s2", label: "Server 2", url: "https://studypanda.live/nexttoppers" },
-      { id: "s3", label: "Server 3", url: "https://nt.studybeepro.site/" },
+      { id: "s2", label: "Server 2", url: "https://nt.studyace.in/" },
+      { id: "s3", label: "Server 3", url: "https://studyhulk-ntt.ai.studio/" },
     ],
     accent: "var(--gradient-blue)",
   },
@@ -111,8 +113,8 @@ const batches = [
     logo: missionJeetLogo.url,
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/mj" },
-      { id: "s2", label: "Server 2", url: "https://studypanda.live/missionjeet" },
-      { id: "s3", label: "Server 3", url: "https://studybeepro.site/mj/" },
+      { id: "s2", label: "Server 2", url: "http://mj.Studyace.in" },
+      { id: "s3", label: "Server 3", url: "http://mjstudyhulk.vercel.app/" },
     ],
     accent: "var(--gradient-gold)",
   },
@@ -123,14 +125,16 @@ const batches = [
     logo: pwLogo.url,
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/pw" },
-      { id: "s2", label: "Server 2", url: "https://pw.studypanda.live/study/batches" },
-      { id: "s3", label: "Server 3", url: "https://pw.studybeepro.site/study/batches" },
+      { id: "s2", label: "Server 2", url: "http://pwx.studyace.in" },
+      { id: "s3", label: "Server 3", url: "https://studyhulk.primestudy.live" },
     ],
     accent: "var(--gradient-pink)",
   },
 ] as const;
 
 function BatchesPage() {
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
   const [serverId, setServerId] = useState<string | null>(null);
   const active = batches.find((b) => b.id === openId);
@@ -273,58 +277,30 @@ function BatchesPage() {
     );
   }
 
+  const platforms = [
+    { id: "pw", name: "Physics Wallah", description: "Premium batches, lectures, notes, and study support", logo: pwLogo.url },
+    { id: "nt", name: "Next Toppers", description: "Focused batches for fast revision and exam-ready practice", logo: nextToppersLogo.url },
+    { id: "mj", name: "Mission JEET", description: "Exclusive high-speed learning ecosystem", logo: missionJeetLogo.url },
+    { id: "practice", name: "Daily Practice 🎯", description: "English, Maths, Science & Social Science · Class 10", logo: null },
+  ];
+  const filtered = platforms.filter(p => `${p.name} ${p.description}`.toLowerCase().includes(query.toLowerCase().trim()));
   return (
-    <div className="min-h-screen pb-28 font-sans">
-      <div className="hero-surface border-b border-border/70 px-4 py-12 text-center">
-        <h1 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-          <span className="text-gold">Batches</span>
-        </h1>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-          NEW 2026-27 batches — open them right here, you never leave our website.
-        </p>
+    <main className="platform-page min-h-screen pb-36 font-sans">
+      <div className="mx-auto max-w-3xl px-5 pt-10 sm:px-8 sm:pt-14">
+        <h1 className="max-w-lg font-display text-4xl leading-tight font-extrabold sm:text-6xl">Choose your<br />platform</h1>
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">Pick a learning ecosystem to open batches, notes and study support.</p>
+        <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary/25 px-5 py-3 text-sm font-semibold"><GraduationCap className="h-5 w-5" /><strong className="text-lg">{platforms.length}</strong> platforms</span>
+        <div className="relative mt-7"><Search className="pointer-events-none absolute top-1/2 left-5 h-5 w-5 -translate-y-1/2 text-muted-foreground" /><Input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search platforms or exams" aria-label="Search platforms or exams" className="h-16 rounded-full border-0 bg-secondary pl-14 pr-5 text-base" /></div>
       </div>
-
-      <div className="mx-auto grid max-w-2xl gap-4 px-4 py-8">
-        {batches.map((b) => (
-          <button
-            key={b.id}
-            type="button"
-            onClick={() => {
-              setServerId(null);
-              setOpenId(b.id);
-            }}
-            className="card-elevated group relative overflow-hidden rounded-3xl border border-border bg-card p-5 text-left transition-transform duration-300 hover:-translate-y-1"
-          >
-            <div
-              className="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full opacity-25 blur-3xl"
-              style={{ backgroundImage: b.accent }}
-            />
-            <div className="relative flex items-center gap-4">
-              <img
-                src={b.logo}
-                alt={`${b.name} logo`}
-                loading="lazy"
-                className="h-16 w-16 shrink-0 rounded-2xl bg-white object-contain p-2 ring-1 ring-border"
-              />
-
-              <div className="min-w-0">
-                <span className="inline-block rounded-full border border-border bg-secondary px-2.5 py-1 text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
-                  {b.tag}
-                </span>
-                <h2 className="mt-2 font-display text-lg leading-tight font-bold">{b.name}</h2>
-                <p className="mt-1 text-xs text-muted-foreground">Server 1 • Server 2 • Server 3</p>
-              </div>
-              <ExternalLink className="ml-auto h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
-            </div>
-            <span
-              className="glow relative mt-5 flex w-full items-center justify-center rounded-xl px-5 py-3 font-display text-sm font-bold text-primary-foreground"
-              style={{ backgroundImage: b.accent }}
-            >
-              Open {b.name}
-            </span>
-          </button>
-        ))}
+      <div className="platform-divider mt-7 h-2 w-full" />
+      <div className="mx-auto grid max-w-3xl gap-4 px-5 pt-5 sm:px-8">
+        {filtered.map(p=><Button key={p.id} variant="ghost" onClick={()=>{if(p.id==='practice'){navigate({to:'/daily-practice'});return;}setServerId(null);setOpenId(p.id);}} className="platform-row group h-auto w-full justify-start gap-4 whitespace-normal rounded-3xl border border-border/40 bg-card px-4 py-5 text-left hover:bg-secondary sm:gap-5 sm:p-6">
+          {p.logo?<img src={p.logo} alt={`${p.name} logo`} className="h-16 w-16 shrink-0 rounded-2xl object-contain sm:h-20 sm:w-20"/>:<span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-4xl sm:h-20 sm:w-20" aria-hidden="true">🎯</span>}
+          <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold sm:text-2xl">{p.name}</span><span className="mt-1 block text-sm leading-relaxed font-normal text-muted-foreground sm:text-base">{p.description}</span>{p.id!=='practice'&&<span className="mt-2 block text-[10px] text-muted-foreground">Server 1 • Server 2 • Server 3</span>}</span>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive text-destructive-foreground transition-transform group-hover:translate-x-1 sm:h-12 sm:w-12"><ArrowRight className="!h-6 !w-6"/></span>
+        </Button>)}
+        {!filtered.length&&<p className="py-10 text-center text-sm text-muted-foreground">No platforms found.</p>}
       </div>
-    </div>
+    </main>
   );
 }
