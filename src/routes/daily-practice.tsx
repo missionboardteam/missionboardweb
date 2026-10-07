@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useServerFn } from '@tanstack/react-start';
 import { useQuery, useQueryClient, useSuspenseQuery, queryOptions } from '@tanstack/react-query';
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, BookOpen, Calculator, FlaskConical, Globe, Trophy, CheckCircle2, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Calculator, FlaskConical, Globe, Trophy, Target, CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { getDailyQuestions, getPracticeScores, submitPractice } from '@/lib/daily-practice.functions';
@@ -37,7 +37,7 @@ function DailyPracticePage(){
  const total=scores.data?.attempts.reduce((s,a)=>s+a.score,0)??0;
  return <main className="mx-auto max-w-3xl px-5 pt-7 pb-36 font-sans">
   <Button asChild variant="ghost" className="mb-6 px-0"><Link to="/batches"><ArrowLeft/>Batches</Link></Button>
-  <div className="flex flex-wrap items-end justify-between gap-5"><div><p className="mb-2 text-xs font-bold uppercase text-primary">Class 10 · Daily challenge</p><h1 className="font-display text-3xl font-extrabold sm:text-4xl">Daily Practice 🎯</h1><p className="mt-3 text-sm text-muted-foreground">10 questions per subject · 5 points each</p><p className="mt-1 text-xs text-muted-foreground">New set at midnight IST · One scored attempt per subject daily</p></div>
+  <div className="flex flex-wrap items-end justify-between gap-5"><div><p className="mb-2 text-xs font-bold uppercase text-primary">Class 10 · Daily challenge</p><h1 className="flex items-center gap-3 font-display text-3xl font-extrabold sm:text-4xl">Daily Practice <Target aria-label="Target" className="h-8 w-8 shrink-0 text-destructive"/></h1><p className="mt-3 text-sm text-muted-foreground">10 questions per subject · 5 points each</p><p className="mt-1 text-xs text-muted-foreground">New set at midnight IST · One scored attempt per subject daily</p></div>
   {user && <div className="border-l-2 border-primary pl-4"><span className="block text-xs text-muted-foreground">Your total points</span><strong className="text-3xl text-accent">{total}</strong></div>}</div>
   <div className="mt-8 flex gap-3 border-b border-border pb-3"><Button variant={tab==='practice'?'default':'ghost'} onClick={()=>setTab('practice')}><BookOpen/>Practice</Button><Button variant={tab==='leaderboard'?'default':'ghost'} onClick={()=>setTab('leaderboard')}><Trophy/>Leaderboard</Button></div>
   {!user && <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-5"><p className="text-sm text-muted-foreground">Sign in to submit answers and save your points.</p><Button asChild variant="outline"><Link to="/auth">Sign in</Link></Button></div>}

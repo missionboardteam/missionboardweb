@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { setChromeHidden } from "@/lib/chrome";
-import { ArrowLeft, ArrowRight, GraduationCap, Search, Send, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, GraduationCap, Search, Send, Loader2, Target } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -281,7 +281,7 @@ function BatchesPage() {
     { id: "pw", name: "Physics Wallah", description: "Premium batches, lectures, notes, and study support", logo: pwLogo.url },
     { id: "nt", name: "Next Toppers", description: "Focused batches for fast revision and exam-ready practice", logo: nextToppersLogo.url },
     { id: "mj", name: "Mission JEET", description: "Exclusive high-speed learning ecosystem", logo: missionJeetLogo.url },
-    { id: "practice", name: "Daily Practice 🎯", description: "English, Maths, Science & Social Science · Class 10", logo: null },
+    { id: "practice", name: "Daily Practice", description: "English, Maths, Science & Social Science · Class 10", logo: null },
   ];
   const filtered = platforms.filter(p => `${p.name} ${p.description}`.toLowerCase().includes(query.toLowerCase().trim()));
   return (
@@ -295,7 +295,7 @@ function BatchesPage() {
       <div className="platform-divider mt-7 h-2 w-full" />
       <div className="mx-auto grid max-w-3xl gap-4 px-5 pt-5 sm:px-8">
         {filtered.map(p=><Button key={p.id} variant="ghost" onClick={()=>{if(p.id==='practice'){navigate({to:'/daily-practice'});return;}setServerId(null);setOpenId(p.id);}} className="platform-row group h-auto w-full justify-start gap-4 whitespace-normal rounded-3xl border border-border/40 bg-card px-4 py-5 text-left hover:bg-secondary sm:gap-5 sm:p-6">
-          {p.logo?<img src={p.logo} alt={`${p.name} logo`} className="h-16 w-16 shrink-0 rounded-2xl object-contain sm:h-20 sm:w-20"/>:<span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-4xl sm:h-20 sm:w-20" aria-hidden="true">🎯</span>}
+          {p.logo?<img src={p.logo} alt={`${p.name} logo`} className="h-16 w-16 shrink-0 rounded-2xl object-contain sm:h-20 sm:w-20"/>:<span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary/15 sm:h-20 sm:w-20" aria-hidden="true"><Target className="!h-10 !w-10 text-destructive"/></span>}
           <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold sm:text-2xl">{p.name}</span><span className="mt-1 block text-sm leading-relaxed font-normal text-muted-foreground sm:text-base">{p.description}</span>{p.id!=='practice'&&<span className="mt-2 block text-[10px] text-muted-foreground">Server 1 • Server 2 • Server 3</span>}</span>
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive text-destructive-foreground transition-transform group-hover:translate-x-1 sm:h-12 sm:w-12"><ArrowRight className="!h-6 !w-6"/></span>
         </Button>)}
