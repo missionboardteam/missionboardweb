@@ -4,4 +4,4 @@
 - [x] Add Class 10 daily practice: 10 questions per subject, 5 points each.
 - [x] Save authenticated scores and show combined-subject leaderboard.
 - [x] Verify scoring, daily limits, navigation, and page layouts.
-- [ ] Make Q4 short written answers and Q5 long written answers in every subject, with word limits and server grading.
+- [x] Make Q4 short written answers and Q5 long written answers in every subject, with word limits and server grading.
