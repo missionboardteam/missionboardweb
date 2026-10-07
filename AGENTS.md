@@ -11,5 +11,6 @@
 
 - Daily practice uses a server-only question bank and India-local dates so answers stay private and daily sets reset consistently.
 - Grade practice submissions on the authenticated server and allow only a privileged insert into score rows; a unique user/date/subject key prevents duplicate scoring.
+- Use shared word-count validation for mixed written/MCQ practice answers and private server-side key-point rubrics for written grading; answer length alone must not earn points.
 - Leaderboard access exposes only display names and aggregate scores to authenticated users, never private profile fields.
 - Keep batch provider URLs in the batch page's shared provider list so server selection and embedded navigation agree.

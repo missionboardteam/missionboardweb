@@ -7,7 +7,7 @@ export const getDailyQuestions = createServerFn({method:'GET'})
  .handler(async ({data}) => {
   const {dailyQuestions,practiceDate} = await import('./daily-practice.server');
   const date = practiceDate();
-  return {date, questions:dailyQuestions(data.subject,date).map(({correct,explanation,...q}) => q)};
+  return {date, questions:dailyQuestions(data.subject,date).map(({correct,explanation,rubric,...q}) => q)};
  });
 export const getPracticeScores = createServerFn({method:'GET'}).middleware([requireSupabaseAuth])
  .handler(async ({context}) => {
@@ -22,7 +22,7 @@ export const getPracticeScores = createServerFn({method:'GET'}).middleware([requ
   return {date,attempts:attempts.data,leaderboard:leaderboard.data};
  });
 export const submitPractice = createServerFn({method:'POST'}).middleware([requireSupabaseAuth])
- .inputValidator((data: unknown) => z.object({subject:subjectSchema,date:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),answers:z.array(z.number().int().min(0).max(3)).length(10)}).parse(data))
+ .inputValidator((data: unknown) => z.object({subject:subjectSchema,date:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),answers:z.array(z.union([z.number().int().min(0).max(3),z.string().max(4000)])).length(10)}).parse(data))
  .handler(async ({data,context}) => {
   const {practiceDate,dailyQuestions,gradeAnswers} = await import('./daily-practice.server');
   const date=practiceDate();
