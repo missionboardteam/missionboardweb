@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { getDailyQuestions, getPracticeScores, submitPractice } from '@/lib/daily-practice.functions';
 import { toast } from 'sonner';
+import { Textarea } from '@/components/ui/textarea';
+import { countWords, validWrittenAnswer, type PracticeAnswer } from '@/lib/practice-answers';
 const subjects = [
  {id:'english',name:'English',icon:BookOpen},
  {id:'maths',name:'Maths',icon:Calculator},
@@ -52,13 +54,13 @@ function DailyPracticePage(){
 }
 function QuestionSet({subject,completed,canSubmit}:{subject:Subject;completed?:number;canSubmit:boolean}){
  const {data}=useSuspenseQuery(questionsOptions(subject));
- const [answers,setAnswers]=useState<Record<string,number>>({});
+ const [answers,setAnswers]=useState<Record<string,PracticeAnswer>>({});
  const [busy,setBusy]=useState(false);
  const [result,setResult]=useState<Awaited<ReturnType<typeof submitPractice>>|null>(null);
  const submit=useServerFn(submitPractice);
  const qc=useQueryClient();
  const locked=completed!==undefined||result!==null;
- const count=data.questions.filter(q=>answers[q.id]!==undefined).length;
+ const count=data.questions.filter(q=>q.kind==='mcq'?typeof answers[q.id]==='number':validWrittenAnswer(answers[q.id],q.minWords??0,q.maxWords??0)).length;
  async function finish(){
   setBusy(true);
   try{const response=await submit({data:{subject,date:data.date,answers:data.questions.map(q=>answers[q.id])}});setResult(response);await qc.invalidateQueries({queryKey:['practice-scores']});toast.success('Your score has been saved.');}
@@ -67,7 +69,7 @@ function QuestionSet({subject,completed,canSubmit}:{subject:Subject;completed?:n
  }
  return <section><div className="mb-5 flex justify-between text-xs text-muted-foreground"><span>{data.date} · Class 10</span><span>{count}/10 answered</span></div>
   {locked&&<div role="status" className="mb-6 flex items-center gap-3 border-y border-border bg-secondary/40 px-4 py-5"><CheckCircle2 className="text-accent"/><div><strong className="text-lg">{result?.score??completed}/50 points</strong><p className="text-xs text-muted-foreground">Saved for today. Next set arrives at midnight IST.</p></div></div>}
-  <div className="space-y-8">{data.questions.map((q,i)=>{const review=result?.review.find(r=>r.id===q.id);return <fieldset key={`${data.date}-${q.id}`} disabled={locked||busy} className="border-b border-border pb-7"><legend className="mb-4 flex gap-3 text-sm font-semibold leading-relaxed"><span className="text-primary">{String(i+1).padStart(2,'0')}</span>{q.prompt}</legend><div className="grid gap-2 sm:grid-cols-2">{q.options.map((option,j)=><label key={j} className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm ${review?.correct===j?'border-accent bg-accent/10':answers[q.id]===j?'border-primary bg-primary/10':'border-border bg-card'}`}><input type="radio" name={q.id} value={j} checked={answers[q.id]===j} onChange={()=>setAnswers(a=>({...a,[q.id]:j}))} className="h-4 w-4 shrink-0 accent-primary"/><span className="break-words">{option}</span>{review?.correct===j&&<CheckCircle2 className="ml-auto h-4 w-4 shrink-0 text-accent"/>}</label>)}</div>{review&&<p className="mt-3 text-xs text-muted-foreground">Correct answer: {review.explanation}</p>}</fieldset>})}</div>
+  <div className="space-y-8">{data.questions.map((q,i)=>{const review=result?.review.find(r=>r.id===q.id);return <fieldset key={`${data.date}-${q.id}`} disabled={locked||busy} className="border-b border-border pb-7"><legend className="mb-4 flex gap-3 text-sm font-semibold leading-relaxed"><span className="text-primary">{String(i+1).padStart(2,'0')}</span>{q.prompt}</legend>{q.kind!=='mcq'?<div><label htmlFor={q.id} className="mb-2 block text-xs font-semibold text-primary">{q.kind==='short'?'Short answer':'Long answer'} · {q.minWords}–{q.maxWords} words · 5 points</label><Textarea id={q.id} value={typeof answers[q.id]==='string'?String(answers[q.id]):''} onChange={e=>setAnswers(a=>({...a,[q.id]:e.target.value}))} rows={q.kind==='short'?4:7} maxLength={4000} className="resize-y text-sm"/><p className={`mt-2 text-xs ${countWords(String(answers[q.id]??''))>(q.maxWords??0)?'text-destructive':'text-muted-foreground'}`}>{countWords(String(answers[q.id]??''))} / {q.minWords}–{q.maxWords} words</p></div>:<div className="grid gap-2 sm:grid-cols-2">{q.options.map((option,j)=><label key={j} className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm ${review?.correct===j?'border-accent bg-accent/10':answers[q.id]===j?'border-primary bg-primary/10':'border-border bg-card'}`}><input type="radio" name={q.id} value={j} checked={answers[q.id]===j} onChange={()=>setAnswers(a=>({...a,[q.id]:j}))} className="h-4 w-4 shrink-0 accent-primary"/><span className="break-words">{option}</span>{review?.correct===j&&<CheckCircle2 className="ml-auto h-4 w-4 shrink-0 text-accent"/>}</label>)}</div>}{review&&<p className="mt-3 text-xs text-muted-foreground">{q.kind==='mcq'?'Correct answer':'Key points'}: {review.explanation}</p>}</fieldset>})}</div>
   {!locked&&<div className="mt-7 flex flex-wrap items-center justify-between gap-4"><span className="text-xs text-muted-foreground">Maximum 50 points · No negative marking</span><Button disabled={!canSubmit||count!==10||busy} onClick={finish}>{busy?<Loader2 className="animate-spin"/>:<ArrowRight/>}Submit answers</Button></div>}
  </section>;
 }
