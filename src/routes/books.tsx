@@ -4,6 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { BookOpen, Search, X, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import sqpMathsPdf from "@/assets/next-toppers-16-sqp-maths-class10.pdf.asset.json";
+
+const SQP_FOLDER_ID = "sqp_next_toppers_16";
+const SQP_PDFS = [
+  { id: "sqp-maths", title: "NEXT TOPPERS 16 SQP Maths Class 10", url: sqpMathsPdf.url },
+] as const;
 
 export const Route = createFileRoute("/books")({
   head: () => ({
@@ -29,6 +35,7 @@ export const Route = createFileRoute("/books")({
 const folders = [
   { id: "books_class10", label: "Class 10" },
   { id: "books_class11_12", label: "Class 11 and 12" },
+  { id: SQP_FOLDER_ID, label: "NEXT TOPPERS 16 SQP ALL SUBJECTS" },
 ] as const;
 
 const SORTS = [
