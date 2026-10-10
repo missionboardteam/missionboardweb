@@ -306,6 +306,8 @@ function BooksPage() {
             </li>
           ))}
         </ul>
+          </>
+        )}
       </div>
     </div>
   );
