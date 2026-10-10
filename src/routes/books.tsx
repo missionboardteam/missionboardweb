@@ -89,7 +89,7 @@ function BooksPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["books-notifications", folder, session?.user.id],
-    enabled: !!session,
+    enabled: !!session && folder !== SQP_FOLDER_ID,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("notifications")
@@ -239,6 +239,34 @@ function BooksPage() {
         </div>
 
 
+        {folder === SQP_FOLDER_ID ? (
+          <div className="grid gap-4">
+            {SQP_PDFS.map((pdf) => (
+              <div
+                key={pdf.id}
+                className="card-elevated overflow-hidden rounded-2xl border border-border bg-card"
+                onContextMenu={(e) => e.preventDefault()}
+              >
+                <div className="flex items-center gap-3 border-b border-border p-4">
+                  <BookOpen className="h-5 w-5 shrink-0 text-gold" />
+                  <div className="min-w-0">
+                    <p className="truncate font-display font-bold">{pdf.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      View only — downloading, printing and sharing are disabled.
+                    </p>
+                  </div>
+                </div>
+                <iframe
+                  src={`${pdf.url}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`}
+                  title={pdf.title}
+                  className="h-[70vh] w-full select-none"
+                  onContextMenu={(e) => e.preventDefault()}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
         {!session && <p className="text-sm text-muted-foreground">Sign in to see the book list.</p>}
         {isLoading && <p className="text-sm text-muted-foreground">Loading…</p>}
         {!isLoading && session && (!filtered || filtered.length === 0) && (
