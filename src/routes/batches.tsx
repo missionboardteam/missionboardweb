@@ -46,7 +46,7 @@ function AskMbAiButton({ url }: { url: string }) {
       onClick={ask}
       disabled={busy}
       aria-label="Ask MB AI about this page"
-      className="fixed right-4 bottom-40 z-50 flex items-center gap-2 rounded-full border border-accent/50 bg-card/80 py-1.5 pr-4 pl-1.5 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.75)] backdrop-blur-xl transition-transform active:scale-95 disabled:opacity-80"
+      className="fixed left-4 bottom-24 z-50 flex items-center gap-2 rounded-full border border-accent/50 bg-card/80 py-1.5 pr-4 pl-1.5 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.75)] backdrop-blur-xl transition-transform active:scale-95 disabled:opacity-80"
     >
       <span
         className="pointer-events-none absolute inset-0 -z-10 rounded-full opacity-60 blur-lg"
@@ -100,9 +100,7 @@ const batches = [
     tag: "Class 9-12 · Batches",
     logo: nextToppersLogo.url,
     servers: [
-      { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/nt/" },
-      { id: "s2", label: "Server 2", url: "https://nt.studyace.in/" },
-      { id: "s3", label: "Server 3", url: "https://studyhulk-ntt.ai.studio/" },
+      { id: "s1", label: "Server 1", url: "https://nt.nexthope.fun/" },
     ],
     accent: "var(--gradient-blue)",
   },
@@ -112,8 +110,8 @@ const batches = [
     tag: "Board + Competitive",
     logo: missionJeetLogo.url,
     servers: [
-      { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/mj" },
-      { id: "s2", label: "Server 2", url: "http://mj.Studyace.in" },
+      { id: "s1", label: "Server 1", url: "https://nexthope.fun/mj/" },
+      { id: "s2", label: "Server 2", url: "https://mj.studyace.in/" },
       { id: "s3", label: "Server 3", url: "http://mjstudyhulk.vercel.app/" },
     ],
     accent: "var(--gradient-gold)",
@@ -124,9 +122,8 @@ const batches = [
     tag: "JEE / NEET / Boards",
     logo: pwLogo.url,
     servers: [
-      { id: "s1", label: "Server 1", url: "https://nexthope.pages.dev/pw" },
-      { id: "s2", label: "Server 2", url: "http://pwx.studyace.in" },
-      { id: "s3", label: "Server 3", url: "https://studyhulk.primestudy.live" },
+      { id: "s1", label: "Server 1", url: "https://nexthope-52c52ef4eb0e.herokuapp.com/PW/" },
+      { id: "s2", label: "Server 2", url: "https://peedablu.com" },
     ],
     accent: "var(--gradient-pink)",
   },
