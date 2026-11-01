@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import introVideo from "@/assets/splash-intro.mp4.asset.json";
+import { Volume2 } from "lucide-react";
+import introVideo from "@/assets/splash-intro-v2.mp4.asset.json";
 
-const VIDEO_DURATION = 7400;
+const VIDEO_DURATION = 10050;
 const CREDITS_DURATION = 3000;
 const FADE_DURATION = 500;
 
@@ -16,6 +17,7 @@ export const CREDITS = [
 
 export function SplashScreen() {
   const [state, setState] = useState<"pending" | "video" | "credits" | "done">("pending");
+  const [needsTapForSound, setNeedsTapForSound] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
@@ -49,14 +51,27 @@ export function SplashScreen() {
     if (state !== "video") return;
     const el = videoRef.current;
     if (!el) return;
+    // Sound is compulsory: try full-volume playback first. If the device
+    // blocks unmuted autoplay, fall back to muted video with a tap-for-sound
+    // prompt so audio still plays the moment the user taps.
     el.muted = false;
     el.volume = 1;
     el.play().catch(() => {
-      // Device blocked sound autoplay — play muted silently, no button shown.
       el.muted = true;
       el.play().catch(() => undefined);
+      setNeedsTapForSound(true);
     });
   }, [state]);
+
+  function enableSound() {
+    const el = videoRef.current;
+    if (!el) return;
+    el.muted = false;
+    el.volume = 1;
+    el.currentTime = 0;
+    el.play().catch(() => undefined);
+    setNeedsTapForSound(false);
+  }
 
   if (state === "pending" || state === "done") return null;
 
@@ -75,6 +90,17 @@ export function SplashScreen() {
           autoPlay
           preload="auto"
         />
+        {needsTapForSound && (
+          <button
+            type="button"
+            onClick={enableSound}
+            aria-label="Tap to play sound"
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-in fade-in zoom-in-50 flex items-center gap-2 rounded-full border border-accent/50 bg-card/80 px-5 py-2.5 font-display text-xs font-extrabold text-accent shadow-lg backdrop-blur-xl"
+          >
+            <Volume2 className="h-4 w-4" />
+            Tap for sound
+          </button>
+        )}
       </div>
     );
   }
