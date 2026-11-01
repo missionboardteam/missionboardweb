@@ -90,6 +90,17 @@ export function SplashScreen() {
           autoPlay
           preload="auto"
         />
+        {needsTapForSound && (
+          <button
+            type="button"
+            onClick={enableSound}
+            aria-label="Tap to play sound"
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-in fade-in zoom-in-50 flex items-center gap-2 rounded-full border border-accent/50 bg-card/80 px-5 py-2.5 font-display text-xs font-extrabold text-accent shadow-lg backdrop-blur-xl"
+          >
+            <Volume2 className="h-4 w-4" />
+            Tap for sound
+          </button>
+        )}
       </div>
     );
   }
