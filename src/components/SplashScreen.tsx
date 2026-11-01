@@ -51,14 +51,27 @@ export function SplashScreen() {
     if (state !== "video") return;
     const el = videoRef.current;
     if (!el) return;
+    // Sound is compulsory: try full-volume playback first. If the device
+    // blocks unmuted autoplay, fall back to muted video with a tap-for-sound
+    // prompt so audio still plays the moment the user taps.
     el.muted = false;
     el.volume = 1;
     el.play().catch(() => {
-      // Device blocked sound autoplay — play muted silently, no button shown.
       el.muted = true;
       el.play().catch(() => undefined);
+      setNeedsTapForSound(true);
     });
   }, [state]);
+
+  function enableSound() {
+    const el = videoRef.current;
+    if (!el) return;
+    el.muted = false;
+    el.volume = 1;
+    el.currentTime = 0;
+    el.play().catch(() => undefined);
+    setNeedsTapForSound(false);
+  }
 
   if (state === "pending" || state === "done") return null;
 
