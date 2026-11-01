@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import introVideo from "@/assets/splash-intro.mp4.asset.json";
+import { Volume2 } from "lucide-react";
+import introVideo from "@/assets/splash-intro-v2.mp4.asset.json";
 
-const VIDEO_DURATION = 7400;
+const VIDEO_DURATION = 10050;
 const CREDITS_DURATION = 3000;
 const FADE_DURATION = 500;
 
@@ -16,6 +17,7 @@ export const CREDITS = [
 
 export function SplashScreen() {
   const [state, setState] = useState<"pending" | "video" | "credits" | "done">("pending");
+  const [needsTapForSound, setNeedsTapForSound] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
