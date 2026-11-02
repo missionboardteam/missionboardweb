@@ -69,6 +69,7 @@ function AskMbAiButton({ url }: { url: string }) {
 import nextToppersLogo from "@/assets/batch-nt-logo.webp.asset.json";
 import missionJeetLogo from "@/assets/batch-mj-logo.png.asset.json";
 import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
+import pinnacleLogo from "@/assets/batch-pinnacle-logo.png.asset.json";
 
 export const Route = createFileRoute("/batches")({
   head: () => ({
@@ -77,7 +78,7 @@ export const Route = createFileRoute("/batches")({
       {
         name: "description",
         content:
-          "Open the 2026-27 batches of Next Toppers, Mission JEET and Physics Wallah right inside our website — no redirects.",
+          "Open the 2026-27 batches of Next Toppers, Mission JEET, Physics Wallah and Pinnacle Ebooks right inside our website — no redirects.",
       },
       { property: "og:title", content: "Batches — Next Toppers, Mission JEET & PW" },
       {
@@ -101,6 +102,8 @@ const batches = [
     logo: nextToppersLogo.url,
     servers: [
       { id: "s1", label: "Server 1", url: "https://nt.nexthope.fun/" },
+      { id: "s2", label: "Server 2", url: "https://nt.studyace.in/" },
+      { id: "s3", label: "Server 3", url: "https://studyhulk-ntt.ai.studio/" },
     ],
     accent: "var(--gradient-blue)",
   },
@@ -124,8 +127,19 @@ const batches = [
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope-52c52ef4eb0e.herokuapp.com/PW/" },
       { id: "s2", label: "Server 2", url: "https://peedablu.com" },
+      { id: "s3", label: "Server 3", url: "https://studyhulk.primestudy.live" },
     ],
     accent: "var(--gradient-pink)",
+  },
+  {
+    id: "pinnacle",
+    name: "Pinnacle Ebooks",
+    tag: "E-books & Study Material",
+    logo: pinnacleLogo.url,
+    servers: [
+      { id: "s1", label: "Server 1", url: "https://nexthope.fun/pinnacle/" },
+    ],
+    accent: "var(--gradient-red)",
   },
 ] as const;
 
@@ -278,6 +292,7 @@ function BatchesPage() {
     { id: "pw", name: "Physics Wallah", description: "Premium batches, lectures, notes, and study support", logo: pwLogo.url },
     { id: "nt", name: "Next Toppers", description: "Focused batches for fast revision and exam-ready practice", logo: nextToppersLogo.url },
     { id: "mj", name: "Mission JEET", description: "Exclusive high-speed learning ecosystem", logo: missionJeetLogo.url },
+    { id: "pinnacle", name: "Pinnacle Ebooks", description: "Complete e-books and study material library", logo: pinnacleLogo.url },
     { id: "practice", name: "Daily Practice", description: "English, Maths, Science & Social Science · Class 10", logo: null },
   ];
   const filtered = platforms.filter(p => `${p.name} ${p.description}`.toLowerCase().includes(query.toLowerCase().trim()));

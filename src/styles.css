@@ -208,7 +208,7 @@
   background-color: var(--background);
   letter-spacing: 0;
 }
-.platform-divider { background-color: var(--destructive); }
+.platform-divider { background-image: var(--gradient-gold); }
 .platform-row img { background-color: var(--foreground); padding: 0.25rem; }
 @media (prefers-reduced-motion: reduce) {
   .platform-row * { transition: none; }
