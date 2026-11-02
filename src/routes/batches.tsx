@@ -69,6 +69,7 @@ function AskMbAiButton({ url }: { url: string }) {
 import nextToppersLogo from "@/assets/batch-nt-logo.webp.asset.json";
 import missionJeetLogo from "@/assets/batch-mj-logo.png.asset.json";
 import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
+import pinnacleLogo from "@/assets/batch-pinnacle-logo.png.asset.json";
 
 export const Route = createFileRoute("/batches")({
   head: () => ({
@@ -77,7 +78,7 @@ export const Route = createFileRoute("/batches")({
       {
         name: "description",
         content:
-          "Open the 2026-27 batches of Next Toppers, Mission JEET and Physics Wallah right inside our website — no redirects.",
+          "Open the 2026-27 batches of Next Toppers, Mission JEET, Physics Wallah and Pinnacle Ebooks right inside our website — no redirects.",
       },
       { property: "og:title", content: "Batches — Next Toppers, Mission JEET & PW" },
       {
@@ -101,6 +102,8 @@ const batches = [
     logo: nextToppersLogo.url,
     servers: [
       { id: "s1", label: "Server 1", url: "https://nt.nexthope.fun/" },
+      { id: "s2", label: "Server 2", url: "https://nt.studyace.in/" },
+      { id: "s3", label: "Server 3", url: "https://studyhulk-ntt.ai.studio/" },
     ],
     accent: "var(--gradient-blue)",
   },
@@ -124,8 +127,19 @@ const batches = [
     servers: [
       { id: "s1", label: "Server 1", url: "https://nexthope-52c52ef4eb0e.herokuapp.com/PW/" },
       { id: "s2", label: "Server 2", url: "https://peedablu.com" },
+      { id: "s3", label: "Server 3", url: "https://studyhulk.primestudy.live" },
     ],
     accent: "var(--gradient-pink)",
+  },
+  {
+    id: "pinnacle",
+    name: "Pinnacle Ebooks",
+    tag: "E-books & Study Material",
+    logo: pinnacleLogo.url,
+    servers: [
+      { id: "s1", label: "Server 1", url: "https://nexthope.fun/pinnacle/" },
+    ],
+    accent: "var(--gradient-red)",
   },
 ] as const;
 
@@ -278,6 +292,7 @@ function BatchesPage() {
     { id: "pw", name: "Physics Wallah", description: "Premium batches, lectures, notes, and study support", logo: pwLogo.url },
     { id: "nt", name: "Next Toppers", description: "Focused batches for fast revision and exam-ready practice", logo: nextToppersLogo.url },
     { id: "mj", name: "Mission JEET", description: "Exclusive high-speed learning ecosystem", logo: missionJeetLogo.url },
+    { id: "pinnacle", name: "Pinnacle Ebooks", description: "Complete e-books and study material library", logo: pinnacleLogo.url },
     { id: "practice", name: "Daily Practice", description: "English, Maths, Science & Social Science · Class 10", logo: null },
   ];
   const filtered = platforms.filter(p => `${p.name} ${p.description}`.toLowerCase().includes(query.toLowerCase().trim()));
@@ -293,7 +308,7 @@ function BatchesPage() {
       <div className="mx-auto grid max-w-3xl gap-4 px-5 pt-5 sm:px-8">
         {filtered.map(p=><Button key={p.id} variant="ghost" onClick={()=>{if(p.id==='practice'){navigate({to:'/daily-practice'});return;}setServerId(null);setOpenId(p.id);}} className="platform-row group h-auto w-full justify-start gap-4 whitespace-normal rounded-3xl border border-border/40 bg-card px-4 py-5 text-left hover:bg-secondary sm:gap-5 sm:p-6">
           {p.logo?<img src={p.logo} alt={`${p.name} logo`} className="h-16 w-16 shrink-0 rounded-2xl object-contain sm:h-20 sm:w-20"/>:<span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary/15 sm:h-20 sm:w-20" aria-hidden="true"><Target className="!h-10 !w-10 text-destructive"/></span>}
-          <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold sm:text-2xl">{p.name}</span><span className="mt-1 block text-sm leading-relaxed font-normal text-muted-foreground sm:text-base">{p.description}</span>{p.id!=='practice'&&<span className="mt-2 block text-[10px] text-muted-foreground">Server 1 • Server 2 • Server 3</span>}</span>
+          <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold sm:text-2xl">{p.name}</span><span className="mt-1 block text-sm leading-relaxed font-normal text-muted-foreground sm:text-base">{p.description}</span>{p.id!=='practice'&&<span className="mt-2 block text-[10px] text-muted-foreground">{batches.find(b=>b.id===p.id)?.servers.map(s=>s.label).join(' • ')}</span>}</span>
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive text-destructive-foreground transition-transform group-hover:translate-x-1 sm:h-12 sm:w-12"><ArrowRight className="!h-6 !w-6"/></span>
         </Button>)}
         {!filtered.length&&<p className="py-10 text-center text-sm text-muted-foreground">No platforms found.</p>}
