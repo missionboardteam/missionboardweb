@@ -5,7 +5,6 @@ import {
   Bot,
   BrainCircuit,
   ChevronDown,
-  Clock3,
   MessageCircle,
   MessageSquarePlus,
   Trash2,
@@ -103,8 +102,7 @@ function MbAiHome() {
       <section className="relative overflow-hidden border-b border-primary/20 px-4 pb-10 pt-5">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,color-mix(in_oklab,var(--primary)_28%,transparent),transparent_48%)]" />
         <div className="relative mx-auto max-w-4xl">
-          <CreditStatus />
-          <div className="mx-auto mt-10 max-w-xl text-center sm:mt-8">
+          <div className="mx-auto max-w-xl pt-6 text-center">
             <MbAiLogo className="mx-auto h-24 w-24 sm:h-28 sm:w-28" />
             <h1 className="mt-5 font-display text-4xl font-extrabold sm:text-5xl">MB AI</h1>
             <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-muted-foreground sm:text-base">
@@ -192,21 +190,6 @@ function MbAiHome() {
   );
 }
 
-function CreditStatus() {
-  return (
-    <div className="inline-flex items-center gap-3 rounded-lg border border-primary/30 bg-card/90 px-3 py-2 shadow-sm backdrop-blur-xl">
-      <span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/15 text-primary">
-        <Zap className="h-5 w-5" />
-      </span>
-      <span>
-        <span className="block text-sm font-extrabold">0 AI credits remaining</span>
-        <span className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
-          <Clock3 className="h-3 w-3" /> Monthly credits refill October 1
-        </span>
-      </span>
-    </div>
-  );
-}
 
 function NewChatMenu({
   onChoose,
