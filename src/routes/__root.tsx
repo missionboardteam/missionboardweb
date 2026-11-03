@@ -19,6 +19,7 @@ import { SwipeTabs } from "@/components/SwipeTabs";
 import { DriveAnnouncement } from "@/components/DriveAnnouncement";
 import { MbAiFab } from "@/components/MbAiFab";
 import { StatusBar } from "@/components/StatusBar";
+import { GlassProvider } from "@/lib/glass";
 
 import { Toaster } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
