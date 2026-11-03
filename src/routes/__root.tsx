@@ -135,6 +135,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <GlassProvider>
       <AuthProvider>
         <StatusBar />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
@@ -147,6 +148,7 @@ function RootComponent() {
 
         <Toaster position="top-center" richColors />
       </AuthProvider>
+      </GlassProvider>
     </QueryClientProvider>
   );
 }
