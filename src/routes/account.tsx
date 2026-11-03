@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Camera, LogOut, Mail, Phone } from "lucide-react";
+import { Camera, Droplets, LogOut, Mail, Phone, Snowflake } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { useGlass } from "@/lib/glass";
 import { channels, TelegramIcon } from "@/lib/channels";
 
 export const Route = createFileRoute("/account")({
@@ -42,6 +44,7 @@ function AccountPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
+  const { level: glassLevel, setLevel: setGlassLevel } = useGlass();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -359,6 +362,34 @@ function AccountPage() {
             </div>
           </section>
         )}
+
+        <section className="card-elevated mt-4 rounded-3xl border border-border bg-card p-6">
+          <h2 className="font-display text-lg font-bold">Appearance</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Fine-tune the navigation bar material, from classic frosted glass to glossy liquid glass.
+          </p>
+          <div className="mt-5 grid gap-3">
+            <div className="flex items-center justify-between text-xs font-semibold">
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                <Snowflake className="h-3.5 w-3.5" /> Frosted
+              </span>
+              <span className="flex items-center gap-1.5 text-accent">
+                Liquid <Droplets className="h-3.5 w-3.5" />
+              </span>
+            </div>
+            <Slider
+              aria-label="Glass effect level"
+              value={[glassLevel]}
+              min={0}
+              max={100}
+              step={1}
+              onValueChange={([v]) => setGlassLevel(v)}
+            />
+            <p className="text-xs text-muted-foreground">
+              Currently: {glassLevel === 0 ? "frosted glass" : glassLevel === 100 ? "liquid glass" : `liquid glass (${glassLevel}%)`}
+            </p>
+          </div>
+        </section>
 
         <h2 className="mt-8 font-display text-lg font-bold">Quick join</h2>
         <ul className="mt-3 grid gap-3">
