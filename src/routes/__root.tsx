@@ -19,6 +19,7 @@ import { SwipeTabs } from "@/components/SwipeTabs";
 import { DriveAnnouncement } from "@/components/DriveAnnouncement";
 import { MbAiFab } from "@/components/MbAiFab";
 import { StatusBar } from "@/components/StatusBar";
+import { GlassProvider } from "@/lib/glass";
 
 import { Toaster } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
@@ -135,6 +136,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <GlassProvider>
       <AuthProvider>
         <StatusBar />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
@@ -147,6 +149,7 @@ function RootComponent() {
 
         <Toaster position="top-center" richColors />
       </AuthProvider>
+      </GlassProvider>
     </QueryClientProvider>
   );
 }
