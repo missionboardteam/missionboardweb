@@ -20,12 +20,19 @@ export function StatusBar() {
   return (
     <>
       <div className="sticky top-0 z-50 px-2 pt-2">
-        <div className="mx-auto flex max-w-lg items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.07] px-2.5 py-2 shadow-[0_10px_34px_-16px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-2xl backdrop-saturate-200">
+        <div className="glass-panel relative mx-auto flex max-w-lg items-center gap-2 overflow-hidden rounded-2xl px-2.5 py-2">
+          {/* animated gold hairline along the bottom edge */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden">
+            <div
+              className="h-full w-1/3"
+              style={{ backgroundImage: "var(--gradient-gold)", animation: "mb-line 3.6s linear infinite" }}
+            />
+          </div>
           <button
             type="button"
             aria-label="Open menu"
             onClick={() => setOpen(true)}
-            className="rounded-xl border border-white/15 bg-white/[0.08] p-2 text-foreground transition-colors hover:bg-white/[0.16]"
+            className="glass-chip rounded-xl p-2 text-foreground transition-all duration-200 hover:bg-white/[0.16] active:scale-90"
           >
             <Menu className="h-4.5 w-4.5" />
           </button>

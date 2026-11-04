@@ -90,7 +90,7 @@ export function TelegramIcon({ className = "h-4 w-4" }: { className?: string }) 
 
 export function ChannelCard({ channel }: { channel: Channel }) {
   return (
-    <article className="card-elevated group relative overflow-hidden rounded-3xl border border-border bg-card p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-8">
+    <article className="glass-panel group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/[0.1] sm:p-8">
       <div
         className="pointer-events-none absolute -top-20 -right-20 h-52 w-52 rounded-full opacity-25 blur-3xl"
         style={{ backgroundImage: accentGradient[channel.accent] }}
@@ -100,7 +100,7 @@ export function ChannelCard({ channel }: { channel: Channel }) {
           src={channel.logo}
           alt={`${channel.name} logo`}
           loading="lazy"
-          className="h-24 w-24 shrink-0 rounded-2xl object-cover ring-1 ring-border sm:h-28 sm:w-28"
+          className="mb-float h-24 w-24 shrink-0 rounded-2xl object-cover ring-1 ring-white/25 transition-transform duration-500 group-hover:scale-105 sm:h-28 sm:w-28"
         />
         <div>
           <span className="inline-block rounded-full border border-border bg-secondary px-3 py-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
@@ -127,7 +127,7 @@ export function ChannelCard({ channel }: { channel: Channel }) {
         href={channel.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="glow relative mt-7 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+        className="glow shine-sweep relative mt-7 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
         style={{ backgroundImage: accentGradient[channel.accent] }}
       >
         <TelegramIcon />
