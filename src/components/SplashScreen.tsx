@@ -113,16 +113,16 @@ export function SplashScreen() {
       aria-label="Loading"
     >
       <div
-        className="pointer-events-none absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full opacity-60 blur-3xl"
-        style={{ backgroundImage: "var(--gradient-gold)" }}
+        className="mb-drift pointer-events-none absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full opacity-60 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)", animationDuration: "16s" }}
       />
       <div
-        className="pointer-events-none absolute top-1/2 -left-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
-        style={{ backgroundImage: "var(--gradient-gold)" }}
+        className="mb-drift pointer-events-none absolute top-1/2 -left-24 h-72 w-72 rounded-full opacity-45 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)", animationDuration: "20s", animationDelay: "2s" }}
       />
       <div
-        className="pointer-events-none absolute -bottom-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-50 blur-3xl"
-        style={{ backgroundImage: "var(--gradient-gold)" }}
+        className="mb-drift pointer-events-none absolute -bottom-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full opacity-50 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-gold)", animationDuration: "18s", animationDelay: "4s" }}
       />
 
       <div className="relative w-full max-w-md text-center">
@@ -134,7 +134,7 @@ export function SplashScreen() {
           {CREDITS.map((p) => (
             <div
               key={p.handle}
-              className="rounded-2xl border border-border bg-card/70 px-4 py-2 text-xs backdrop-blur"
+              className="glass-chip rounded-2xl px-4 py-2 text-xs"
             >
               <p className="font-semibold tracking-wide text-muted-foreground uppercase">
                 {p.role}
