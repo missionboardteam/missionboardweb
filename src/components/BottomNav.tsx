@@ -170,6 +170,7 @@ export function BottomNav() {
                                   80,
                                   liquid,
                                 ).toFixed(0)}%, transparent))`,
+                                animation: "mb-float 3.6s ease-in-out infinite",
                               }
                             : undefined
                         }

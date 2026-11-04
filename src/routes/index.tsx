@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { BookOpen, GraduationCap, Sparkles } from "lucide-react";
 import ntLogo from "@/assets/batch-nt-logo.webp.asset.json";
 import mjLogo from "@/assets/batch-mj-logo.png.asset.json";
 import pwLogo from "@/assets/batch-pw-logo.png.asset.json";
@@ -57,7 +58,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-
 const stats = [
   { value: "5", label: "Telegram channels" },
   { value: "100%", label: "Free forever" },
@@ -107,21 +107,19 @@ const faqs = [
   },
 ];
 
-
 function Index() {
   return (
     <div className="min-h-screen pb-28 font-sans">
       <SplashScreen />
       <FamilyBanner />
-      <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
-
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-white/[0.04] backdrop-blur-2xl backdrop-saturate-150">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <span className="font-display text-sm font-bold tracking-tight sm:text-base">
             Mission Board × Aarambhian Legacy
           </span>
           <a
             href="#channels"
-            className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-secondary"
+            className="glass-chip shine-sweep rounded-full px-4 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-white/[0.14]"
           >
             Join now
           </a>
@@ -130,25 +128,64 @@ function Index() {
 
       <main>
         <section className="hero-surface relative overflow-hidden border-b border-border">
-          <div className="mx-auto max-w-5xl px-4 py-16 text-center sm:py-24">
-            <span className="inline-block rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+          {/* floating liquid-glass decorations */}
+          <div className="pointer-events-none absolute inset-0">
+            <div
+              className="mb-drift absolute -top-12 left-[4%] h-40 w-40 rounded-full border border-white/10 opacity-40"
+              style={{
+                background:
+                  "radial-gradient(circle at 32% 30%, color-mix(in oklab, var(--primary) 55%, transparent), transparent 70%)",
+                animationDuration: "19s",
+              }}
+            />
+            <div
+              className="mb-drift absolute top-[30%] right-[2%] h-52 w-52 rounded-full border border-white/10 opacity-35"
+              style={{
+                background:
+                  "radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--accent) 45%, transparent), transparent 70%)",
+                animationDuration: "24s",
+                animationDelay: "2.5s",
+              }}
+            />
+            <span
+              className="glass-chip absolute top-[14%] right-[10%] rounded-2xl p-2.5"
+              style={{ animation: "mb-float 6.5s ease-in-out infinite" }}
+            >
+              <GraduationCap className="h-5 w-5 text-accent" strokeWidth={2.2} />
+            </span>
+            <span
+              className="glass-chip absolute top-[46%] left-[7%] rounded-2xl p-2.5"
+              style={{ animation: "mb-float 7.5s ease-in-out infinite", animationDelay: "1.4s" }}
+            >
+              <BookOpen className="h-5 w-5 text-primary" strokeWidth={2.2} />
+            </span>
+            <span
+              className="glass-chip absolute bottom-[12%] right-[22%] rounded-2xl p-2.5"
+              style={{ animation: "mb-float 7s ease-in-out infinite", animationDelay: "2.6s" }}
+            >
+              <Sparkles className="h-5 w-5 text-accent" strokeWidth={2.2} />
+            </span>
+          </div>
+
+          <div className="relative mx-auto max-w-5xl px-4 py-16 text-center sm:py-24">
+            <span className="glass-chip animate-in fade-in slide-in-from-bottom-2 inline-block rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase duration-500">
               Quality education for all
             </span>
-            <h1 className="mt-6 font-display text-4xl leading-[1.1] font-extrabold tracking-tight sm:text-6xl">
+            <h1 className="animate-in fade-in slide-in-from-bottom-4 mt-6 font-display text-4xl leading-[1.1] font-extrabold tracking-tight duration-700 fill-mode-backwards delay-100 sm:text-6xl">
               Free notes & books for
               <br />
               <span className="text-gold">Class 10, 11 and 12</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+            <p className="animate-in fade-in slide-in-from-bottom-4 mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground duration-700 fill-mode-backwards delay-200">
               Five Telegram channels, one mission — premium study material, doubt discussions
               and daily updates for CBSE boards, JEE and NEET. Absolutely free.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <div className="animate-in fade-in slide-in-from-bottom-4 mt-8 flex flex-wrap justify-center gap-3 duration-700 fill-mode-backwards delay-300">
               <a
                 href={MISSION_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-accent-foreground transition-opacity hover:opacity-90"
+                className="glow shine-sweep inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-accent-foreground transition-opacity hover:opacity-90"
                 style={{ backgroundImage: "var(--gradient-gold)" }}
               >
                 <TelegramIcon />
@@ -168,7 +205,7 @@ function Index() {
                 href={NEXTGEN_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 font-display text-sm font-bold transition-colors hover:bg-secondary"
+                className="glass-chip inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold transition-colors hover:bg-white/[0.14]"
               >
                 <TelegramIcon />
                 Class 11 &amp; 12
@@ -176,10 +213,12 @@ function Index() {
             </div>
 
             <dl className="mx-auto mt-14 grid max-w-3xl grid-cols-3 gap-3">
-              {stats.map((s) => (
+              {stats.map((s, i) => (
                 <div
                   key={s.label}
-                  className="rounded-2xl border border-border bg-card/70 px-3 py-4"
+                  className={`glass-chip animate-in fade-in slide-in-from-bottom-3 rounded-2xl px-3 py-4 transition-transform duration-300 hover:-translate-y-1 duration-500 fill-mode-backwards ${
+                    i === 0 ? "delay-300" : i === 1 ? "delay-[400ms]" : "delay-500"
+                  }`}
                 >
                   <dt className="font-display text-2xl font-bold text-foreground">{s.value}</dt>
                   <dd className="mt-1 text-xs text-muted-foreground">{s.label}</dd>
@@ -190,14 +229,14 @@ function Index() {
         </section>
 
         <section className="mx-auto max-w-5xl px-4 pt-12 sm:pt-16">
-          <div className="card-elevated relative overflow-hidden rounded-3xl border border-border bg-card p-6 sm:p-8">
+          <div className="glass-panel relative overflow-hidden rounded-3xl p-6 sm:p-8">
             <div
               className="pointer-events-none absolute -top-20 -left-16 h-52 w-52 rounded-full opacity-25 blur-3xl"
               style={{ backgroundImage: "var(--gradient-blue)" }}
             />
             <div className="relative flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left">
               <div>
-                <span className="inline-block rounded-full border border-border bg-secondary px-3 py-1 text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
+                <span className="glass-chip inline-block rounded-full px-3 py-1 text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
                   New · 2026-27
                 </span>
                 <h2 className="mt-3 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
@@ -209,20 +248,21 @@ function Index() {
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-3">
-                {[ntLogo, mjLogo, pwLogo].map((l) => (
+                {[ntLogo, mjLogo, pwLogo].map((l, i) => (
                   <img
                     key={l.url}
                     src={l.url}
                     alt="Batch provider logo"
                     loading="lazy"
-                    className="h-14 w-14 rounded-2xl bg-white object-contain p-1.5 ring-1 ring-border"
+                    className="mb-float h-14 w-14 rounded-2xl bg-white object-contain p-1.5 ring-1 ring-white/25"
+                    style={{ animationDelay: `${i * 0.9}s`, animationDuration: `${5 + i}s` }}
                   />
                 ))}
               </div>
             </div>
             <Link
               to="/batches"
-              className="glow relative mt-6 flex w-full items-center justify-center rounded-xl px-5 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+              className="glow shine-sweep relative mt-6 flex w-full items-center justify-center rounded-xl px-5 py-3.5 font-display text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
               style={{ backgroundImage: "var(--gradient-blue)" }}
             >
               Go to Batches
@@ -259,7 +299,7 @@ function Index() {
                   href={`https://t.me/${p.handle}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="card-elevated rounded-2xl border border-border bg-card px-5 py-4 text-center transition-colors hover:bg-secondary"
+                  className="glass-panel rounded-2xl px-5 py-4 text-center transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.1]"
                 >
                   <p className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
                     {p.role}
@@ -277,7 +317,7 @@ function Index() {
           </div>
         </section>
 
-        <section id="faq" className="border-t border-border bg-card/30">
+        <section id="faq" className="border-t border-border">
           <div className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
             <h2 className="text-center font-display text-3xl font-bold tracking-tight sm:text-4xl">
               Frequently asked questions
@@ -290,7 +330,7 @@ function Index() {
                 <AccordionItem
                   key={f.q}
                   value={`item-${i}`}
-                  className="mb-3 rounded-2xl border border-border bg-card px-5"
+                  className="glass-panel mb-3 rounded-2xl px-5"
                 >
                   <AccordionTrigger className="text-left font-display text-base font-semibold hover:no-underline">
                     {f.q}
@@ -318,7 +358,7 @@ function Index() {
                 href={MISSION_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glow inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-accent-foreground transition-opacity hover:opacity-90"
+                className="glow shine-sweep inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold text-accent-foreground transition-opacity hover:opacity-90"
                 style={{ backgroundImage: "var(--gradient-gold)" }}
               >
                 <TelegramIcon />
@@ -338,7 +378,7 @@ function Index() {
                 href={NEXTGEN_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 font-display text-sm font-bold transition-colors hover:bg-secondary"
+                className="glass-chip inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-sm font-bold transition-colors hover:bg-white/[0.14]"
               >
                 <TelegramIcon />
                 Class 11 &amp; 12
@@ -348,7 +388,7 @@ function Index() {
         </section>
       </main>
 
-      <footer className="border-t border-border py-8">
+      <footer className="border-t border-white/10 py-8">
         <p className="text-center text-xs text-muted-foreground">
           © {new Date().getFullYear()} Mission Board × Aarambhian Legacy · Free education for every student
         </p>

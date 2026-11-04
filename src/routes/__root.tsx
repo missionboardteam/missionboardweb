@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AuthGate } from "@/components/AuthGate";
 import { BottomNav } from "@/components/BottomNav";
+import { FloatingGlassAssets } from "@/components/FloatingGlassAssets";
 import { SwipeTabs } from "@/components/SwipeTabs";
 import { DriveAnnouncement } from "@/components/DriveAnnouncement";
 import { MbAiFab } from "@/components/MbAiFab";
@@ -137,6 +138,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <GlassProvider>
+        <FloatingGlassAssets />
       <AuthProvider>
         <StatusBar />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
