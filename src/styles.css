@@ -211,6 +211,80 @@
 }
 .platform-divider { background-image: var(--gradient-gold); }
 .platform-row img { background-color: var(--foreground); padding: 0.25rem; }
+
+/* ===== Liquid glass design system ===== */
+
+/* Frosted-to-liquid glass surface for cards, bars and chips. */
+@utility glass-panel {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.045));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px -22px oklch(0 0 0 / 0.85);
+}
+
+@utility glass-chip {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 10px 26px -14px oklch(0 0 0 / 0.8);
+}
+
+/* Slow specular sweep across a surface (buttons, banners, cards). */
+@utility shine-sweep {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.3) 50%, transparent 68%);
+    transform: translateX(-130%);
+    animation: mb-shine 6s ease-in-out infinite;
+  }
+}
+
+@keyframes mb-shine {
+  0% { transform: translateX(-130%); }
+  45% { transform: translateX(130%); }
+  100% { transform: translateX(130%); }
+}
+
+@keyframes mb-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(16px, -22px, 0) scale(1.07); }
+  66% { transform: translate3d(-14px, 12px, 0) scale(0.95); }
+}
+
+@keyframes mb-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes mb-float-x {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(12px, -8px); }
+}
+
+@keyframes mb-line {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(320%); }
+}
+
+.mb-drift { animation: mb-drift 20s ease-in-out infinite; }
+.mb-float { animation: mb-float 5.5s ease-in-out infinite; }
+.mb-float-x { animation: mb-float-x 7s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
   .platform-row * { transition: none; }
 }
