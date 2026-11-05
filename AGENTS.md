@@ -14,3 +14,4 @@
 - Use shared word-count validation for mixed written/MCQ practice answers and private server-side key-point rubrics for written grading; answer length alone must not earn points.
 - Leaderboard access exposes only display names and aggregate scores to authenticated users, never private profile fields.
 - Keep batch provider URLs in the batch page's shared provider list so server selection and embedded navigation agree.
+- The liquid-glass design system lives in src/styles.css (glass-panel/glass-chip/shine-sweep utilities, mb-* keyframes); the site-wide floating decor layer is src/components/FloatingGlassAssets.tsx mounted in __root, and its intensity follows the frosted↔liquid slider via useGlass.
