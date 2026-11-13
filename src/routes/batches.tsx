@@ -101,7 +101,7 @@ const batches = [
     tag: "Class 9-12 · Batches",
     logo: nextToppersLogo.url,
     servers: [
-      { id: "s1", label: "Server 1", url: "https://nt.nexthope.fun/" },
+      { id: "s1", label: "Server 1", url: "https://nexthope.cc.cd/nexttopper/" },
       { id: "s2", label: "Server 2", url: "https://nt.studyace.in/" },
       { id: "s3", label: "Server 3", url: "https://studyhulk-ntt.ai.studio/" },
     ],
@@ -113,9 +113,9 @@ const batches = [
     tag: "Board + Competitive",
     logo: missionJeetLogo.url,
     servers: [
-      { id: "s1", label: "Server 1", url: "https://nexthope.fun/mj/" },
+      { id: "s1", label: "Server 1", url: "https://nexthope.site/mj/" },
       { id: "s2", label: "Server 2", url: "https://mj.studyace.in/" },
-      { id: "s3", label: "Server 3", url: "http://mjstudyhulk.vercel.app/" },
+      { id: "s3", label: "Server 3", url: "https://mjstudyhulk.vercel.app/" },
     ],
     accent: "var(--gradient-gold)",
   },
@@ -125,9 +125,9 @@ const batches = [
     tag: "JEE / NEET / Boards",
     logo: pwLogo.url,
     servers: [
-      { id: "s1", label: "Server 1", url: "https://nexthope-52c52ef4eb0e.herokuapp.com/PW/" },
+      { id: "s1", label: "Server 1", url: "https://nexthope.cc.cd/PW/" },
       { id: "s2", label: "Server 2", url: "https://peedablu.com" },
-      { id: "s3", label: "Server 3", url: "https://studyhulk.primestudy.live" },
+      { id: "s3", label: "Server 3", url: "https://studyhulk.primestudy.live/" },
     ],
     accent: "var(--gradient-pink)",
   },
